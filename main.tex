@@ -1,0 +1,41 @@
+\documentclass[12pt]{article}
+
+\input{preamble.tex}
+
+\usepackage{mathtools}
+
+\def\eps{\varepsilon}
+\def\Exp{\mathbb{E}}
+\def\N{\mathbb{N}}
+\def\R{\mathbb{R}}
+
+\def\E{\textsf{E}}
+\def\sharpp{\textsf{\#P}}
+
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+
+\renewcommand{\Pr}{\mathbb{P}}
+\addbibresource{main.bib}
+
+\title{\bf Derandomization and Its Connections Throughout Complexity Theory}
+\author{}
+
+\begin{document}
+  \allsectionsfont{\sffamily}
+
+  \newcommand{\pr}[1]{\textsf{pr#1}}
+  \newcommand{\dtime}[1]{\textsf{DTIME}\left[#1\right]}
+
+  \maketitle
+
+  % Table of contents with "Contents" line.
+  \makeatletter
+  \@starttoc{toc}
+  \makeatother
+
+  \input{lec01.tex}
+  \input{lec02.tex}
+  \input{lec03.tex}
+  \input{lec04.tex}
+
+\end{document}

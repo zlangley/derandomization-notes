@@ -1,0 +1,31 @@
+\begin{lecture}{2}{Hardness vs.\ Randomness}{January 27, 2022}
+
+\subsection*{The Upshot}
+
+\begin{enumerate}
+  \item Hardness and randomness are tightly connected: hard functions can be
+    used to design PRGs that stretch seeds of logarithmic length and fool small
+    circuits. The quintisential construction of such a PRG is the
+    Nisan-Wigderson (NW) PRG.
+  \item The NW-PRG applies a hard function $f$ to many mostly disjoint
+    projections (or subsequences) of the seed. The set of projections is given
+    by a combinatorial design thats computable in polynomial time.
+  \item The proof that the NW-PRG with a hard function $f$ yields a suitable
+    PRG goes by contrapositive: if the PRG did not fool some circuit $D$, then we
+    could \emph{reconstruct} from $D$ another small circuit that has small but
+    significant agreement with $f$.
+  \item A key technique in the above proof is the \emph{hybrid argument}, which
+    states that if a circuit $D$ distinguishes the uniform distribution from
+    another product distribution, then it distinguishes two ``hybrid'' product
+    distributions that differ in a single coordinate.
+\end{enumerate}
+
+\subsection{Pseudorandomness}
+
+\subsection{Hitting Set Generators}
+
+\subsection{Pseudorandom Generators}
+
+\subsection{The Nisan-Wigderson Generator}
+
+\end{lecture}

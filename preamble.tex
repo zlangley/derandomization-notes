@@ -1,0 +1,87 @@
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb}
+\usepackage{amsthm}
+\usepackage{xspace}
+\usepackage{centernot}
+\usepackage{enumitem}
+\usepackage{dsfont}
+\usepackage{biblatex}
+\usepackage[immediate]{silence}
+
+% These come from sectsty; doesn't affect us.
+\WarningFilter[sectsty]{latex}{Command}
+\usepackage{sectsty}
+\DeactivateWarningFilters[sectsty]
+
+\usepackage{tocloft}
+
+\usepackage[usenames,dvipsnames]{xcolor}
+\definecolor{DarkRed}{rgb}{0.5,0.1,0.1}
+\definecolor{ForestGreen}{rgb}{0.1333,0.5451,0.1333}
+\usepackage{hyperref}
+\hypersetup{
+  linktocpage=true,
+  citecolor=ForestGreen,
+  colorlinks=true,
+  linkcolor=DarkRed,
+  linktoc=all,
+}
+
+% Fonts
+\usepackage[T1]{fontenc}
+\usepackage{libertine}
+\usepackage[libertine]{newtxmath}
+\usepackage{roboto}
+\usepackage{inconsolata}
+
+\newenvironment{proofsk}{%
+  \renewcommand{\proofname}{Proof sketch}\proof}{\endproof}
+
+\newtheoremstyle{sansserif}%
+  {10pt}%                Space above
+  {10pt}%                Space below
+  {\itshape}%            Body font
+  {}%                    Indent amount
+  {\normalfont\sffamily\small}%  Theorem head font
+  {\textnormal{.}}%      Punctuation after theorem head
+  {.5em}%                Space after theorem head
+  {}%                    Theorem head spec
+
+\newtheorem{claim}{Claim}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{corollary}{Corollary}
+\newtheorem{exercise}{Exercise}
+\newtheorem{lemma}{Lemma}
+\newtheorem{observation}{Observation}
+\newtheorem{proposition}{Proposition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{tool}{Tool}
+
+\setlength{\topmargin}{0pt}
+\setlength{\textheight}{9in}
+\setlength{\headheight}{0pt}
+\setlength{\headsep}{0pt}
+\setlength{\oddsidemargin}{0.25in}
+\setlength{\textwidth}{6in}
+
+\pagestyle{plain}
+
+% Hopefully this doesn't come back to bite me...
+\WarningFilter{latex}{Empty bibliography}
+
+
+\newenvironment{lecture}[3]{
+  \refstepcounter{section}
+
+  \newpage
+  \phantomsection{}
+  {\noindent\sffamily\LARGE\bfseries Lecture #1\\[2ex]\noindent#2}
+  \addcontentsline{toc}{section}{Lecture #1: #2}
+  \bigskip
+  \bigskip
+  \begin{refsection}
+}{
+  \printbibliography[heading=subbibliography]
+  \end{refsection}
+}
+
