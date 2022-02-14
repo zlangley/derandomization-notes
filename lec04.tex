@@ -129,7 +129,47 @@ the $(n, \ell, a)$ thing because the parameters looked lonely.}
 \end{proposition}
 
 \begin{proof}
-	\comment{TODO}
+	Let $D$ be any such uniform distinguisher breaking $G^f$, then by
+	definition
+	\[
+		\card{\Pr\brac{D(G(1^n, s)) = 1} - \Pr\brac{D(\overline{u}_n) = 1}} >
+		1 / n.
+	\]
+	As in the hybrid argument (\comment{ref. lecture 2 here}), we define the
+	distributions:
+	\[
+		\overline{H}_0 = (f(x_1), \ldots  ,f(x_n)), \ldots
+		\overline{H}_i = (\overline{u}_i, f(x_{i + 1}) \ldots f(x_n)), \ldots
+		\overline{H}_n = \overline{u}_n.
+	\]
+	Where $x_i$ is the projection of the seed given to the PRG onto the
+	coordinates $T_i$.
+	Then recall the (easy) lemma that there is an $i$ such that:
+	\[
+		\card{\Pr\brac{D(\overline{H}_{i - 1}) = 1}
+		- \Pr\brac{D(\overline{H}_i) = 1}} > 1 / n^2.
+	\]
+	Roughly speaking, we will guess the value of this $i$, and then try to
+	exploit the fact that $D$ can differentiate the bit $f(x_i)$ from a
+	uniformly random bit to compute $f(x_i)$. More concretely, we describe
+	the algorithm $A$:
+	\begin{enumerate}
+		\item Choose a random $i \in \brac{n}$.
+		\item Choose a random $z^* \in \set{0, 1}^{\ell(n) - \ell}$. Here $s$
+			(the seed of the PRG) projected to $T_i$ will be equal to $x_i$,
+			and the remaining coordinates will be filled by $z^*$.
+		\item Choose a random bit $\sigma$.
+		\item Query the oracle for $f$ on all possible inputs
+			$x_{i + 1}, \ldots , x_n$. Note that at most $\ell / 100$ bits of
+			each of these $x_j$'s is unknown after fixing $z^*$, so there
+			are at most $n \cdot 2^{\ell / 100}$ queries to the oracle.
+		\item Choose a random $u^* \in \set{0, 1}^{i - 1}$.
+		\item Output the circuit $C_n$ which simulates $D$ on
+			$(u^*, \sigma, f(x_{i + 1}), \ldots , f(x_n))$ and outputs
+			$\sigma$ if $D$ accepts, and $\lnot \sigma$ otherwise.
+	\end{enumerate}
+	It is easy\footnote{haha} to see that
+	$\Pr\brac{C_n(x) = f_n(x)} = 1/2 + 1/n^2$.
 \end{proof}
 
 \begin{proposition}
