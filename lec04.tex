@@ -13,31 +13,34 @@
 
 \subsection{Uniform Circuits}
 
+So far we have been studying PRGs for non-uniform circuits. As a consequence,
+the results we've seen assume problems in \E are hard for non-uniform models.
+In this lecture we investigate the analgous uniform questions.
+
 \begin{definition}[$\eps$-PRG for uniform circuits]
-	An algorithm $G$ is an $\eps$-PRG for uniform circuits generated in time
-	$t(n)$ if for every turing machine $D$ with running time $t(n)$ and
-	large enough $n \in \N$
+  An algorithm $G$ is an \emph{$\eps$-PRG for uniform circuits generated in
+  time $t(n)$} if for every Turing machine $D$ with running time $t(n)$ and
+  enough $n \in \N$
 	\[
-		\Pr\brac{D(1^n) \text{ prints an } \eps\text{-distinguisher circuit }
-		D_n \text{ for } G(1^n, u_{l(n)}} \leq \eps.
+		\Pr\brac{D(1^n) \text{ is an $\eps$-distinguisher circuit }
+    D_n \text{ for } G(1^n, u_{l(n)})} \leq \eps.
 	\]
 \end{definition}
 
 \begin{definition}
-	Let $\overline{x} = \set{\overline{x}_n}$ be a sequence of distributions
-	over $\set{0, 1}^n$. We say that $\overline{x}$ is $p$-time samplable
-	if there is a probabilistic machine $S$ with runtime $p(n)$ such that
-	$S(1^n)$ has the distribution $\overline{x}(n)$.
+  Let $\overline{x} = \set{\overline{x}_n}$ be a sequence of distributions over
+  $\set{0, 1}^n$ and lelt $p : \N \to \N$. We say that $\overline{x}$ is
+  $p$-time samplable if there is a probabilistic machine $S$ with runtime
+  $p(n)$ such that $S(1^n)$ has the distribution $\overline{x}(n)$.
 \end{definition}
 
 \begin{theorem}
-	Assume that for all polynomials $p(n)$ there is an $\eps$-PRG $G$ for
-	uniform circuits generated in time $p(n)$, such that $G$ has polynomial
-	running time, and uses a $\log$-size seed. Then for all
-	$L \in \BPP$ and poly-time samplable distributions $\overline{x}$,%
-	\footnote{Think of $\overline{x}$ as an adversary (limited to polynomial
-	time) trying to generate hard inputs with $\geq \eps$ probability.}
-	there exists a language $L' \in \textsf{P}$ such that:
+  Assume that for all polynomials $p(n)$ there is an $\eps$-PRG $G$ for uniform
+  circuits generated in time $p(n)$ that stretches a $\log(n)$-sized seed. Then
+  for all $L \in \BPP$ and poly-time samplable distributions $\overline{x}$,%
+  \footnote{Think of $\overline{x}$ as an adversary (limited to polynomial
+  time) trying to generate hard inputs with $\geq \eps$ probability.} there
+  exists a language $L' \in \textsf{P}$ such that
 	\[
 		\Pr_{x \sim \overline{x}}\brac{L(x) \neq L'(x)} \leq \eps.
 	\]
@@ -63,35 +66,35 @@
 
 \subsection{Learning via Uniform Distinguishers}
 
-\begin{definition}[Combinatorial Design]
-	An $(n, \ell, d)$-combinatorial design is a collection of subsets
+\begin{definition}[Combinatorial design]
+  An \emph{$(n, \ell, a)$-combinatorial design} is a collection of subsets
 	$S_1, \ldots , S_n$ of a universe $\brac{d}$ such that:
 	\begin{enumerate}
 		\item For each $i$, $\card{S_i} = \ell$.
-		\item For each $i \neq j$, $\card{S_i \cap S_j} \leq a = \ell / 100$.
+		\item For each $i \neq j$, $\card{S_i \cap S_j} \leq a.$
 	\end{enumerate}
 \end{definition}
 \comment{This will probably need to be defined already in
 Lecture~\ref{lec:02}, so eventually we want to move this there. Also I made up
-the $(n, \ell, d)$ thing because the parameters looked lonely.}
+the $(n, \ell, a)$ thing because the parameters looked lonely.}
 
 \comment{Restate / refer to the Nisan-Wigderson PRG here.}
 
 \begin{definition}
-	A probabilistic algorithm $A$ \emph{learns} a function
-	$f_n : \set{0, 1}^n \to \set{0, 1}$ if given oracle access to $f_n$, and
-	the input $1^n$, the probability that $A$ produces a circuit $C_n$ such
-	that $\Pr_x \brac{C_n(x) = f_n(x)} \geq 1/2 + \eps$ is at least $\delta$.
-	$\eps$ and $\delta$ are called the advantage and success of $A$
-	respectively.
+  Let $f_n : \set{0, 1}^n \to \set{0, 1}.$ A probabilistic algorithm $A$
+  \emph{learns} with oracle access to $f_n$ \emph{learns $f_n$ with success
+  $\delta$ and advantage $\eps$} if on input $1^n$, $A$ produces a circuit
+  $C_n$ such that $\Pr_x \brac{C_n(x) = f_n(x)} \geq 1/2 + \eps$.
 \end{definition}
 
 \begin{proposition}
-	For all uniform distinguishers $D$, there exists a probabilistic algorithm
-	$A = A_D$ satisfying the following: If the Nisan-Wigderson PRG instantiated
-	with the function $f: \set{0, 1}^n \to \set{0, 1}$ is distinguished from
-	the uniform distribution by $D$, then $A$ learns $f$ success and advantage
-	$1 / \poly(n)$.
+  Let $\ell(n)$ and $T_1, \dots, T_n$ be the seed length and $(n, \ell,
+  \ell/100)$-design, repsectively, from the NW-PRG construction. Let $f :
+  \set{0,1}^\ell \to \set{0, 1}$ and let $G^f$ be the Nisan-Wigderson PRG with
+  oracle $f$. If $D$ is a uniform circuit on $n$ inputs generated in time
+  $\poly(n)$ that is not $(1/n)$-fooled by $G^f$, then there is a
+  polynomial-time algorithm that learns $f$ with success and advantage both
+  $1/\poly(n).$
 \end{proposition}
 
 \begin{proof}
@@ -99,18 +102,26 @@ the $(n, \ell, d)$ thing because the parameters looked lonely.}
 \end{proof}
 
 \begin{proposition}
-	If $D$ is a distinguisher for $G^{f_n}$, then $A$ learns $f_n$ with success
-	$0.99$ and advantage $1/2 + 1/n^3$.
+	If $D$ is a distinguisher for $G^{f}$, then $A$ learns $f$ with success
+	$0.99$ and advantage $1/n^2$.
 \end{proposition}
+
+\begin{proof}
+  Have the algorithm generate $n \log{n}$ circuits; with high probability one
+  of these has advantage $1/n^2$. In other words, we have $n \log{n}$ coins and
+  at least one of them lands heads with probability at least $1/2 + 1/n^2$
+  (flipping a coin corresponds to running the circuit on a random input). It
+  suffices to estimate the bias of each of these coins to a sufficient degree,
+  which can be done in $\poly(n)$ time.
+\end{proof}
 
 \subsection{Boosting via Downward Self-Reducibility and LLDCs}
 
 \begin{definition}
-	$f$ is downward self-reducable (DSR) if there exists an algorithm $A$
-	such that when $A$ gets $x \in \set{0, 1}^n$ and oracle access to $f$
-	on $n - 1$ bits, it outputs $f(x)$ in linear time.%
-	\footnote{Linear time is not critical, it can be replaced (for example)
-	by quadratic time ... but not $\poly$-time (???).}
+  $f$ is \emph{downward self-reducable (DSR)} if there exists an algorithm $A$
+  such that when $A$ gets $x \in \set{0, 1}^n$ and oracle access to $f$ on $n -
+  1$ bits, it outputs $f(x)$ in linear time.%
+  \footnote{Linear time is not critical, it can be replaced (for example) by quadratic time ... but not $\poly$-time (???).}
 \end{definition}
 
 For example, $\SAT$ and $\PERM$ are DSR.
@@ -122,22 +133,17 @@ For example, $\SAT$ and $\PERM$ are DSR.
 		\item For all $\ell \in \N$ the truth table of $\fws$ is a codeword
 			which is:
 			\begin{enumerate}
-				\item Locally List Decodable from agreement
-					$\eps(\ell) = 2^{-\ell / ???}$ in time $\poly(1/\eps)$
-					with list size $\poly(1 / \eps)$.
-				\item Uniquely Decodable from agreement $0.99$ in time
-					$\poly(???)$.
+        \item Locally List Decodable from agreement $\eps(\ell) = 2^{-\ell /
+          100}$ in time $\poly(1/\eps)$ with list size $\poly(1 / \eps)$.
+        \item Uniquely Decodable from agreement $0.99$ in time $\poly(n)$.
 			\end{enumerate}
 	\end{enumerate}
 \end{proposition}
 
 \begin{theorem}
-	If
-	$\fws$ is hard for $\BPTIME\brac{2^{\eps n}}$
-	then
-	for all polynomials $p(n)$ there is a $(1 / n)$-PRG for uniform circuits
-	generated in time $p(n)$ with $\log$-sized seed and polynomial running
-	time.
+  If $\fws$ is hard for $\BPTIME\brac{2^{\eps n}}$ then for all polynomials
+  $p(n)$ there is a $(1 / n)$-PRG for uniform circuits generated in time $p(n)$
+  with $\log$-sized seed and polynomial running time.
 \end{theorem}
 
 \begin{proof}
