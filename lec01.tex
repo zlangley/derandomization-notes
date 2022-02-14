@@ -4,9 +4,10 @@
 \subsection*{The Upshot}
 
 \begin{enumerate}
-  \item Randomness is necessary in many computational settings---is it
-    necessary for polynomial-time computation? This is a fundamental question
-    we will investigate in this course.
+  \item Randomness is necessary in many computational settings. Is randomness
+    necessary for polynomial-time computation? There are good reasons to expect
+    it is not! This is a fundamental question we will investigate in this
+    course.
   \item Promise problems are a natural generalization of languages, and the
     theory of probabilistic algorithms for promise problems is richer than
     for that of languages.
@@ -30,6 +31,41 @@ that there exists a probabilistic polynomial-time Turing machine $M$ deciding
 $\Pi$ with probability $2/3$. By a classic amplification technique, the
 correctness probability $2/3$ can be replaced with any other constant and we
 obtain the same set of problems.
+
+\begin{definition}
+  An \emph{$(\eps, \delta)$-sampler} is a function $s :
+  \set{0,1}^{\overline{T}} \times \set{0,1}^\ell \to \set{0,1}^T$ such that for
+  all $f : \set{0,1}^T \to \set{0,1}$ and for all $z \in
+  \set{0,1}^{\overline{T}}$ it holds that \[
+    |\Exp_i f(s(z, i)) - \Exp_x f(x)| \le \eps.
+  \]
+\end{definition}
+
+\begin{theorem}
+  For all $\eps > 0$ there exists a polynomial-time computable $(\eps,
+  \delta)$-sampler with $\overline{T} = \poly(T)$, $\ell = O(\log
+  \overline{T}/\eps)$ and $\delta = 2^{\overline{T}^\eps - \overline{T}}$.
+\end{theorem}
+
+\begin{corollary}
+  The class $\prBPP$ can be equivalently defined with an error of $2^{T^\eps -
+  T}$ instead of 1/3, where $T = T(n)$ is the number of random bits.
+\end{corollary}
+
+\subsection{The Complexity of BPP}
+
+What do we know about the placement $\BPP$ with respect to other complexity
+classes? A trivial inclusion is $\BPP \subseteq \PSPACE \subseteq \EXP
+\subseteq \NEXP$. Open problem: prove $\BPP \ne \NEXP$.
+
+\begin{theorem}
+  $\BPP \subseteq \Ppoly$.
+\end{theorem}
+
+\begin{proof}
+  Since the class $\BPP$ is the same even with error $2^{-2n}$, there exists
+  some choice of randomness that works for all inputs.
+\end{proof}
 
 \subsection{The Circuit Acceptance Probability Problem (CAPP)}
 
