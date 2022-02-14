@@ -33,7 +33,7 @@
 	Assume that for all polynomials $p(n)$ there is an $\eps$-PRG $G$ for
 	uniform circuits generated in time $p(n)$, such that $G$ has polynomial
 	running time, and uses a $\log$-size seed. Then for all
-	$L \in \textsf{BPP}$ and poly-time samplable distributions $\overline{x}$,%
+	$L \in \BPP$ and poly-time samplable distributions $\overline{x}$,%
 	\footnote{Think of $\overline{x}$ as an adversary (limited to polynomial
 	time) trying to generate hard inputs with $\geq \eps$ probability.}
 	there exists a language $L' \in \textsf{P}$ such that:
@@ -44,16 +44,16 @@
 
 \begin{theorem}
 	If
-	$\textsf{SPACE}\brac{O(n)}$ is hard for $\textsf{BPTIME}\brac{2^{\eps n}}$
+	$\SPACE\brac{O(n)}$ is hard for $\BPTIME\brac{2^{\eps n}}$
 	then
-	$\textsf{RP} = \textsf{P}$ ``on average''.
+	$\RP = \P$ ``on average''.
 \end{theorem}
 
 \newcommand{\fws}{\ensuremath{ f^{\text{ws}} }}
 \begin{theorem}
-	There exists a language $\fws \in \textsf{P}^{\sharpp}$ such that if $\fws$
-	is hard for $\textsf{BPTIME}\brac{2^{\eps n}}$ then
-	$\textsf{BPP} = \textsf{P}$ ``on average''.
+	There exists a language $\fws \in \P^{\sharpp}$ such that if $\fws$
+	is hard for $\BPTIME\brac{2^{\eps n}}$ then
+	$\BPP = \P$ ``on average''.
 \end{theorem}
 
 \subsection{Learning via Uniform Distinguishers}
