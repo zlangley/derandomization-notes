@@ -12,6 +12,50 @@
 
 \subsection{Uniform Circuits}
 
+\begin{definition}[$\eps$-PRG for uniform circuits]
+	An algorithm $G$ is an $\eps$-PRG for uniform circuits generated in time
+	$t(n)$ if for every turing machine $D$ with running time $t(n)$ and
+	large enough $n \in \N$
+	\[
+		\Pr\brac{D(1^n) \text{ prints an } \eps\text{-distinguisher circuit }
+		D_n \text{ for } G(1^n, u_{l(n)}} \leq \eps.
+	\]
+\end{definition}
+
+\begin{definition}
+	Let $\overline{x} = \set{\overline{x}_n}$ be a sequence of distributions
+	over $\set{0, 1}^n$. We say that $\overline{x}$ is $p$-time samplable
+	if there is a probabilistic machine $S$ with runtime $p(n)$ such that
+	$S(1^n)$ has the distribution $\overline{x}(n)$.
+\end{definition}
+
+\begin{theorem}
+	Assume that for all polynomials $p(n)$ there is an $\eps$-PRG $G$ for
+	uniform circuits generated in time $p(n)$, such that $G$ has polynomial
+	running time, and uses a $\log$-size seed. Then for all
+	$L \in \textsf{BPP}$ and poly-time samplable distributions $\overline{x}$,%
+	\footnote{Think of $\overline{x}$ as an adversary (limited to polynomial
+	time) trying to generate hard inputs with $\geq \eps$ probability.}
+	there exists a language $L' \in \textsf{P}$ such that:
+	\[
+		\Pr_{x \sim \overline{x}}\brac{L(x) \neq L'(x)} \leq \eps.
+	\]
+\end{theorem}
+
+\begin{theorem}
+	If
+	$\textsf{SPACE}\brac{O(n)}$ is hard for $\textsf{BPTIME}\brac{2^{\eps n}}$
+	then
+	$\textsf{RP} = \textsf{P}$ ``on average''.
+\end{theorem}
+
+\newcommand{\fws}{\ensuremath{ f^{\text{ws}} }}
+\begin{theorem}
+	There exists a language $\fws \in \textsf{P}^{\sharpp}$ such that if $\fws$
+	is hard for $\textsf{BPTIME}\brac{2^{\eps n}}$ then
+	$\textsf{BPP} = \textsf{P}$ ``on average''.
+\end{theorem}
+
 \subsection{Learning via Uniform Distinguishers}
 
 \subsection{Boosting via Downward Self-Reducibility and LLDCs}
