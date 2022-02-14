@@ -56,8 +56,91 @@
 	$\BPP = \P$ ``on average''.
 \end{theorem}
 
+\begin{proof}
+	\comment{TODO.}
+\end{proof}
+
 \subsection{Learning via Uniform Distinguishers}
 
+\begin{definition}[Combinatorial Design]
+	An $(n, \ell, d)$-combinatorial design is a collection of subsets
+	$S_1, \ldots , S_n$ of a universe $\brac{d}$ such that:
+	\begin{enumerate}
+		\item For each $i$, $\card{S_i} = \ell$.
+		\item For each $i \neq j$, $\card{S_i \cap S_j} \leq a = \ell / 100$.
+	\end{enumerate}
+\end{definition}
+\comment{This will probably need to be defined already in
+Lecture~\ref{lec:02}, so eventually we want to move this there. Also I made up
+the $(n, \ell, d)$ thing because the parameters looked lonely.}
+
+\comment{Restate / refer to the Nisan-Wigderson PRG here.}
+
+\begin{definition}
+	A probabilistic algorithm $A$ \emph{learns} a function
+	$f_n : \set{0, 1}^n \to \set{0, 1}$ if given oracle access to $f_n$, and
+	the input $1^n$, the probability that $A$ produces a circuit $C_n$ such
+	that $\Pr_x \brac{C_n(x) = f_n(x)} \geq 1/2 + \eps$ is at least $\delta$.
+	$\eps$ and $\delta$ are called the advantage and success of $A$
+	respectively.
+\end{definition}
+
+\begin{proposition}
+	For all uniform distinguishers $D$, there exists a probabilistic algorithm
+	$A = A_D$ satisfying the following: If the Nisan-Wigderson PRG instantiated
+	with the function $f: \set{0, 1}^n \to \set{0, 1}$ is distinguished from
+	the uniform distribution by $D$, then $A$ learns $f$ success and advantage
+	$1 / \poly(n)$.
+\end{proposition}
+
+\begin{proof}
+	\comment{TODO}
+\end{proof}
+
+\begin{proposition}
+	If $D$ is a distinguisher for $G^{f_n}$, then $A$ learns $f_n$ with success
+	$0.99$ and advantage $1/2 + 1/n^3$.
+\end{proposition}
+
 \subsection{Boosting via Downward Self-Reducibility and LLDCs}
+
+\begin{definition}
+	$f$ is downward self-reducable (DSR) if there exists an algorithm $A$
+	such that when $A$ gets $x \in \set{0, 1}^n$ and oracle access to $f$
+	on $n - 1$ bits, it outputs $f(x)$ in linear time.%
+	\footnote{Linear time is not critical, it can be replaced (for example)
+	by quadratic time ... but not $\poly$-time (???).}
+\end{definition}
+
+For example, $\SAT$ and $\PERM$ are DSR.
+
+\begin{proposition}
+	There exists a function $\fws \in \P^{\sharpp}$ such that:
+	\begin{enumerate}
+		\item $\fws$ is DSR.
+		\item For all $\ell \in \N$ the truth table of $\fws$ is a codeword
+			which is:
+			\begin{enumerate}
+				\item Locally List Decodable from agreement
+					$\eps(\ell) = 2^{-\ell / ???}$ in time $\poly(1/\eps)$
+					with list size $\poly(1 / \eps)$.
+				\item Uniquely Decodable from agreement $0.99$ in time
+					$\poly(???)$.
+			\end{enumerate}
+	\end{enumerate}
+\end{proposition}
+
+\begin{theorem}
+	If
+	$\fws$ is hard for $\BPTIME\brac{2^{\eps n}}$
+	then
+	for all polynomials $p(n)$ there is a $(1 / n)$-PRG for uniform circuits
+	generated in time $p(n)$ with $\log$-sized seed and polynomial running
+	time.
+\end{theorem}
+
+\begin{proof}
+	\comment{TODO.}
+\end{proof}
 
 \end{lecture}
