@@ -116,7 +116,29 @@ which it outputs 1.
   \end{enumerate}
 \end{definition}
 
+\begin{theorem}[$\CAPP$ is $\prBPP$-complete]
+  $\CAPP$ is complete for $\prBPP$ under deterministic polynomial-time reductions.
+\end{theorem}
+
+\comment{State the form of the Cook-Levin theorem we need in the following proof.}
+
+\begin{proof}
+  The problem $\CAPP$ is easily seen to be in $\prBPP$: consider the algorithm
+  that simply simulate the input circuit on a randomly chosen input.
+
+  Now we argue that every problem in $\prBPP$ can be reduced to $\CAPP$ in
+  polynomial-time. Let $\Pi \in \prBPP$ and let $M$ be the probabilistic
+  polynomial-time Turing machine solving $\Pi$. {\`A} la Cook-Levin, for every
+  input $x$, we can construct in polynomial-time a circuit $C_x$ such that
+  $C_x(r) = M(x, r)$. Hence if $x \in \Pi_Y$, then $C_x \in \CAPP_Y$, and if $x
+  \in \Pi_N$, then $C_x \in \CAPP_N$.
+\end{proof}
+
 \subsection{A Time-Hierarchy Theorem}
+
+\begin{theorem}
+  $\prBPTIME[T \log{T}] \subsetneq \prBPTIME[T]$
+\end{theorem}
 
 \subsection{Reducing Search Problems to Decision Problems}
 
