@@ -1,4 +1,4 @@
-\begin{lecture}{1}{The Class \pr{BPP}}{January 23, 2020}
+\begin{lecture}{1}{The Class prBPP}{January 23, 2020}
 \label{lec:01}
 
 \subsection*{The Upshot}
@@ -10,28 +10,35 @@
   \item Promise problems are a natural generalization of languages, and the
     theory of probabilistic algorithms for promise problems is richer than
     for that of languages.
-  \item The class \pr{BPP} has a complete problem, The Circuit Acceptance
-    Probability Problem (CAPP), which asks whether an input circuit has
-    acceptance probability at least 2/3.
-  \item The class \pr{BPP} admits a time-hierarchy theorem.
+  \item The class $\prBPP$ has a complete problem ($\CAPP$) under deterministic
+    polynomial-time reductions. Hence to prove $\prBPP = \prP$ it suffices
+    to give a deterministic polynomial-time algorithm for $\CAPP$.
+  \item The class $\prBPP$ admits a time-hierarchy theorem.
   \item Probabilistic search problems can be reduced to probabilistic decision
     problems, meaning the theory we will develop around the class of decision
-    problems \pr{BPP} will apply to the search analog as well.
+    problems $\prBPP$ will apply to the search analog as well.
 \end{enumerate}
 
-\subsection{Equivalent Definitions of \pr{BPP}}
+\subsection{Equivalent Definitions of prBPP via Amplification}
 
 A \emph{promise problem} is a pair $\Pi = (\Pi_Y, \Pi_N) \subseteq \{0, 1\}^*
 \times \{0, 1\}^*$ such that $\Pi_Y \cap \Pi_N = \emptyset$. Promise problems
 generalize languages in the case that $\Pi_Y \cup \Pi_N = \Pi$.
 
-The complexity class \pr{BPP} is the set of all promise problems $\Pi$ such
+The complexity class $\prBPP$ is the set of all promise problems $\Pi$ such
 that there exists a probabilistic polynomial-time Turing machine $M$ deciding
 $\Pi$ with probability $2/3$. By a classic amplification technique, the
 correctness probability $2/3$ can be replaced with any other constant and we
 obtain the same set of problems.
 
 \subsection{The Circuit Acceptance Probability Problem (CAPP)}
+
+\begin{definition}
+  The Circuit Acceptance Probability Problem ($\CAPP$) is the following: The input
+  is a description of a circuit. The YES instances are all those descriptions
+  of circuits that accept at least 2/3 of their inputs, and the NO instances
+  are all those descriptions that accept at most 1/3 of their inputs.
+\end{definition}
 
 \subsection{A Time-Hierarchy Theorem}
 
