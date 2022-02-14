@@ -46,6 +46,37 @@ In this lecture we investigate the analgous uniform questions.
 	\]
 \end{theorem}
 
+\begin{proof}
+	Let $S$ be the sampling algorithm for $\overline{x}$, and let $M = M_L$
+	be the $\BPP$ machine for $L$. We define $L'$ as: given $x$, enumerate
+	over seeds $s$ of $G$, and output
+	\[ \textsf{MAJ}_{s} \set{M(x, G(s)) }. \]
+	Since the seed length $s$ is $O(\log n)$, the algorithm above runs in
+	polynomial time, and hence $L' \in \P$.
+	Further, for each $x$, we define:
+	\[
+		\Delta(x) = \card{
+			\Pr_{r \sim \overline{u}_n}         \brac{ M(x, r) = 1}
+		  - \Pr_{s \sim \overline{u}_{\ell(n)}} \brac{ M(x, s) = 1}
+		  }.
+	\]
+
+	We suppose (towards a contradiction) that $L'$ differs from $L$ on more
+	than an $\eps$-fraction of inputs. Since $M$ is a $\BPP$ machine for $L$
+	this means that
+	$\Pr_{x \sim \overline{x}_n}\brac{\Delta(x) > \eps} > \eps$. Then consider
+	the algorithm $D$: on the input $1^n$, sample $x \sim \overline{x}_n$ using
+	$S(1^n)$, and then output the circuit $D_x(r) = M(x, r)$.
+	Then
+	\[
+		\Pr\brac{D \text{ prints a circuit that } \eps \text{-distinguishes }
+		G(1^n, u_{\ell})}
+		= \Pr\brac{\Delta(S(1^n)) > \eps}
+		= \Pr_{x \sim \overline{x}_n}\brac{\Delta(x) > \eps} > \eps.
+	\]
+	Which contradicts the fact that $G$ is an $\eps$-PRG.
+\end{proof}
+
 \begin{theorem}
 	If
 	$\SPACE\brac{O(n)}$ is hard for $\BPTIME\brac{2^{\eps n}}$
@@ -89,7 +120,7 @@ the $(n, \ell, a)$ thing because the parameters looked lonely.}
 
 \begin{proposition}
   Let $\ell(n)$ and $T_1, \dots, T_n$ be the seed length and $(n, \ell,
-  \ell/100)$-design, repsectively, from the NW-PRG construction. Let $f :
+  \ell/100)$-design, respectively, from the NW-PRG construction. Let $f :
   \set{0,1}^\ell \to \set{0, 1}$ and let $G^f$ be the Nisan-Wigderson PRG with
   oracle $f$. If $D$ is a uniform circuit on $n$ inputs generated in time
   $\poly(n)$ that is not $(1/n)$-fooled by $G^f$, then there is a
