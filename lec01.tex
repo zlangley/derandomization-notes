@@ -20,17 +20,66 @@
     problems $\prBPP$ will apply to the search analog as well.
 \end{enumerate}
 
-\subsection{Equivalent Definitions of prBPP via Amplification}
+\subsection{Promise Problems and prBPP}
 
 A \emph{promise problem} is a pair $\Pi = (\Pi_Y, \Pi_N) \subseteq \{0, 1\}^*
-\times \{0, 1\}^*$ such that $\Pi_Y \cap \Pi_N = \emptyset$. Promise problems
-generalize languages in the case that $\Pi_Y \cup \Pi_N = \Pi$.
+\times \{0, 1\}^*$ such that $\Pi_Y \cap \Pi_N = \emptyset$. The set $\Pi_Y$
+captures all of the ``yes'' instances, and the set $\Pi_N$ captures all of the
+``no'' instances. The set $\Pi_Y \cup \Pi_N$ is called the \emph{promise}. We
+say that a Turing machine $M$ \emph{solves} a promise problem $\Pi$ if on
+input $x \in Pi_Y$ it accepts and on input $x \in \Pi_N$ it rejects. Crucially,
+for inputs not in the promise, the machine can behave arbitrarily.
 
-The complexity class $\prBPP$ is the set of all promise problems $\Pi$ such
-that there exists a probabilistic polynomial-time Turing machine $M$ deciding
-$\Pi$ with probability $2/3$. By a classic amplification technique, the
-correctness probability $2/3$ can be replaced with any other constant and we
-obtain the same set of problems.
+Promise problems generalize decision problems (languages) in the case that
+$\Pi_Y \cup \Pi_N = \Pi$. Complexity classes based on decision problems have
+obvious analogs based on promise problems. For example, $\prP$ is the class of
+all promise problems solvable by a deterministic polynomial-time Turing
+machine. Similarly, the class $\prBPP$ is the set of decision problems solvable
+by a probabilistic polynomial-time Turing machine with error probability at
+most 1/3 for all instances. The class $\prBPP$ will be one of our main objects
+of study, so its definition is worth repeating carefully.
+
+\begin{definition}[$\prBPP$]
+  A promise problem $\Pi = (\Pi_Y, \Pi_N)$ is in $\prBPP$ if and only if there
+  exists polynomial $p(n)$ and a probabilistic Turing machine $M$ such that
+  \begin{enumerate}
+    \item if $x \in \Pi_Y$, then $M$ accepts input $x$ with probability at
+      least $2/3$ after $p(n)$ steps, and
+    \item if $x \in \Pi_N$, then $M$ rejects input $x$ with probability at
+      least $2/3$ after $p(n)$ steps.
+  \end{enumerate}
+\end{definition}
+
+The constant $2/3$ in the definition of $\prBPP$ is not consequential; it
+can be replaced by any other constant greater than 1/2, which we will discuss
+in more detail in the next section.%
+\footnote{However, if the success probability is just ``strictly greater than
+  1/2,'' then we obtain the class \PP, which contains, in particular, \NP and
+  therefore is believed to be a strict superset of \BPP.}
+
+\begin{proposition}
+  If $\prBPP = \prP$, then $\BPP = \P$.
+\end{proposition}
+
+\begin{proof}
+  If $\Pi \in \BPP$, then trivially $\Pi \in \prBPP$ and therefore by
+  assumpiton $\Pi \in \prP$. As $\Pi$ is a decision problem, it follows
+  that $\Pi \in \P$.
+\end{proof}
+
+What do we know about the placement $\BPP$ with respect to other complexity
+classes? A trivial inclusion is $\BPP \subseteq \PSPACE \subseteq \EXP
+\subseteq \NEXP$. Open problem: prove $\BPP \ne \NEXP$.
+
+Using the amplification techniques of the next section, one can also prove
+the following theorem.
+
+\begin{theorem}
+  $\BPP \subseteq \Ppoly$.
+\end{theorem}
+
+
+\subsection{Equivalent Definitions of prBPP via Amplification}
 
 \begin{definition}
   An \emph{$(\eps, \delta)$-sampler} is a function $s :
@@ -52,28 +101,19 @@ obtain the same set of problems.
   T}$ instead of 1/3, where $T = T(n)$ is the number of random bits.
 \end{corollary}
 
-\subsection{The Complexity of BPP}
-
-What do we know about the placement $\BPP$ with respect to other complexity
-classes? A trivial inclusion is $\BPP \subseteq \PSPACE \subseteq \EXP
-\subseteq \NEXP$. Open problem: prove $\BPP \ne \NEXP$.
-
-\begin{theorem}
-  $\BPP \subseteq \Ppoly$.
-\end{theorem}
-
-\begin{proof}
-  Since the class $\BPP$ is the same even with error $2^{-2n}$, there exists
-  some choice of randomness that works for all inputs.
-\end{proof}
-
 \subsection{The Circuit Acceptance Probability Problem (CAPP)}
 
-\begin{definition}
-  The Circuit Acceptance Probability Problem ($\CAPP$) is the following: The input
-  is a description of a circuit. The YES instances are all those descriptions
-  of circuits that accept at least 2/3 of their inputs, and the NO instances
-  are all those descriptions that accept at most 1/3 of their inputs.
+The \emph{acceptance probability} of a circuit is the fraction of inputs for
+which it outputs 1.
+
+\begin{definition}[$\CAPP$]
+  $\CAPP$ is the promise problem where
+  \begin{enumerate}
+    \item $\CAPP_Y$ is the set of all descriptions of circuits that have
+      acceptance probability at least 2/3, and
+    \item $\CAPP_N$ is the set of all descriptions of circuits that have
+      acceptance probability at most 1/3.
+  \end{enumerate}
 \end{definition}
 
 \subsection{A Time-Hierarchy Theorem}
