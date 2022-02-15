@@ -7,9 +7,9 @@
   \item Uniform distinguishers for the NW-PRG with hard function $f$ can be
     used to learn $f$ with $1/\poly(n)$ advantage with high probability.
   \item The small advantage can be used to bootstrap an algorithm that computes
-    a well-structured problem in $\P^\sharpP$ with advantage. The conclusion is
+    a well-structured problem in $\P^{\sharpp}$ with advantage. The conclusion is
     that if $\prBPP = \prP$ unless there are algorithms to solve problems in
-    $\P^{\sharpP}$ on average. \comment{Is this right? I think we are missing
+    $\P^{\sharpp}$ on average. \comment{Is this right? I think we are missing
     a concrete hardness claim about the problem.}
   \item LLDCs and downward self-reducibility play a crucial role in the
     bootstrapping algorithm.
@@ -74,13 +74,13 @@ computation.
 	the algorithm $D$: on the input $1^n$, sample $x \sim \overline{x}_n$ using
 	$S(1^n)$, and then output the circuit $D_x(r) = M(x, r)$.
 	Then
-	\[
-		\Pr\brac{D \text{ prints a circuit that } \eps \text{-distinguishes }
-		G(1^n, u_{\ell})}
-		= \Pr\brac{\Delta(S(1^n)) > \eps}
-		= \Pr_{x \sim \overline{x}_n}\brac{\Delta(x) > \eps} > \eps.
-	\]
-	Which contradicts the fact that $G$ is an $\eps$-PRG.
+  \begin{align*}
+		\Pr\brac{D \text{ prints a circuit that } \eps \text{-distinguishes } G(1^n, u_{\ell})}
+    &= \Pr\brac{\Delta(S(1^n)) > \eps}\\
+    &= \Pr_{x \sim \overline{x}_n}\brac{\Delta(x) > \eps}\\
+    &> \eps,
+  \end{align*}
+	which contradicts the fact that $G$ is an $\eps$-PRG.
 \end{proof}
 
 \begin{theorem}
