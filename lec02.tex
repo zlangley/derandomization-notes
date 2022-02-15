@@ -29,4 +29,26 @@
 
 \subsection{The Nisan-Wigderson Generator}
 
+\begin{definition}[Combinatorial design]
+  A collection of subsets $T_1, \dots, T_m \subseteq [d]$ is a \emph{$(\ell, a)$-design}
+	\begin{enumerate}
+    \item $\card{S_i} = \ell$ for all $i$, and
+		\item $\card{S_i \cap S_j} < a$ for all $i \ne j$.
+	\end{enumerate}
+\end{definition}
+
+\begin{proposition}
+  \label{prop:design}
+  Let $\eps \in (0, 1/2)$ and let $\ell, m \in \mathbb{N}$. There exists an
+  $(\ell, a)$-design $T_1, \dots, T_m \subseteq [d]$ with $d = e^{2/\eps} \cdot
+  \ell^2/a$ and $a = \eps \log{m}$. Moreover, this design can be found
+  deterministically in time $\poly(m, d)$.
+\end{proposition}
+
+We will be interested in the parameter regime where $\eps$ is constant and $m =
+2^\ell$. Then the proposition states that in time $O(2^\ell)$ we can find
+$2^\ell$ sets from $[O(\ell)]$ that form an $(\ell, \eps \ell)$-design.
+
+\comment{Add proof. The sketch is given in Problem 3.2 of Vadhan's pseudorandomness.}
+
 \end{lecture}

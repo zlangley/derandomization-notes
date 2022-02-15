@@ -103,18 +103,6 @@ computation.
 
 \subsection{Learning via Uniform Distinguishers}
 
-\begin{definition}[Combinatorial design]
-  An \emph{$(n, \ell, a)$-combinatorial design} is a collection of subsets
-	$S_1, \ldots , S_n$ of a universe $\brac{d}$ such that:
-	\begin{enumerate}
-		\item For each $i$, $\card{S_i} = \ell$.
-		\item For each $i \neq j$, $\card{S_i \cap S_j} \leq a.$
-	\end{enumerate}
-\end{definition}
-\comment{This will probably need to be defined already in
-Lecture~\ref{lec:02}, so eventually we want to move this there. Also I made up
-the $(n, \ell, a)$ thing because the parameters looked lonely.}
-
 \comment{Restate / refer to the Nisan-Wigderson PRG here.}
 
 \begin{definition}
@@ -126,27 +114,27 @@ the $(n, \ell, a)$ thing because the parameters looked lonely.}
 
 \begin{proposition}
   \label{prop:learning}
-  Let $\ell(n)$ and $T_1, \dots, T_n$ be the seed length and $(n, \ell,
-  \ell/100)$-design, respectively, from the NW-PRG construction. Let $f :
+  Let $\ell = \log{n}$, let $\gamma \in (0, 1/2)$, and let $T_1, \dots, T_n$ be
+  a $(\ell, \gamma \ell)$-design over $[O(\ell)]$. Finally, let $f :
   \set{0,1}^\ell \to \set{0, 1}$ and let $G^f$ be the Nisan-Wigderson PRG with
-  oracle $f$. If $D$ is a uniform circuit on $n$ inputs generated in time
-  $\poly(n)$ that is not $(1/n)$-fooled by $G^f$, then there is a
-  polynomial-time algorithm that learns $f$ with advantage $1/n^2$ and success
-  $1/n$.
+  oracle $f$ and design $T_1, \dots, T_n$. If $D$ is a uniform circuit on $n$
+  inputs generated in time $\poly(n)$ that is not $(1/n)$-fooled by $G^f$, then
+  there is a $\poly(n)$-time algorithm to learn $f$ with advantage $1/n^2$ and
+  success $1/n$.
 \end{proposition}
 
 \begin{proof}
-  If $D$ is such a uniform distinguisher breaking $G^f$, then by definition
+  By definition, if $D$ is not $(1/n)$-fooled by $G^f$, then
 	\[
-		\card{\Pr\brac{D(G(1^n, s)) = 1} - \Pr\brac{D(\overline{u}_n) = 1}} >
-		1 / n.
+		\card{\Pr\brac{D(G(1^n, s)) = 1} - \Pr\brac{D(\overline{u}_n) = 1}} > 1/n.
 	\]
   \comment{Should the input to $G$ really be $1^n$ above?}
+
   As in the hybrid argument (\comment{ref. lecture 2 here}), we define the
   distributions
   \begin{align*}
-    \overline{H}_0 &= (f(x_1), \ldots  ,f(x_n)),\\
-    \overline{H}_i &= (\overline{u}_i, f(x_{i + 1}) \ldots f(x_n)),\\
+    \overline{H}_0 &= (f(x_1), \ldots, f(x_n)),\\
+    \overline{H}_i &= (\overline{u}_i, f(x_{i + 1}), \ldots, f(x_n)),\\
     \overline{H}_n &= \overline{u}_n,
   \end{align*}
   where $x_i$ is the projection of the seed given to the PRG onto the
@@ -158,6 +146,9 @@ the $(n, \ell, a)$ thing because the parameters looked lonely.}
   exploit the fact that $D$ can differentiate the bit $f(x_i)$ from a uniformly
   random bit. More concretely, we describe the algorithm $A$:
 	\begin{enumerate}
+    \item Construct the a $(\ell, \gamma \ell)$-design $T_1, \dots, T_n$ in
+      time $\poly(n)$ using Proposition~\ref{prop:design} from
+      Lecture~\ref{lec:02}.
 		\item Choose a random $i \in \brac{n}$.
 		\item Choose a random $z^* \in \set{0, 1}^{\ell(n) - \ell}$. Here $s$
 			(the seed of the PRG) projected to $T_i$ will be equal to $x_i$,
