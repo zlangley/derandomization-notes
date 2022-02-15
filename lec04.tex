@@ -19,25 +19,26 @@
 \subsection{Uniform Circuits}
 
 So far we have been studying PRGs for non-uniform circuits. As a consequence,
-the results we've seen assume problems in \E are hard for non-uniform models.
+our results so far require problems in \E that are hard for non-uniform models.
 In this lecture we investigate the analgous questions for uniform models of
 computation.
+
+\comment{Define uniform circuits}
 
 \begin{definition}[$\eps$-PRG for uniform circuits]
   An algorithm $G$ is an \emph{$\eps$-PRG for uniform circuits generated in
   time $t(n)$} if for every Turing machine $D$ with running time $t(n)$ and
   large enough $n \in \N$
 	\[
-		\Pr\brac{D(1^n) \text{ is an $\eps$-distinguisher circuit }
-    D_n \text{ for } G(1^n, u_{l(n)})} \leq \eps.
+		\Pr\brac{D(1^n) \text{ is an $\eps$-distinguisher for } G(1^n, u_{l(n)})} \leq \eps.
 	\]
 \end{definition}
 
 \begin{definition}
   Let $\overline{x} = \set{\overline{x}_n}$ be a sequence of distributions over
-  $\set{0, 1}^n$ and lelt $p : \N \to \N$. We say that $\overline{x}$ is
-  $p$-time samplable if there is a probabilistic machine $S$ with runtime
-  $p(n)$ such that $S(1^n)$ has the distribution $\overline{x}(n)$.
+  $\set{0, 1}^n$ and let $p : \N \to \N$. We say that $\overline{x}$ is
+  \emph{$p$-time samplable} if there is a probabilistic machine $S$ with
+  runtime $p(n)$ such that $S(1^n)$ has the distribution $\overline{x}(n)$.
 \end{definition}
 
 \begin{theorem}
