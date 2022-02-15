@@ -4,10 +4,15 @@
 \subsection*{The Upshot}
 
 \begin{enumerate}
-  \item Distinguishers for the NW-PRG with hard function $f$ imply learning
-    algorithms for $f$.
-  \item We can significantly boost the learning algorithm for functions that
-    are downward self-reducible and whose truthtable corresponds to a LLDC.
+  \item Uniform distinguishers for the NW-PRG with hard function $f$ can be
+    used to learn $f$ with $1/\poly(n)$ advantage with high probability.
+  \item The small advantage can be used to bootstrap an algorithm that computes
+    a well-structured problem in $\P^\sharpP$ with advantage. The conclusion is
+    that if $\prBPP = \prP$ unless there are algorithms to solve problems in
+    $\P^{\sharpP}$ on average. \comment{Is this right? I think we are missing
+    a concrete hardness claim about the problem.}
+  \item LLDCs and downward self-reducibility play a crucial role in the
+    bootstrapping algorithm.
 \end{enumerate}
 
 
@@ -15,12 +20,13 @@
 
 So far we have been studying PRGs for non-uniform circuits. As a consequence,
 the results we've seen assume problems in \E are hard for non-uniform models.
-In this lecture we investigate the analgous uniform questions.
+In this lecture we investigate the analgous questions for uniform models of
+computation.
 
 \begin{definition}[$\eps$-PRG for uniform circuits]
   An algorithm $G$ is an \emph{$\eps$-PRG for uniform circuits generated in
   time $t(n)$} if for every Turing machine $D$ with running time $t(n)$ and
-  enough $n \in \N$
+  large enough $n \in \N$
 	\[
 		\Pr\brac{D(1^n) \text{ is an $\eps$-distinguisher circuit }
     D_n \text{ for } G(1^n, u_{l(n)})} \leq \eps.
@@ -119,40 +125,38 @@ the $(n, \ell, a)$ thing because the parameters looked lonely.}
 \end{definition}
 
 \begin{proposition}
+  \label{prop:learning}
   Let $\ell(n)$ and $T_1, \dots, T_n$ be the seed length and $(n, \ell,
   \ell/100)$-design, respectively, from the NW-PRG construction. Let $f :
   \set{0,1}^\ell \to \set{0, 1}$ and let $G^f$ be the Nisan-Wigderson PRG with
   oracle $f$. If $D$ is a uniform circuit on $n$ inputs generated in time
   $\poly(n)$ that is not $(1/n)$-fooled by $G^f$, then there is a
-  polynomial-time algorithm that learns $f$ with success and advantage both
-  $1/\poly(n).$
+  polynomial-time algorithm that learns $f$ with advantage $1/n^2$ and success
+  $1/n$.
 \end{proposition}
 
 \begin{proof}
-	Let $D$ be any such uniform distinguisher breaking $G^f$, then by
-	definition
+  If $D$ is such a uniform distinguisher breaking $G^f$, then by definition
 	\[
 		\card{\Pr\brac{D(G(1^n, s)) = 1} - \Pr\brac{D(\overline{u}_n) = 1}} >
 		1 / n.
 	\]
-	As in the hybrid argument (\comment{ref. lecture 2 here}), we define the
-	distributions:
+  \comment{Should the input to $G$ really be $1^n$ above?}
+  As in the hybrid argument (\comment{ref. lecture 2 here}), we define the
+  distributions
+  \begin{align*}
+    \overline{H}_0 &= (f(x_1), \ldots  ,f(x_n)),\\
+    \overline{H}_i &= (\overline{u}_i, f(x_{i + 1}) \ldots f(x_n)),\\
+    \overline{H}_n &= \overline{u}_n,
+  \end{align*}
+  where $x_i$ is the projection of the seed given to the PRG onto the
+  coordinates $T_i$. Recall the (easy) lemma that there is an $i$ such that:
 	\[
-		\overline{H}_0 = (f(x_1), \ldots  ,f(x_n)), \ldots
-		\overline{H}_i = (\overline{u}_i, f(x_{i + 1}) \ldots f(x_n)), \ldots
-		\overline{H}_n = \overline{u}_n.
+		\card{\Pr\brac{D(\overline{H}_{i - 1}) = 1} - \Pr\brac{D(\overline{H}_i) = 1}} > 1 / n^2.
 	\]
-	Where $x_i$ is the projection of the seed given to the PRG onto the
-	coordinates $T_i$.
-	Then recall the (easy) lemma that there is an $i$ such that:
-	\[
-		\card{\Pr\brac{D(\overline{H}_{i - 1}) = 1}
-		- \Pr\brac{D(\overline{H}_i) = 1}} > 1 / n^2.
-	\]
-	Roughly speaking, we will guess the value of this $i$, and then try to
-	exploit the fact that $D$ can differentiate the bit $f(x_i)$ from a
-	uniformly random bit to compute $f(x_i)$. More concretely, we describe
-	the algorithm $A$:
+  Roughly speaking, the learning algorithm will guess the value of this $i$ and
+  exploit the fact that $D$ can differentiate the bit $f(x_i)$ from a uniformly
+  random bit. More concretely, we describe the algorithm $A$:
 	\begin{enumerate}
 		\item Choose a random $i \in \brac{n}$.
 		\item Choose a random $z^* \in \set{0, 1}^{\ell(n) - \ell}$. Here $s$
@@ -161,7 +165,7 @@ the $(n, \ell, a)$ thing because the parameters looked lonely.}
 		\item Choose a random bit $\sigma$.
 		\item Query the oracle for $f$ on all possible inputs
 			$x_{i + 1}, \ldots , x_n$. Note that at most $\ell / 100$ bits of
-			each of these $x_j$'s is unknown after fixing $z^*$, so there
+			each of these $x_j$'s are unknown after fixing $z^*$, so there
 			are at most $n \cdot 2^{\ell / 100}$ queries to the oracle.
 		\item Choose a random $u^* \in \set{0, 1}^{i - 1}$.
 		\item Output the circuit $C_n$ which simulates $D$ on
@@ -172,21 +176,25 @@ the $(n, \ell, a)$ thing because the parameters looked lonely.}
 	$\Pr\brac{C_n(x) = f_n(x)} = 1/2 + 1/n^2$.
 \end{proof}
 
-\begin{proposition}
-	If $D$ is a distinguisher for $G^{f}$, then $A$ learns $f$ with success
-	$0.99$ and advantage $1/n^2$.
-\end{proposition}
+\begin{corollary}
+  If there is a $(1/n)$-distinguisher for the NW-PRG $G^f$, then there is an
+  algorithm that learns $f$ with success $1 - 1/\delta$ and advantage
+  $1/(2n^2)$ that runs in time $\poly(n, 1/\delta)$.
+\end{corollary}
 
 \begin{proof}
-  Have the algorithm generate $n \log{n}$ circuits; with high probability one
-  of these has advantage $1/n^2$. In other words, we have $n \log{n}$ coins and
-  at least one of them lands heads with probability at least $1/2 + 1/n^2$
-  (flipping a coin corresponds to running the circuit on a random input). It
-  suffices to estimate the bias of each of these coins to a sufficient degree,
-  which can be done in $\poly(n)$ time.
+  Let $A$ be the learning algorithm for $f$ with success $1/n$ and advantage
+  $1/n^2$ promised by Proposition \ref{prop:learning}. By running $A$
+  independently $n \log(1/\delta)$ times, the probability that none of the
+  circuits produced has advantage $1/n^2$ is $1 - (1 - 1/n)^{n\log(1/\delta)} >
+  1 - \delta$. We can estimate the acceptance probability of each of the
+  $n\log(1/\delta)$ circuits to within an additive error of $1/(2n^2)$ with
+  probability $1 - \delta$ by running it on $O(n^4 \log(1/\delta))$ random
+  inputs. Hence if such a circuit exists, we will find it in time $\poly(n,
+  1/\delta)$. Reparameterizing $\delta$ gives the result.
 \end{proof}
 
-\subsection{Boosting via Downward Self-Reducibility and LLDCs}
+\subsection{Bootstrapping via Downward Self-Reducibility and LLDCs}
 
 \begin{definition}
   $f$ is \emph{downward self-reducable (DSR)} if there exists an algorithm $A$
