@@ -32,23 +32,96 @@
 \begin{definition}[Combinatorial design]
   A collection of subsets $T_1, \dots, T_m \subseteq [d]$ is a \emph{$(\ell, a)$-design}
 	\begin{enumerate}
-    \item $\card{S_i} = \ell$ for all $i$, and
-		\item $\card{S_i \cap S_j} < a$ for all $i \ne j$.
+    \item $\card{T_i} = \ell$ for all $i$, and
+		\item $\card{T_i \cap T_j} < a$ for all $i \ne j$.
 	\end{enumerate}
 \end{definition}
 
-\begin{proposition}\label{prop:design}
+We will be interested in combinatorial designs where $m = 2^\ell$, $d =
+O(\ell)$, and $a = \gamma \ell$ for some constant $\gamma > 0$. The following
+proposition states that, not only does such a design exist for all $\ell$,
+but it can be computed deterministically in time $O(2^\ell)$.
+
+\begin{theorem}\label{thm:design}
   Let $\gamma > 0 $ and let $\ell, m \in \mathbb{N}$. For all $a \ge \gamma
-  \log{n}$ and $d \ge e^2 \cdot 2^{1/\gamma} \cdot \ell^2/a$, there exists an
+  \log{m}$ and $d \ge e^2 \cdot 2^{1/\gamma} \cdot \ell^2/a$, there exists an
   $(\ell, a)$-design $T_1, \dots, T_m \subseteq [d]$. Moreover, such a design
   can be found deterministically in time $\poly(m, d)$.
-\end{proposition}
+\end{theorem}
 
-We will be interested in the parameter regime where $\gamma$ is a small
-constant (say, $1/10$) and $m = 2^\ell$. In this regime, the set intersection
-sizes are bounded by $\gamma \ell$ (no two sets intersect in more than a
-constant fraction of their elements) and the universe size $d$ is $O(\ell)$.
+The proof of the theorem will use the following lemma.
+\begin{lemma}\label{lem:design}
+  Let $a, \ell, d \in \N$ with $a \le \ell \le d$, and let $T_1, \dots, T_m \in
+  \binom{[d]}{\ell}$. If $m < \binom{d}{a} / \binom{\ell}{a}^2$, then there
+  exists a set $T^* \in \binom{[d]}{\ell}$ such that $\card{T^* \cap T_i} < a$
+  for all $i \in [m]$. Moreover, such a set $T^*$ can be found
+  deterministically in time $\poly(m, d)$.
+\end{lemma}
 
-\comment{Add proof. The sketch is given in Problem 3.2 of Vadhan's pseudorandomness.}
+\begin{proof}
+  We first use the probabilistic method to show that such a set $T^*$ exists.
+  Let $\mathbb{T}$ be a uniformly random $\ell$-set over $[d]$, let $X_j$
+  be an indicator for the ``bad'' event $B_j$ that $|\mathbb{T} \cap T_j| \ge
+  a$, and let $X = \sum_{j=1}^m X$ be the number of bad events. It suffices to
+  show that \[
+    \Exp\brac*{X} < 1,
+  \]
+  because then there is some realization of $\mathbb{T}$ for which all $X_j$
+  are 0.
+
+  The number of $\ell$-sets whose intersection with $T_j$ is at least $a$ is
+  most $\binom{\ell}{a}\binom{d - a}{\ell - a}$: first choose $a$ elements from
+  $T_j$ and then pick any $\ell - a$ elements from the remaining elements. Hence
+  \[
+    \Pr(B_j) \le \frac{\binom{\ell}{a}\binom{d - a}{\ell - a}}{\binom{d}{\ell}} =
+    \frac{\binom{\ell}{a}^2}{\binom{d}{a}},
+  \]
+  where we used the identity $\binom{d}{\ell}\binom{\ell}{a} =
+  \binom{d}{a}\binom{d - a}{\ell - a}$ in the last step. If $m < \binom{d}{a} /
+  \binom{\ell}{a}^2$, then \[
+    \Exp\brac*{X} =
+    \sum_{j=1}^m \Pr(B_j) \le m \cdot \frac{\binom{\ell}{a}^2}{\binom{d}{a}} < 1,
+  \]
+  as desired.
+
+  Now we describe how to construct such a set $T^*$ deterministically using the
+  \emph{method of conditional probabilities}. At a high level, the algorithm
+  iterates simply over the elements $i \in [d]$ and in each iteration decides
+  whether to include $i$ in $T^*$ based on a conditional expectation
+  calculation. For example, suppose we want to decide if the element $1$ should
+  be included. We have \[
+    1 > \Exp\brac*{X} = \Pr(1 \in \mathbb{T}) \cdot \Exp\brac*{X \mid 1 \in \mathbb{T}} 
+      + \Pr(1 \not\in \mathbb{T}) \cdot \Exp\brac*{X \mid 1 \not\in \mathbb{T}},
+  \]
+  and so one of $\Exp\brac{X \mid 1 \in \mathbb{T}}$ or $\Exp\brac{X \mid 1 \not\in
+  \mathbb{T}}$ is less than one. If $\Exp\brac{X \mid 1 \in \mathbb{T}} < 1$,
+  then it is safe to add $1$ to $T^*$. Inductively, when we consider adding
+  element $i$ to $\mathbb{T}$, one of the two expectations will be less than
+  one, which gives us a decision for $i$.
+
+  The only thing left to show is that for any set $T \subseteq [i]$, we can
+  compute $\Pr(B_j \mid \mathbb{T} \cap [i] = T)$ exactly. This is a bit of an
+  ugly calculation, but only involves basic combinatorics; we leave the details
+  to the reader.
+\end{proof}
+%    \Pr(B_j \mid \mathbb{T} \cap [i] = T) = \binom{d - i}{\ell - |T|}^{-1}
+%    \sum_{b=a}^{\ell} \binom{|S_j \cap \set{i+1, \dots, d}|}{b-|T \cap S_j|}\binom{d - \ell}{\ell}
+
+Now we return to the proof of Theorem~\ref{thm:design}.
+
+\begin{proof}[Proof of Theorem~\ref{thm:design} using Lemma~\ref{lem:design}]
+  A routine calculation shows that for $a \ge \gamma \log{m}$ and $d \ge e^2
+  \cdot 2^{1/\gamma} \cdot \ell^2/a$, we have $m \le \binom{d}{a} /
+  \binom{\ell}{a}^2$. Indeed,
+  \begin{align*}
+    \binom{d}{a} \cdot \binom{\ell}{a}^{-2}
+    &\ge \paren*{\frac{d}{a}}^a \cdot \paren*{\frac{e \ell}{a}}^{-2a}\\
+    &\ge \paren*{\frac{e^2 \cdot 2^{1/\gamma} \cdot \ell^2}{a^2}}^{a} \cdot \paren*{\frac{e^2 \ell^2}{a^2}}^{-a}\\
+    &= 2^{a / \gamma}\\
+    &\ge m.
+  \end{align*}
+  Hence we can iteratively apply Lemma~\ref{lem:design} $m$ times to obtain the
+  sets $T_1, \dots T_m$.
+\end{proof}
 
 \end{lecture}

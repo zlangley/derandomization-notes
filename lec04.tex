@@ -113,8 +113,7 @@ computation.
   $C_n$ such that $\Pr_x \brac{C_n(x) = f_n(x)} \geq 1/2 + \eps$.
 \end{definition}
 
-\begin{proposition}
-  \label{prop:learning}
+\begin{proposition}\label{prop:learning}
   Let $\ell = \log{n}$, let $\gamma \in (0, 1/2)$, and let $T_1, \dots, T_n$ be
   a $(\ell, \gamma \ell)$-design over $[O(\ell)]$. Finally, let $f :
   \set{0,1}^\ell \to \set{0, 1}$ and let $G^f$ be the Nisan-Wigderson PRG with
@@ -148,7 +147,7 @@ computation.
   random bit. More concretely, we describe the algorithm $A$:
 	\begin{enumerate}
     \item Construct the a $(\ell, \gamma \ell)$-design $T_1, \dots, T_n$ in
-      time $\poly(n)$ using Proposition~\ref{prop:design} from
+      time $\poly(n)$ using Theorem~\ref{thm:design} from
       Lecture~\ref{lec:02}.
 		\item Choose a random $i \in \brac{n}$.
 		\item Choose a random $z^* \in \set{0, 1}^{\ell(n) - \ell}$. Here $s$
