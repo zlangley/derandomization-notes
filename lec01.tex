@@ -78,6 +78,27 @@ the following theorem.
   $\BPP \subseteq \Ppoly$.
 \end{theorem}
 
+\comment{Did we do a $\prBPP$ version of this?}
+
+\begin{proof}
+    Let $L \in \BPP$.
+    Then there exists a polynomial time Turing Machine $M$ using polynomially many random bits that decides $L$ with error probability $2^{-2n}$.
+    That is, for all inputs $x$,
+    \begin{align*}
+        \Pr_r\left[M(x,r) \neq [x \in L]\right] \leq 2^{-2n}.
+    \end{align*}
+    Union bounding over all inputs of size $n$,
+    \begin{align*}
+                & \Pr_r\left[\bigcup_{x \in \{0,1\}^n} M(x,r) \neq [x \in L]\right]
+        \\ \leq & \sum_{x \in \{0,1\}^n} \Pr_r\left[M(x,r) \neq [x \in L]\right]
+        \\ \leq & 2^n \cdot 2^{-2n}
+        \\ <    & 1.
+    \end{align*}
+    There is thus some $r$ that such that $M(x,r) = \left[x \in L\right]$ for all inputs $x$ of size $n$.
+    We can hardwire this $r$ into an emulation of $M$ on inputs $x$ of size $n$ via a poly size circuit.
+    $L$ is therefore in $\Ppoly$.
+\end{proof}
+
 \subsection{Equivalent Definitions of prBPP via Amplification}
 
 \comment{This section needs some love. goal: state the success/failure range for which we know BPP is the same class}
@@ -143,7 +164,7 @@ which it outputs 1.
   $\prBPTIME[T \log{T}] \subsetneq \prBPTIME[T]$
 \end{theorem}
 
-\comment{I recall that the proof in class had a bug. Ask Vikrant?}
+\comment{TODO: Why standard diag fails for BPP. Why it fails for prBPP. Why lazy diag works for prBPP. Why it still fails for BPP.}
 
 \subsection{Reducing Search Problems to Decision Problems}
 
