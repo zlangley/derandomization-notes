@@ -100,40 +100,37 @@ already mentioned that for all constant $\delta_0 > 1/2$, $\prBPP[\delta_0] =
 \prBPP$. However, perhaps surprisingly, the class $\prBPP[1/2]$ appears much
 more powerful than $\prBPP$: for example, $\NP \subseteq \prBPP[1/2]$.%
 \footnote{The non-promise class corresponding to what we call $\prBPP[1/2]$ is
-called $\PP$.} However, we can still have $\prBPP[\delta(n)] = \prBPP$ for
-$\delta(n)$ tending to $1/2$, provided $\delta$ it doesn't converge too
-quickly.
+called $\PP$.}
 
-\begin{proposition}
-  If $\delta(n) \le 1/2 - \eps(n)$ for some function $\eps(n)$ satisfying
-  $1/\eps(n) = \poly(n)$, then $\prBPP[\delta(n)] = \prBPP$.
+Recall the following additive Chernoff bound.
+
+\begin{theorem}[Additive Chernoff lower tail bound]\label{thm:chernoff}
+  Let $X_1, \dots, X_n$ are independent random variables where $X_i \sim
+  \Bern(p)$, let $X := \sum_{i=1}^n X_i$, and let $\mu = \Exp X$. For all
+  $\lambda \ge 0$, \[
+    \Pr\paren*{X \le \mu - \lambda} \le \exp\paren*{-\frac{\lambda^2}{2\mu}}.
+  \]
+\end{theorem}
+
+\begin{proposition}[Majority trick]
+  Let $\eps \in (0, \frac{1}{2}]$, let $p \ge \frac{1}{2} + \eps$, and let $X_1,
+  \dots, X_t \sim \Bern(p)$ be i.i.d. The majority of $X_1, \dots, X_t$ is 1
+  with probability at least $1 - \exp(-\eps^2 t/2)$.
 \end{proposition}
 
 \begin{proof}
-  We may assume without loss of generality that $\delta(n) \ge 1/3$. It follows
-  by definition that $\prBPP \subseteq \prBPP[\delta(n)]$. Let $\Pi \in
-  \prBPP[\delta(n)]$ and let $M$ be the corresponding machine for $\Pi$. We
-  must amplify the success rate of $M$ from $1/2 + \eps$ to $2/3$, and we do so
-  in the obvious way: run $M$ independently many times and output the majority
-  bit.
-
-  Consider the machine $M'$ that runs $M$ independently $t := 2\ln(3)/\eps^2$
-  times, records the outputs $X_1, \dots, X_t$, and returns the majority of the
-  $X_i$'s. Clearly $M'$ runs in polynomial time as $1/\eps = \poly(n)$. We
-  claim that $M'$ errs with probability at most 1/3. The majority of the
-  $X_i$'s is wrong when $\sum_i X_i < t/2$. Let $X = \sum_{i=1}^t X_i$ and
-  observe that $\Exp{X} \ge t(1/2 - \eps)$. By a Chernoff bound, the
-  probability of failure is \[
-    \Pr(X < t/2) = \Pr(X < \Exp{X} + \eps t) < \exp\paren*{-\eps^2 t/2} < 1/3,
+  Let $X := \sum_{i=1}^t X_i$ and let $\mu = \Exp X$ and observe that $\mu \ge
+  t/2 + t\eps$ and $\mu \le t$. If $X \le t/2$, then the majority is 0. By the
+  Chernoff bound of Theorem~\ref{thm:chernoff}, the probability of this bad
+  event is \[
+    \Pr(X \le t/2) = \Pr(X \le \mu - \eps t) < \exp\paren*{-\frac{\eps^2t^2}{2\mu}} \le \exp\paren*{-\frac{\eps^2t}{2}}.
   \]
-  as desired.
+  Hence the output is 1 with probability at most $1 - \exp(-\eps^2 t/2)$.
 \end{proof}
 
-In the other direction, how small can the error be so that we can still prove
-an equivalence to $\prBPP$? Obviously we cannot yet prove $\prBPP[0] = \prBPP$,
-for $\prBPP[0] = \prP$.
+\comment{Add a corollary here detailing what kinds of amplification we can get with the majority trick}
 
-\comment{TODO: Flesh out below a bit more and reference Lecture 5, in which the theorem below is proved}
+\comment{TODO: reference Lecture 5, in which the theorem below is proved}
 
 \begin{definition}
   An \emph{$(\eps, \delta)$-sampler} is a function $s :
