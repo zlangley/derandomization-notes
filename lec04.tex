@@ -260,33 +260,32 @@ For example, $\SAT$ and $\PERM$ are DSR.
 \end{theorem}
 
 \begin{proofsk}
-  We will derandomize using the Nisan-Wigderson PRG. Assume towards a
-  contradiction that a uniform distinguisher $D$ breaks the PRG $G^{\fws}$
-  for all input lengths. Then for any $x \in \set{0, 1}^{\ell}$ we want to
-  compute $\fws(x)$ with a small circuit. In particular, we will inductively
-  construct a circuit $F_i$ of size much smaller than $2^{\eps \ell}$ that
-  computes $\fws_i$.
+  The proof is by reconstruction: Assume contrapositively that there is some
+  uniform distinguisher $D$ that is not fooled by the PRG. We will use $D$ to
+  give a $\BPTIME\brac{2^{\eps n}}$ algorithm for $\fws$.
+
+  Let $x \in \{0, 1\}^n$; we want to compute $\fws(x)$ efficiently. The
+  algorithm iteratively constructs circuits $F_i$ that computes $\fws$ on all
+  inputs of length $i$. We can compute $F_1$ in constant time. Now describe how
+  to compute $F_i$ from $F_{i-1}$:
   \begin{enumerate}
     \item Assume that $F_{i - 1}$ computes $\fws_{i - 1}$.
-    \item Run $A(i)$ from Corollary~\ref{corr:learning-boost-success},
-      answering queries to $\fws_i(x)$ using its downward self reducability
-      and the circuit $F_{i - 1}$.
+    \item Let $A$ be the learning algorithm for
+      Corollary~\ref{corr:learning-boost-success} with $\delta = 1/n^2$. Run
+      $A$ on input $1^i$, answering queries $\fws_i(x)$ using the downward
+      self-reducability of $\fws$ and the circuit $F_{i - 1}$.
     \item With high probability, $A$ returns a circuit that agrees with
-      $\fws_i$ on $1/2 + 2^{\ell / c}$ fraction of the inputs.
-    \item Compute a list of circuits each implementing the LLDC decoder with
-      the previous circuits as the corrupt codewords.
-      \comment{This step makes no sense -- I just copied it from my notes.
-      In particular, what exactly are we decoding?}
-    \item Using random sampling, and the downward self-reducability of
-      $\fws$, and $F_{i - 1}$ find a circuit that agrees with $\fws_i$ on
-      $0.99$ fraction of the inputs.
+      $\fws_i$ on a $1/2 + 1/n^2$ fraction of the inputs.
+    \item Compute a list of circuits via the LLDC decoder with the previous
+      circuit as the corrupt codeword.
+    \item Using random sampling and the downward self-reducability of $\fws$
+      and $F_{i - 1}$, find a circuit that agrees with $\fws_i$ on a $0.99$
+      fraction of the inputs.
     \item Combine this with a local unique decoder.
-      \comment{Again, I don't know why this step is here, don't we have
-      the circuit we want already after the previous step?}
   \end{enumerate}
-  To tie this up, observe that there are $\ell$ steps of the loop above,
-  and in each step we run in time $\poly(2^{\ell / c})$ and output a circuit
-  of size $\poly(2^{\ell / c})$.
+  To tie this up, observe that there are $\ell$ steps of the loop above, and in
+  each step we run in time $\poly(2^{\ell / c})$ and output a circuit of size
+  $\poly(2^{\ell / c})$.
 \end{proofsk}
 
 \end{lecture}
