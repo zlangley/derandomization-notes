@@ -31,22 +31,18 @@ input $x \in \Pi_Y$ it accepts and on input $x \in \Pi_N$ it rejects. Crucially,
 for inputs not in the promise, the machine can behave arbitrarily.
 
 Promise problems generalize decision problems (languages) in the case that
-$\Pi_Y \cup \Pi_N = \Pi$. \comment{Should this be $\set{0, 1}^*$?}
-Complexity classes based on decision problems have
-obvious analogs based on promise problems. For example, $\prP$ is the class of
-all promise problems solvable by a deterministic polynomial-time Turing
-machine. Similarly, the class $\prBPP$ is the class of promise problems solvable
-by a probabilistic polynomial-time Turing machine with error probability at
-most 1/3 for all instances. \comment{I ``fixed'' this, but I'm not a 100\% sure
-what the original sentence wanted to say.}
-The class $\prBPP$ will be one of our main objects of study, so its definition
-is worth repeating carefully.
+$\Pi_Y \cup \Pi_N = \{0,1\}^*$. Complexity classes based on decision problems
+have obvious analogs based on promise problems. For example, $\prP$ is the
+class of all promise problems solvable by a deterministic polynomial-time
+Turing machine. Similarly, the class $\prBPP$ is the class of promise problems
+solvable by a probabilistic polynomial-time Turing machine with error
+probability at most 1/3 for all instances. The class $\prBPP$ will be one of
+our main objects of study, so its definition is worth repeating carefully.
 
 \begin{definition}[$\prBPP$]
   A promise problem $\Pi = (\Pi_Y, \Pi_N)$ is in $\prBPP$ if and only if there
-  exists polynomial $p(n)$ and a probabilistic Turing machine $M$ such that
+  exists a polynomial $p(n)$ and a probabilistic Turing machine $M$ such that
   \begin{enumerate}
-    \item $M$ runs in time $p(n)$ on any string,
     \item if $x \in \Pi_Y$, then $M$ accepts input $x$ with probability at
       least $2/3$ after $p(n)$ steps, and
     \item if $x \in \Pi_N$, then $M$ rejects input $x$ with probability at
@@ -58,8 +54,8 @@ The constant $2/3$ in the definition of $\prBPP$ is not important; it
 can be replaced by any other constant greater than 1/2, which we will discuss
 in more detail in the next section.%
 \footnote{However, if the success probability is just ``strictly greater than
-  1/2,'' then we obtain the class \PP, which contains, in particular, \NP{} and
-  therefore is believed to be a strict superset of \BPP.}
+1/2,'' then we obtain the class $\PP$, which contains, in particular, $\NP$ and
+therefore is believed to be a strict superset of $\BPP$.}
 
 \begin{proposition}
   If $\prBPP = \prP$, then $\BPP = \P$.
