@@ -43,67 +43,97 @@ our main objects of study, so its definition is worth repeating carefully.
   A promise problem $\Pi = (\Pi_Y, \Pi_N)$ is in $\prBPP$ if and only if there
   exists a polynomial $p(n)$ and a probabilistic Turing machine $M$ such that
   \begin{enumerate}
-    \item if $x \in \Pi_Y$, then $M$ accepts input $x$ with probability at
-      least $2/3$ after $p(n)$ steps, and
-    \item if $x \in \Pi_N$, then $M$ rejects input $x$ with probability at
-      least $2/3$ after $p(n)$ steps.
+    \item if $x \in \Pi_Y$, then $M$ accepts input $x$ with probability greater
+      than $2/3$ after $p(n)$ steps, and
+    \item if $x \in \Pi_N$, then $M$ rejects input $x$ with probability greater
+      than $2/3$ after $p(n)$ steps.
   \end{enumerate}
 \end{definition}
 
 The constant $2/3$ in the definition of $\prBPP$ is not important; it
 can be replaced by any other constant greater than 1/2, which we will discuss
 in more detail in the next section.%
-\footnote{However, if the success probability is just ``strictly greater than
-1/2,'' then we obtain the class $\PP$, which contains, in particular, $\NP$ and
-therefore is believed to be a strict superset of $\BPP$.}
 
 \begin{proposition}
   If $\prBPP = \prP$, then $\BPP = \P$.
 \end{proposition}
 
 \begin{proof}
-  If $\Pi \in \BPP$, then trivially $\Pi \in \prBPP$ and therefore by
-  assumpiton $\Pi \in \prP$. As $\Pi$ is a decision problem, it follows
+  If $\Pi \in \BPP$, then trivially $\Pi \in \prBPP$, and therefore by
+  assumption, $\Pi \in \prP$. As $\Pi$ is a decision problem, it follows
   that $\Pi \in \P$.
 \end{proof}
 
 What do we know about the placement $\BPP$ with respect to other complexity
-classes? A trivial inclusion is $\BPP \subseteq \PSPACE \subseteq \EXP
-\subseteq \NEXP$. Open problem: prove $\BPP \ne \NEXP$.
+classes? An easy inclusion is $\BPP \subseteq \PSPACE$.
 
-Using the amplification techniques of the next section, one can also prove
-the following theorem.
-
-\begin{theorem}
-  $\BPP \subseteq \Ppoly$.
-\end{theorem}
-
-\comment{Did we do a $\prBPP$ version of this?}
-
+\begin{proposition}
+  $\BPP \subseteq \PSPACE$.
+\end{proposition}
 \begin{proof}
-    Let $L \in \BPP$.
-    Then there exists a polynomial time Turing Machine $M$ using polynomially
-	many random bits that decides $L$ with error probability $2^{-2n}$.
-    That is, for all inputs $x$,
-    \begin{align*}
-		\Pr_r\brac*{M(x,r) \neq \brac{x \in L}} \leq 2^{-2n}.
-    \end{align*}
-    Union bounding over all inputs of size $n$,
-	\[
-		\Pr_r\brac*{\bigcup_{x \in \set{0, 1}^n} M(x,r) \neq \brac{x \in L}}
-		\leq \sum_{x \in \set{0,1}^n} \Pr_r\brac*{M(x,r) \neq \brac{x \in L}}
-		\leq 2^n \cdot 2^{-2n} < 1.
-	\]
-	There is thus some $r$ that such that $M(x,r) = \brac*{x \in L}$ for all
-	inputs $x$ of size $n$.
-    We can hardwire this $r$ into an emulation of $M$ on inputs $x$ of size
-	$n$ via a poly size circuit.
-    $L$ is therefore in $\Ppoly$.
+  In one sentence: Simulate the $\BPP$ algorithm with all possible random
+  strings.
+
+  In more detail, let $L \in \BPP$ and let $M$ be a probabilistic Turing
+  machine that solves $L$ in polynomial time $p(n)$. We can design a
+  deterministic machine $M'$ that solves $L$ as follows. On input $x$, $M'$
+  simulates $M$ on input $(x, r)$ for every $r \in \set{0,1}^{p(n)}$ and counts
+  the number of times $M$ accepts. If $M$ accepts for more than $\frac{2}{3}
+  \cdot 2^{p(n)}$ choices of $r$, then $M'$ accepts. Otherwise, $M'$ rejects.
+
+  Clearly $M'$ accepts $L$ if and only if $M$ accepts $L$. The space
+  requirements of $M'$ are the space requirements of $M$ plus the $p(n)$ bits
+  for $r$ plus the $p(n)$ bits for the counter, and hence $M$ decides $L$ in
+  polynomial space.
 \end{proof}
+
+Of course we cannot yet prove $\BPP \ne \PSPACE$ because we cannot yet prove
+$\P \ne \PSPACE$. The deterministic time hierarchy theorem tells us that $P \ne
+\EXP$, but suprisingly, it is still only a conjecture that $\BPP \ne \NEXP$!
 
 \subsection{Equivalent Definitions of prBPP via Amplification}
 
-\comment{This section needs some love. goal: state the success/failure range for which we know BPP is the same class}
+Let $\prBPP[\delta(n)]$ be the class of promise problems that are solved by a
+polynomial-time Turing machine with error probability at most $\delta(n)$ on
+all input strings of length $n$. Notice that $\prBPP = \prBPP[1/3]$. We have
+already mentioned that for all constant $\delta_0 > 1/2$, $\prBPP[\delta_0] =
+\prBPP$. However, perhaps surprisingly, the class $\prBPP[1/2]$ appears much
+more powerful than $\prBPP$: for example, $\NP \subseteq \prBPP[1/2]$.%
+\footnote{The non-promise class corresponding to what we call $\prBPP[1/2]$ is
+called $\PP$.} However, we can still have $\prBPP[\delta(n)] = \prBPP$ for
+$\delta(n)$ tending to $1/2$, provided $\delta$ it doesn't converge too
+quickly.
+
+\begin{proposition}
+  If $\delta(n) \le 1/2 - \eps(n)$ for some function $\eps(n)$ satisfying
+  $1/\eps(n) = \poly(n)$, then $\prBPP[\delta(n)] = \prBPP$.
+\end{proposition}
+
+\begin{proof}
+  We may assume without loss of generality that $\delta(n) \ge 1/3$. It follows
+  by definition that $\prBPP \subseteq \prBPP[\delta(n)]$. Let $\Pi \in
+  \prBPP[\delta(n)]$ and let $M$ be the corresponding machine for $\Pi$. We
+  must amplify the success rate of $M$ from $1/2 + \eps$ to $2/3$, and we do so
+  in the obvious way: run $M$ independently many times and output the majority
+  bit.
+
+  Consider the machine $M'$ that runs $M$ independently $t := 2\ln(3)/\eps^2$
+  times, records the outputs $X_1, \dots, X_t$, and returns the majority of the
+  $X_i$'s. Clearly $M'$ runs in polynomial time as $1/\eps = \poly(n)$. We
+  claim that $M'$ errs with probability at most 1/3. The majority of the
+  $X_i$'s is wrong when $\sum_i X_i < t/2$. Let $X = \sum_{i=1}^t X_i$ and
+  observe that $\Exp{X} \ge t(1/2 - \eps)$. By a Chernoff bound, the
+  probability of failure is \[
+    \Pr(X < t/2) = \Pr(X < \Exp{X} + \eps t) < \exp\paren*{-\eps^2 t/2} < 1/3,
+  \]
+  as desired.
+\end{proof}
+
+In the other direction, how small can the error be so that we can still prove
+an equivalence to $\prBPP$? Obviously we cannot yet prove $\prBPP[0] = \prBPP$,
+for $\prBPP[0] = \prP$.
+
+\comment{TODO: Flesh out below a bit more and reference Lecture 5, in which the theorem below is proved}
 
 \begin{definition}
   An \emph{$(\eps, \delta)$-sampler} is a function $s :
@@ -120,12 +150,42 @@ the following theorem.
   \overline{T}/\eps)$ and $\delta = 2^{\overline{T}^\eps - \overline{T}}$.
 \end{theorem}
 
-\begin{corollary}
-  The class $\prBPP$ can be equivalently defined with an error of $2^{T^\eps -
-  T}$ instead of 1/3, where $T = T(n)$ is the number of random bits.
+\comment{TODO: rewrite corollary below in terms of $\prBPP[\delta]$. also write a proof}
+
+\begin{corollary}\label{cor:bpp-small-error}
+  For all $\eps > 0$, the class $\prBPP$ can be equivalently defined with an
+  error of $2^{T^\eps - T}$ instead of 1/3, where $T = T(n)$ is the number of
+  random bits.
 \end{corollary}
 
-\comment{Show $\BPP \subseteq \Ppoly$ corollary}
+\begin{corollary}
+  $\BPP \subseteq \Ppoly$.
+\end{corollary}
+
+\begin{proof}
+    Let $L \in \BPP$. By Corollary~\ref{cor:bpp-small-error}, there exists a
+    probabilistic polynomial-time machine $M$ solving $L$ with error
+    probability at most $2^{-2n}$.
+
+    Fix $n$ and let $f_n : \{0, 1\}^n \to \{0, 1\}$ be the indicator for $L
+    \cap \{0, 1\}^n$. Let $A_x$ be the event that $M(x, r) \ne f_n(x)$, where
+    the randomness is over the choice of $r$. For any fixed $x \in \{0, 1\}^n$,
+    we have
+    \begin{align*}
+      \Pr\brac*{A_x} \leq 2^{-2n}.
+    \end{align*}
+    Union bounding over all inputs of size $n$, \[
+      \Pr\brac*{\bigcup_{x \in \set{0, 1}^n} A_x}
+      \leq \sum_{x \in \set{0,1}^n} \Pr_r\brac*{A_x}
+      \leq \sum_{x \in \set{0,1}^n} 2^{-2n}
+      < 1.
+    \]
+    There is thus some $r^*$ such that $A_x$ does not occur for any $x$. In
+    other words, $M(x,r^*) = f_n(x)$ for all inputs $x$ of size $n$. Hence the
+    machine that on input $x$ and advice $r^*$ simulates $M$ on input $(x,
+    r^*)$ solves $L$ in polynomial time using polynomial bits of advice.
+\end{proof}
+
 
 \subsection{The Circuit Acceptance Probability Problem (CAPP)}
 
@@ -146,7 +206,7 @@ which it outputs 1.
   $\CAPP$ is complete for $\prBPP$ under deterministic polynomial-time reductions.
 \end{theorem}
 
-\comment{State the form of the Cook-Levin theorem we need in the following proof.}
+\comment{TODO: State the form of the Cook-Levin theorem we need in the following proof.}
 
 \begin{proof}
   The problem $\CAPP$ is easily seen to be in $\prBPP$: consider the algorithm
