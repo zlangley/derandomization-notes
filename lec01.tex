@@ -202,22 +202,27 @@ which it outputs 1.
   \end{enumerate}
 \end{definition}
 
-\begin{theorem}[$\CAPP$ is $\prBPP$-complete]
+\begin{theorem}[$\CAPP$ is $\prBPP$-complete]\label{thm:complete}
   $\CAPP$ is complete for $\prBPP$ under deterministic polynomial-time reductions.
 \end{theorem}
 
-\comment{TODO: State the form of the Cook-Levin theorem we need in the following proof.}
+Recall from the reduction in Cook's theorem that every Turing machine can be
+efficiently converted to an equivalent circuit for a fixed input length.
+\begin{lemma}\label{lem:tm-to-circuit}
+  For all $n \in \N$ there is an $O(t^2)$-time algorithm that, on input
+  $\langle M \rangle$ for some Turing machine $M$, outputs a circuit $C_n$ such
+  that $C_n$ accepts $x \in \{0, 1\}^n$ if and only if $x \in L(M)$.
+\end{lemma}
 
-\begin{proof}
+\begin{proof}[Proof of Theorem~\ref{thm:complete}]
   The problem $\CAPP$ is easily seen to be in $\prBPP$: consider the algorithm
-  that simply simulate the input circuit on a randomly chosen input.
-
-  Now we argue that every problem in $\prBPP$ can be reduced to $\CAPP$ in
-  polynomial-time. Let $\Pi \in \prBPP$ and let $M$ be the probabilistic
-  polynomial-time Turing machine solving $\Pi$. {\`A} la Cook-Levin, for every
-  input $x$, we can construct in polynomial-time a circuit $C_x$ such that
-  $C_x(r) = M(x, r)$. Hence if $x \in \Pi_Y$, then $C_x \in \CAPP_Y$, and if $x
-  \in \Pi_N$, then $C_x \in \CAPP_N$.
+  that simply simulates the input circuit on a randomly chosen input. So let us
+  show that every problem in $\prBPP$ can be reduced to $\CAPP$ in
+  deterministic polynomial time. Let $\Pi \in \prBPP$ and let $M$ be the
+  probabilistic polynomial-time Turing machine solving $\Pi$. Given an input
+  $x$, by Lemma~\ref{lem:tm-to-circuit}, we can construct in polynomial-time a
+  circuit $C_x$ such that $C_x(r) = M(x, r)$ for all $r$. Hence if $x \in
+  \Pi_Y$, then $C_x \in \CAPP_Y$, and if $x \in \Pi_N$, then $C_x \in \CAPP_N$.
 \end{proof}
 
 \subsection{A Time-Hierarchy Theorem}
