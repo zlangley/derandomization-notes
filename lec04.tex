@@ -165,7 +165,7 @@ circuits from Lecture~\ref{lec:03} is the following conjecture:
       each of these $x_j$'s are unknown after fixing $z^*$, so there
       are at most $n \cdot 2^{\ell / 100}$ queries to the oracle.
     \item Choose a random $u^* \in \set{0, 1}^{i - 1}$.
-    \item Output the circuit $C_n$ which takes input $x_i$, and simulates
+    \item Output the circuit that takes input $x_i$ and simulates
       $D$ on $(u^*, \sigma, f(x_{i + 1}), \ldots , f(x_n))$ and outputs
       $\lnot \sigma$ if $D$ accepts, and $\sigma$ otherwise.
   \end{enumerate}
@@ -260,9 +260,9 @@ For example, $\SAT$ and $\PERM$ are DSR.
 \end{theorem}
 
 \begin{proofsk}
-  The proof is by reconstruction: Assume contrapositively that there is some
-  uniform distinguisher $D$ that is not fooled by the PRG. We will use $D$ to
-  give a $\BPTIME\brac{2^{\eps n}}$ algorithm for $\fws$.
+  The proof is by reconstruction: Assume there is some uniform distinguisher
+  $D$ that is not fooled by the PRG. We will use $D$ to give a
+  $\BPTIME\brac{2^{\eps n}}$ algorithm for $\fws$.
 
   Let $x \in \{0, 1\}^n$; we want to compute $\fws(x)$ efficiently. The
   algorithm iteratively constructs circuits $F_i$ that computes $\fws$ on all

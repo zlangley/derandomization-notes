@@ -112,7 +112,7 @@ Recall the following additive Chernoff bound.
   \]
 \end{theorem}
 
-\begin{proposition}[Majority trick]
+\begin{proposition}[Majority trick]\label{prop:maj}
   Let $\eps \in (0, \frac{1}{2}]$, let $p \ge \frac{1}{2} + \eps$, and let $X_1,
   \dots, X_t \sim \Bern(p)$ be i.i.d. The majority of $X_1, \dots, X_t$ is 1
   with probability at least $1 - \exp(-\eps^2 t/2)$.
@@ -128,7 +128,18 @@ Recall the following additive Chernoff bound.
   Hence the output is 1 with probability at most $1 - \exp(-\eps^2 t/2)$.
 \end{proof}
 
-\comment{Add a corollary here detailing what kinds of amplification we can get with the majority trick}
+\begin{corollary}\label{cor:bpp-small-error}
+  If $\delta(n)$ satisfies $\delta(n) = 2^{-\poly(n)}$ and $1/2 - \delta =
+  1/\poly(n)$, then $\prBPP[\delta(n)] = \prBPP$.
+\end{corollary}
+
+\begin{proof}
+  By Proposition~\ref{prop:maj}, any algorithm with success rate $\delta_0 =
+  1/2 + \eps$ can be used to produce an algorithm with success rate $\delta_1 >
+  \delta_0$ by repeating the algorithm independently $t :=
+  2\ln(\delta_1)/\eps^2$ times and taking the majority. The conditions on
+  $\delta_0$ and $\delta_1$ ensure that $t = \poly(n)$.
+\end{proof}
 
 \comment{TODO: reference Lecture 5, in which the theorem below is proved}
 
@@ -147,13 +158,13 @@ Recall the following additive Chernoff bound.
   \overline{T}/\eps)$ and $\delta = 2^{\overline{T}^\eps - \overline{T}}$.
 \end{theorem}
 
-\comment{TODO: rewrite corollary below in terms of $\prBPP[\delta]$. also write a proof}
-
-\begin{corollary}\label{cor:bpp-small-error}
+\begin{corollary}\label{cor:bpp-small-random}
   For all $\eps > 0$, the class $\prBPP$ can be equivalently defined with an
   error of $2^{T^\eps - T}$ instead of 1/3, where $T = T(n)$ is the number of
   random bits.
 \end{corollary}
+
+\comment{What do we even need the above defition, theorem and corollary for? I'm not sure where we use it.}
 
 \begin{corollary}
   $\BPP \subseteq \Ppoly$.
