@@ -182,14 +182,14 @@ Recall the following additive Chernoff bound.
     \begin{align*}
       \Pr\brac*{A_x} \leq 2^{-2n}.
     \end{align*}
-    Union bounding over all inputs of size $n$, \[
+    Union bounding over all inputs of length $n$, \[
       \Pr\brac*{\bigcup_{x \in \set{0, 1}^n} A_x}
       \leq \sum_{x \in \set{0,1}^n} \Pr_r\brac*{A_x}
       \leq \sum_{x \in \set{0,1}^n} 2^{-2n}
       < 1.
     \]
     There is thus some $r^*$ such that $A_x$ does not occur for any $x$. In
-    other words, $M(x,r^*) = f_n(x)$ for all inputs $x$ of size $n$. Hence the
+    other words, $M(x,r^*) = f_n(x)$ for all inputs $x$ of length $n$. Hence the
     machine that on input $x$ and advice $r^*$ simulates $M$ on input $(x,
     r^*)$ solves $L$ in polynomial time using polynomial bits of advice.
 \end{proof}
@@ -244,5 +244,24 @@ efficiently converted to an equivalent circuit for a fixed input length.
 \subsection{Reducing Search Problems to Decision Problems}
 
 \subsection{Two-Sided Error vs.\ One-Sided Error}
+
+\begin{theorem}\label{thm:bpp-subset-rprp}
+    $\prBPP \subseteq \prRP^\prRP$.
+\end{theorem}
+
+\comment{TODO: Proof. This is where we need to be efficient vis-a-vis number of random coins.}
+
+\begin{corollary}
+    $\prBPP = \prP \iff \prRP = \prP$.
+\end{corollary}
+
+\begin{proof}
+    If $\prBPP = \prP$, then it is clear that $\prRP = \prP$ since $\prP \subseteq
+    \prRP \subseteq \prBPP$.
+
+    Conversely, if $\prRP = \prP$, then by Theorem~\ref{thm:bpp-subset-rprp},
+    $\prBPP \subseteq \prRP^\prRP = \prP^\prP = \prP$.
+    Since $\prP \subseteq \prBPP$, we have $\prBPP = \prP$.
+\end{proof}
 
 \end{lecture}
