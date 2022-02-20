@@ -146,8 +146,8 @@ Recall the following additive Chernoff bound.
 \begin{definition}
   An \emph{$(\eps, \delta)$-sampler} is a function $s :
   \set{0,1}^{\overline{T}} \times \set{0,1}^\ell \to \set{0,1}^T$ such that for
-  all $f : \set{0,1}^T \to \set{0,1}$ and for all $z \in
-  \set{0,1}^{\overline{T}}$ it holds that \[
+  all $f : \set{0,1}^T \to \set{0,1}$ with probability at least $1 - \delta$ 
+  over $z \in \set{0,1}^{\overline{T}}$ it holds that \[
     |\Exp_i f(s(z, i)) - \Exp_x f(x)| \le \eps.
   \]
 \end{definition}
@@ -162,9 +162,9 @@ Recall the following additive Chernoff bound.
   For all $\eps > 0$, the class $\prBPP$ can be equivalently defined with an
   error of $2^{T^\eps - T}$ instead of 1/3, where $T = T(n)$ is the number of
   random bits.
-\end{corollary}
 
-\comment{What do we even need the above defition, theorem and corollary for? I'm not sure where we use it.}
+  In other words, $2^{T^\eps}$ out of the $2^T$ random bit-strings are exceptional.
+\end{corollary}
 
 \begin{corollary}
   $\BPP \subseteq \Ppoly$.
@@ -182,14 +182,14 @@ Recall the following additive Chernoff bound.
     \begin{align*}
       \Pr\brac*{A_x} \leq 2^{-2n}.
     \end{align*}
-    Union bounding over all inputs of size $n$, \[
+    Union bounding over all inputs of length $n$, \[
       \Pr\brac*{\bigcup_{x \in \set{0, 1}^n} A_x}
       \leq \sum_{x \in \set{0,1}^n} \Pr_r\brac*{A_x}
       \leq \sum_{x \in \set{0,1}^n} 2^{-2n}
       < 1.
     \]
     There is thus some $r^*$ such that $A_x$ does not occur for any $x$. In
-    other words, $M(x,r^*) = f_n(x)$ for all inputs $x$ of size $n$. Hence the
+    other words, $M(x,r^*) = f_n(x)$ for all inputs $x$ of length $n$. Hence the
     machine that on input $x$ and advice $r^*$ simulates $M$ on input $(x,
     r^*)$ solves $L$ in polynomial time using polynomial bits of advice.
 \end{proof}
@@ -239,10 +239,57 @@ efficiently converted to an equivalent circuit for a fixed input length.
   $\prBPTIME[T \log{T}] \subsetneq \prBPTIME[T]$
 \end{theorem}
 
-\comment{TODO: Why standard diag fails for BPP. Why it fails for prBPP. Why lazy diag works for prBPP. Why it still fails for BPP.}
+\comment{TODO: Why standard diag fails for BPP. Why it fails for prBPP. 
+         Why lazy diag works for prBPP. Why it still fails for BPP.}
 
 \subsection{Reducing Search Problems to Decision Problems}
 
 \subsection{Two-Sided Error vs.\ One-Sided Error}
+
+\begin{theorem}\label{thm:bpp-subset-rprp}
+    $\prBPP \subseteq \prRP^\prRP$.
+\end{theorem}
+
+\begin{proofsk}
+    Let $\Gamma = (\Gamma_Y, \Gamma_N)$ be the following promise problem:
+    \begin{itemize}
+        \item $\Gamma_Y = \set{\langle C \rangle \mid \Pr\brac{C(r) = 1} = 1}$,
+        \item $\Gamma_N = \set{\langle C \rangle \mid \Pr\brac{C(r) = 0} \geq 1 - 2^{\sqrt{|r|} - |r|}}$.
+    \end{itemize}
+    One can verify that $\Gamma$ is indeed in $\prRP$.
+
+    Let $\Pi = (\Pi_Y, \Pi_N) \in \prBPP$.
+    By Corollary~\ref{cor:bpp-small-random}, there is a probabilistic polynomial time 
+    Turing Machine $M$ deciding $x \in \Pi_Y$ or $x \in \Pi_N$ with $2^{\sqrt{p(|x|)} 
+    - p(|x|)}$ error probability over $p(|x|)$ random bits.
+    
+    Consider the following $\prRP^\Gamma$ algorithm that, given $x \in \Pi_Y \cup \Pi_N$, 
+    decides if $x \in \Pi_Y$ or $x \in \Pi_N$.
+    \begin{itemize}
+        \item Compile $M(x,r)$ to a circuit $C_x(r)$ which accepts or rejects at most 
+            $2^{\sqrt{|r|}}$ of its inputs (see Lemma~\ref{lem:tm-to-circuit}, 
+            Theorem~\ref{thm:complete}).
+        \item Fixes the first $|r|/2$ inputs of $C_x(r)$ randomly, yielding the circuit 
+            $C'_x(r')$.
+        \item Queries the $\Gamma$ oracle with a description of $C'_x(r')$ and returns 
+            the same answer.
+    \end{itemize}
+
+    \comment{TODO: Finish up and turn into proper proof. 
+    Show $\Pi_Y$ gets $1$ whp, and $\Pi_N$ gets $0$ all the time.}
+\end{proofsk}
+
+\begin{corollary}
+    $\prBPP = \prP \iff \prRP = \prP$.
+\end{corollary}
+
+\begin{proof}
+    If $\prBPP = \prP$, then it is clear that $\prRP = \prP$ since $\prP \subseteq
+    \prRP \subseteq \prBPP$.
+
+    Conversely, if $\prRP = \prP$, then by Theorem~\ref{thm:bpp-subset-rprp},
+    $\prBPP \subseteq \prRP^\prRP = \prP^\prP = \prP$.
+    Since $\prP \subseteq \prBPP$, we have $\prBPP = \prP$.
+\end{proof}
 
 \end{lecture}
