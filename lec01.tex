@@ -141,23 +141,6 @@ Recall the following additive Chernoff bound.
   $\delta_0$ and $\delta_1$ ensure that $t = \poly(n)$.
 \end{proof}
 
-\comment{TODO: reference Lecture 5, in which the theorem below is proved}
-
-\begin{definition}
-  An \emph{$(\eps, \delta)$-sampler} is a function $s :
-  \set{0,1}^{\overline{T}} \times \set{0,1}^\ell \to \set{0,1}^T$ such that for
-  all $f : \set{0,1}^T \to \set{0,1}$ with probability at least $1 - \delta$ 
-  over $z \in \set{0,1}^{\overline{T}}$ it holds that \[
-    |\Exp_i f(s(z, i)) - \Exp_x f(x)| \le \eps.
-  \]
-\end{definition}
-
-\begin{theorem}
-  For all $\eps > 0$ there exists a polynomial-time computable $(\eps,
-  \delta)$-sampler with $\overline{T} = \poly(T)$, $\ell = O(\log
-  \overline{T}/\eps)$ and $\delta = 2^{\overline{T}^\eps - \overline{T}}$.
-\end{theorem}
-
 \begin{corollary}\label{cor:bpp-small-random}
   For all $\eps > 0$, the class $\prBPP$ can be equivalently defined with an
   error of $2^{T^\eps - T}$ instead of 1/3, where $T = T(n)$ is the number of
@@ -245,6 +228,24 @@ efficiently converted to an equivalent circuit for a fixed input length.
 \subsection{Reducing Search Problems to Decision Problems}
 
 \subsection{Two-Sided Error vs.\ One-Sided Error}
+
+\comment{TODO: reference Lecture 5, in which the theorem below is proved}
+
+\begin{definition}
+  An \emph{$(\eps, \delta)$-sampler} is a function $s :
+  \set{0,1}^{\overline{T}} \times \set{0,1}^\ell \to \set{0,1}^T$ such that for
+  all $f : \set{0,1}^T \to \set{0,1}$ with probability at least $1 - \delta$ 
+  over $z \in \set{0,1}^{\overline{T}}$ it holds that \[
+    |\Exp_i f(s(z, i)) - \Exp_x f(x)| \le \eps.
+  \]
+\end{definition}
+
+\begin{theorem}
+  For all $\eps > 0$ there exists a polynomial-time computable $(\eps,
+  \delta)$-sampler with $\overline{T} = \poly(T)$, $\ell = O(\log
+  \overline{T}/\eps)$ and $\delta = 2^{\overline{T}^\eps - \overline{T}}$.
+\end{theorem}
+
 
 \begin{theorem}\label{thm:bpp-subset-rprp}
     $\prBPP \subseteq \prRP^\prRP$.
