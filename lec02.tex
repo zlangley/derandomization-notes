@@ -29,6 +29,52 @@
 
 \subsection{Hitting Set Generators}
 
+\begin{definition}[Hitting Set Generator]
+    A deterministic algorithm $H$ is a Hitting Set Generator (HSG) with seed length 
+    $\ell(n)$ for $F = \set{f_n}_n$ if it satisfies $\Pr\brac{f(H(1^n, u_{l(n)})) = 
+    1} > 0$ for all $f \in F$.
+\end{definition}
+
+\begin{theorem}
+    HSGs for circuits of size $\widetilde{O}(n)$ that accept ``most'' of their inputs 
+    suffice to derandomize $\prRP$.
+\end{theorem}
+
+\comment{Formalize ``most''.}
+
+\begin{definition}[Kolmogorov Complexity]
+    The Kolmogorov Complexity of $x \in \set{0, 1}^*$ is the length of the shortest 
+    programs that, when run, prints $x$ and halts.
+\end{definition}
+
+\begin{theorem}
+    There is an algorithm $H$ that, when given $1^n$ and oracle access to a hard 
+    string $f \in \set{0, 1}^{n^2}$ with Kolmogorov Complexity $|f| - o(1)$, is 
+    an HSG with seed length $\ell(n) = \log{n}$ and polynomial runtime for circuits 
+    of size $\widetilde{O}(n)$ that reject at most $2^{\sqrt{n}}$ inputs.
+\end{theorem}
+
+\begin{proofsk}
+    Let $f = f_1 \cdot f_2 \cdot \ldots \cdot f_n$ where $|f_s| = n$ and $\cdot$ is the 
+    concatenation operator.
+    Define $H(1^n, \langle s \rangle) = f_s$ where $s \in [n]$.
+    We claim that $H$ is an HSG with seed length $\ell(n) = \log{n}$ and polynomial 
+    runtime for circuits of size $\widetilde{O}(n)$ that reject at most $2^{\sqrt{n}}$ 
+    inputs.
+
+    Assume for a contraction that $D$ is a circuit of size $\widetilde{O}(n)$ that 
+    rejects at most $2^{\sqrt{n}}$ inputs and $D(H(1^n, \langle s \rangle)) = 0$ for 
+    all $s \in [n]$.
+    Let $i(s)$ be the index of $f_s$ in $D^{-1}(0)$.
+    The following is a short description of $f$: $D, i(1), i(2), \dots, i(n)$.
+    Since $\card{D^{-1}(0)} \leq 2^{\sqrt{n}}$, we have $|i(s)| \leq \sqrt{n}$.
+    The length of the description is thus $\widetilde{O}(n) + n \cdot \sqrt{n}$ which 
+    contradicts our assumption that the shortest description of $f$ has length $n^2 - 
+    o(1)$.
+
+    \comment{TODO?: More formal description of the program that prints $f$}
+\end{proofsk}
+
 \subsection{Pseudorandom Generators}
 
 \subsection{The Nisan-Wigderson Generator}
