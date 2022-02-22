@@ -12,6 +12,7 @@
 \def\E{\textsf{E}\xspace}
 \def\sharpp{\textsf{\#P}\xspace}
 
+\DeclareMathOperator{\Bern}{Bern}
 \DeclarePairedDelimiter\brac{[}{]}
 \DeclarePairedDelimiter\card{\lvert}{\rvert}
 \DeclarePairedDelimiter\set{\{}{\}}
@@ -26,7 +27,13 @@
 \renewclass{\promiseBPP}{prBPP}
 \newclass{\prBPP}{prBPP}
 \newclass{\prBPTIME}{prBPTIME}
+\newclass{\prDTIME}{prDTIME}
 \newclass{\prP}{prP}
+\newclass{\prQP}{prQP}
+
+
+\newclass{\Psr}{P \lower-.07em\hbox{\textrm{-}} Search }
+\newclass{\BPPsr}{BPP \lower-.07em\hbox{\textrm{-}} Search }
 
 \renewcommand{\Pr}{\mathbb{P}}
 \addbibresource{main.bib}
@@ -38,7 +45,7 @@
   \allsectionsfont{\sffamily}
 
   \newcommand{\pr}[1]{\textsf{pr#1}}
-  \newcommand{\dtime}[1]{\textsf{DTIME}\left[#1\right]}
+  \newcommand{\dtime}[1]{\DTIME\brac*[#1]}
 
   \maketitle
 
