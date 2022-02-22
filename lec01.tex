@@ -120,9 +120,9 @@ Recall the following additive Chernoff bound.
 
 \begin{proof}
   Let $X := \sum_{i=1}^t X_i$ and let $\mu = \Exp X$ and observe that $\mu \ge
-  t/2 + t\eps$ and $\mu \le t$. If $X \le t/2$, then the majority is 0. By the
-  Chernoff bound of Theorem~\ref{thm:chernoff}, the probability of this bad
-  event is \[
+  t/2 + t\eps$ and $\mu \le t$. If $X > t/2$, then the majority is 1. By the
+  Chernoff bound of Theorem~\ref{thm:chernoff}, the probability that this does
+  not happen is \[
     \Pr(X \le t/2) = \Pr(X \le \mu - \eps t) < \exp\paren*{-\frac{\eps^2t^2}{2\mu}} \le \exp\paren*{-\frac{\eps^2t}{2}}.
   \]
   Hence the output is 1 with probability at most $1 - \exp(-\eps^2 t/2)$.
@@ -137,7 +137,7 @@ Recall the following additive Chernoff bound.
   By Proposition~\ref{prop:maj}, any algorithm with success rate $\delta_0 =
   1/2 + \eps$ can be used to produce an algorithm with success rate $\delta_1 >
   \delta_0$ by repeating the algorithm independently $t :=
-  2\ln(\delta_1)/\eps^2$ times and taking the majority. The conditions on
+  2\ln(1/\delta_1)/\eps^2$ times and taking the majority. The conditions on
   $\delta_0$ and $\delta_1$ ensure that $t = \poly(n)$.
 \end{proof}
 
