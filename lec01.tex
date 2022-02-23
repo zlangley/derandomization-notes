@@ -120,9 +120,9 @@ Recall the following additive Chernoff bound.
 
 \begin{proof}
   Let $X := \sum_{i=1}^t X_i$ and let $\mu = \Exp X$ and observe that $\mu \ge
-  t/2 + t\eps$ and $\mu \le t$. If $X \le t/2$, then the majority is 0. By the
-  Chernoff bound of Theorem~\ref{thm:chernoff}, the probability of this bad
-  event is \[
+  t/2 + t\eps$ and $\mu \le t$. If $X > t/2$, then the majority is $1$. By the
+  Chernoff bound of Theorem~\ref{thm:chernoff}, the probability that this does
+  not happen is \[
     \Pr(X \le t/2) = \Pr(X \le \mu - \eps t) < \exp\paren*{-\frac{\eps^2t^2}{2\mu}} \le \exp\paren*{-\frac{\eps^2t}{2}}.
   \]
   Hence the output is 1 with probability at most $1 - \exp(-\eps^2 t/2)$.
@@ -137,41 +137,9 @@ Recall the following additive Chernoff bound.
   By Proposition~\ref{prop:maj}, any algorithm with success rate $\delta_0 =
   1/2 + \eps$ can be used to produce an algorithm with success rate $\delta_1 >
   \delta_0$ by repeating the algorithm independently $t :=
-  2\ln(\delta_1)/\eps^2$ times and taking the majority. The conditions on
+  2\ln(1 / \delta_1)/\eps^2$ times and taking the majority. The conditions on
   $\delta_0$ and $\delta_1$ ensure that $t = \poly(n)$.
 \end{proof}
-
-\comment{TODO: reference Lecture 5, in which the theorem below is proved}
-
-\begin{definition}\label{def:sampler}
-  An \emph{$(\eps, \delta)$-sampler} is a function $s :
-  \set{0,1}^{\overline{T}} \times \set{0,1}^\ell \to \set{0,1}^T$ such that for
-  all $f : \set{0,1}^T \to \set{0,1}$ and for all $z \in
-  \set{0,1}^{\overline{T}}$ it holds that
-  \[ |\Exp_i f(s(z, i)) - \Exp_x f(x)| \le \eps.  \]
-\end{definition}
-
-In \Cref{def:sampler}, $\set{0,1}^{\overline{T}}$ should be thought of as a random input and $\set{0,1}^\ell$ should be thought of as an index. This definition is then saying that for any boolean test $f$, for most strings ($1-\delta$ fraction), the average of $f$ in the sample set (of size $2^{\ell}$) is roughly the same as the average of $f$ in the universe (of size $2^T$).
-
-One can think of $\set{0,1}^n$ as the $2^n$ students at Rutgers and $f$ as a test of height more than $6$ feet. The sampler uses $\overline{T}$ random bits to produce a sample set of $2^\ell$ students who with good probability roughly represent the entire population at Rutgers in terms of height more than $6$ feet.
-
-The naive sampler uses fresh randomness for each sample so $\overline{T}$ is a random string of length $2^\ell \cdot n$.
-
-\comment{Notation should made consistent with lec5}
-
-\begin{theorem}
-  For all $\eps > 0$ there exists a polynomial-time computable $(\eps,
-  \delta)$-sampler with $\overline{T} = \poly(T)$, $\ell = O(\log
-  \overline{T}/\eps)$ and $\delta = 2^{\overline{T}^\eps - \overline{T}}$.
-\end{theorem}
-
-\begin{corollary}\label{cor:bpp-small-random}
-  For all $\eps > 0$, the class $\prBPP$ can be equivalently defined with an
-  error of $2^{T^\eps - T}$ instead of 1/3, where $T = T(n)$ is the number of
-  random bits.
-\end{corollary}
-
-\comment{What do we even need the above definition, theorem and corollary for? I'm not sure where we use it.}
 
 \begin{corollary}
   $\BPP \subseteq \Ppoly$.
@@ -327,16 +295,11 @@ $R$ is a promise problem because there are yes instances $(x,w)$ where $w$ is th
 	
 \end{proof}
 
-
-
-
-
-
 \subsection{Two-Sided Error vs.\ One-Sided Error}
 
 \comment{TODO: reference Lecture 5, in which the theorem below is proved}
 
-\begin{definition}
+\begin{definition}\label{def:sampler}
   An \emph{$(\eps, \delta)$-sampler} is a function $s :
   \set{0,1}^{\overline{T}} \times \set{0,1}^\ell \to \set{0,1}^T$ such that for
   all $f : \set{0,1}^T \to \set{0,1}$ with probability at least $1 - \delta$ 
@@ -344,6 +307,12 @@ $R$ is a promise problem because there are yes instances $(x,w)$ where $w$ is th
     |\Exp_i f(s(z, i)) - \Exp_x f(x)| \le \eps.
   \]
 \end{definition}
+
+In \Cref{def:sampler}, $\set{0,1}^{\overline{T}}$ should be thought of as a random input and $\set{0,1}^\ell$ should be thought of as an index. This definition is then saying that for any boolean test $f$, for most strings ($1-\delta$ fraction), the average of $f$ in the sample set (of size $2^{\ell}$) is roughly the same as the average of $f$ in the universe (of size $2^T$).
+
+One can think of $\set{0,1}^n$ as the $2^n$ students at Rutgers and $f$ as a test of height more than $6$ feet. The sampler uses $\overline{T}$ random bits to produce a sample set of $2^\ell$ students who with good probability roughly represent the entire population at Rutgers in terms of height more than $6$ feet.
+
+The naive sampler uses fresh randomness for each sample so $\overline{T}$ is a random string of length $2^\ell \cdot n$.
 
 \begin{theorem}
   For all $\eps > 0$ there exists a polynomial-time computable $(\eps,
