@@ -96,11 +96,11 @@ $\P \ne \PSPACE$. The deterministic time hierarchy theorem tells us that $P \ne
 Let $\prBPP[\delta(n)]$ be the class of promise problems that are solved by a
 polynomial-time Turing machine with error probability at most $\delta(n)$ on
 all input strings of length $n$. Notice that $\prBPP = \prBPP[1/3]$. We have
-already mentioned that for all constant $\delta_0 > 1/2$, $\prBPP[\delta_0] =
+already mentioned that for all constant $1> \delta_0 > 1/2$, $\prBPP[\delta_0] =
 \prBPP$. However, perhaps surprisingly, the class $\prBPP[1/2]$ appears much
 more powerful than $\prBPP$: for example, $\NP \subseteq \prBPP[1/2]$.%
 \footnote{The non-promise class corresponding to what we call $\prBPP[1/2]$ is
-called $\PP$.}
+called $\PP$. The class corresponding to $\prBPP[1]$ is just $\prP$.}
 
 Recall the following additive Chernoff bound.
 
@@ -120,7 +120,7 @@ Recall the following additive Chernoff bound.
 
 \begin{proof}
   Let $X := \sum_{i=1}^t X_i$ and let $\mu = \Exp X$ and observe that $\mu \ge
-  t/2 + t\eps$ and $\mu \le t$. If $X > t/2$, then the majority is 1. By the
+  t/2 + t\eps$ and $\mu \le t$. If $X > t/2$, then the majority is $1$. By the
   Chernoff bound of Theorem~\ref{thm:chernoff}, the probability that this does
   not happen is \[
     \Pr(X \le t/2) = \Pr(X \le \mu - \eps t) < \exp\paren*{-\frac{\eps^2t^2}{2\mu}} \le \exp\paren*{-\frac{\eps^2t}{2}}.
@@ -137,7 +137,7 @@ Recall the following additive Chernoff bound.
   By Proposition~\ref{prop:maj}, any algorithm with success rate $\delta_0 =
   1/2 + \eps$ can be used to produce an algorithm with success rate $\delta_1 >
   \delta_0$ by repeating the algorithm independently $t :=
-  2\ln(1/\delta_1)/\eps^2$ times and taking the majority. The conditions on
+  2\ln(1 / \delta_1)/\eps^2$ times and taking the majority. The conditions on
   $\delta_0$ and $\delta_1$ ensure that $t = \poly(n)$.
 \end{proof}
 
@@ -169,6 +169,29 @@ Recall the following additive Chernoff bound.
     r^*)$ solves $L$ in polynomial time using polynomial bits of advice.
 \end{proof}
 
+There are a few reasons to believe that we can do better. Consider the following propositions (informal):
+
+\begin{proposition}[BM82,GGM84]
+	If there exist one way functions secure against sub exponential size circuits then $\prBPP \subseteq \prQP := \cup_c \prDTIME[n^{\log^c n}]$.
+\end{proposition}
+
+Circuit lower bound
+\begin{proposition}[IW97]
+	If $\,\exists \eps>0$ such that $\DTIME[2^n]$ is hard for circuits of size $2^{\eps n}$ on almost all inputs then $\prBPP=\prP$.
+\end{proposition}
+
+\begin{proposition}
+	If there exists a function computable by uniform circuits of size $\poly(n)$ and depth $n^2$ that is hard for probabilistic time $n^{100}$ on almost all inputs then $\prBPP = \prP$.
+\end{proposition}
+
+\begin{proposition}
+	$\BPP \neq \P \rightarrow \P \neq \NP$.
+\end{proposition}
+\begin{proof}[Short proof]
+This is because if $\P = \NP$ then the polynomial hierarchy collapses. We know that $\BPP \subseteq \Sigma_2$ which implies $\BPP = \P$.
+\end{proof}
+
+One strong reason to believe in derandomization is that whenever we try we are always successful. 
 
 \subsection{The Circuit Acceptance Probability Problem (CAPP)}
 
@@ -179,9 +202,9 @@ which it outputs 1.
   $\CAPP$ is the promise problem where
   \begin{enumerate}
     \item $\CAPP_Y$ is the set of all descriptions of circuits that have
-      acceptance probability at least 2/3, and
+      acceptance probability at least $2/3$ over the inputs, and
     \item $\CAPP_N$ is the set of all descriptions of circuits that have
-      acceptance probability at most 1/3.
+      acceptance probability at most $1/3$.
   \end{enumerate}
 \end{definition}
 
@@ -189,13 +212,16 @@ which it outputs 1.
   $\CAPP$ is complete for $\prBPP$ under deterministic polynomial-time reductions.
 \end{theorem}
 
+$\CAPP$ is a promise problem because circuits that accept exactly half their inputs neither belong to $\CAPP_Y$ nor to $\CAPP_N$. $\CAPP$ is in $\prBPP$ because given a circuit we can plug in random strings and check if most of the strings are accepted or rejected. We now show why it is complete for $\prBPP$.
+
 Recall from the reduction in Cook's theorem that every Turing machine can be
 efficiently converted to an equivalent circuit for a fixed input length.
 \begin{lemma}\label{lem:tm-to-circuit}
   For all $n \in \N$ there is an $O(t^2)$-time algorithm that, on input
-  $\langle M \rangle$ for some Turing machine $M$, outputs a circuit $C_n$ such
+  $\langle M \rangle$ for some Turing machine $M$ with running time $t$, outputs a circuit $C_n$ such
   that $C_n$ accepts $x \in \{0, 1\}^n$ if and only if $x \in L(M)$.
 \end{lemma}
+\comment{$t$ is the running time of $M$ right?}
 
 \begin{proof}[Proof of Theorem~\ref{thm:complete}]
   The problem $\CAPP$ is easily seen to be in $\prBPP$: consider the algorithm
@@ -211,19 +237,69 @@ efficiently converted to an equivalent circuit for a fixed input length.
 \subsection{A Time-Hierarchy Theorem}
 
 \begin{theorem}
-  $\prBPTIME[T \log{T}] \subsetneq \prBPTIME[T]$
+  $\prBPTIME[T] \subsetneq \prBPTIME[\tilde{O}(T)]$
 \end{theorem}
+\begin{proof}
+	We construct a hard promise problem. The input is interpreted as $(<M>,x)$ where $M$ is a machine and $x$ is an input to $M$. The output can be found by simulating the machine $M$ on $x$ for $T$ steps with $T$ random coins and then flipping the output of $M$. 
+	
+	This is a promise problem because there are machines which take a long time (say more than $T^2$) to simulate implying no answer in $T$ steps. Also, there are machines which on input $x$ accept with probability exactly $1/2$ implying no correct answer. Such inputs do not satisfy the promise.
+	
+	We first show that this problem is hard for $\prBPTIME[T]$. Assume towards a contradiction (toc) that machine $M^*$ solves this problem in $\prBPTIME[T]$. When $M^*$ is given the input $(<M^*>,x)$ it will err (diagonalization). 
+	
+	On the other hand, this problem is in $\prBPTIME[\tilde{O}(T)]$. Consider a machine $\hat{M}$ that runs in time strictly more than $T$ but in $\tilde{O}(T)$. For any input $(<M>,x)$ $\hat{M}$ can simulate $M$ on $x$ since there is enough time. Also, the input $(<\hat{M}>,x)$ does not satisfy the promise so there is no contradiction. 
+	
+	Thus, we showed problem in $\prBPTIME[\tilde{O}(T)]$ which is not in $\prBPTIME[T]$.
+	
+	\comment{I am not sure if this is fully correct}
+\end{proof}
+
+We do not know such a result for $\BPP$. We can prove something similar when there are bits of advice:
+
+\begin{proposition}
+	$ \BPTIME[T]/1  \subsetneq \BPTIME[T^2]/1$ 
+\end{proposition}
 
 \comment{TODO: Why standard diag fails for BPP. Why it fails for prBPP. 
          Why lazy diag works for prBPP. Why it still fails for BPP.}
 
+
+
 \subsection{Reducing Search Problems to Decision Problems}
+
+We now want to show that problems in the search world of $\BPP$ can be reduced to decision problems in $\BPP$ (so it is okay to focus on decision problems). We start with some definitions:
+
+\begin{definition}
+	Let $\Pi = (\Pi_Y,\Pi_N)$ be a promise problem and let $R=\set{ (x,w) \subseteq \Pi_Y \times \set{0,1}^* }$ be a relation denoting pairs of yes instances and their corresponding solutions. Also, assume that there exists a polynomial $p$ such that $\forall (x,w) \in R, \, \card{w} \leq p(\card{x})$.
+	
+	\begin{enumerate}
+		\item $\Pi \in \Psr$ if there is a polynomial time machine $M$ such that $\forall x \in \Pi_Y$ we have $(x, M(x)) \in R$ and $R \in \prP$.
+		\item $\Pi \in \BPPsr$ if there is a probabilistic polynomial time machine $M$ such that $\forall x \in \Pi_Y$ we have $\Pr( (x, M(x)) \in R) \geq 1/2$ and $R \in \prBPP$.		
+	\end{enumerate}
+\end{definition}
+
+$R$ is a promise problem because there are yes instances $(x,w)$ where $w$ is the correct answer to $x$, there are no instances $(x,w')$ where $w'$ is not the correct answer to $x$, and there are instances that do not satisfy the promise $(x',w)$ where $x'$ is not a yes instance of $\Pi$ hence has no solution.
+
+\begin{theorem}
+	If $\prBPP = \prP$ then $\BPPsr = \Psr$.
+\end{theorem}
+\begin{proof}
+	Assume $\prBPP=\prP$. Given $x$ we reduce the problem of finding a solution $w$ such that $(x,w) \in R$ to a decision problem in $\prBPP$. Let $M$ be the probabilistic polynomial time machine that finds solutions. Let $M_R$ be the probabilistic polynomial time machine that decides $R$ and let $D_R$ be the deterministic polynomial time machine that decides $R$ (such a machine exists since $\prBPP=\prP$). 
+	Let $C_x(r)= D_R(x, M(x,r))$ be the circuit that has the input $x$ hard coded and gets random coins $r$ and runs $M$ with $r$ and tests whether the solution is correct. We know $\Pr_r(C_x(r)=1) \geq 1/2$.
+	
+	We now want to construct good random coins for $M$ ($\bar{r}$ st $M(x,\bar{r})$ is a solution). Denote the runtime of $M$ by $T$ (the number of random bits used by $M$ is thus bounded by $T$). We will work in $T$ iterations and in each iteration we will fix one of the random bits and finally end up with $\bar{r}$. Let $\bar{r}_0 = \lambda, \card{\bar{r}_i}=i, \card{\bar{r}_n} = \card{\bar{r}} = T$.
+	For $i=1$ to $T$ maintain the following invariant:
+	\[
+		\Pr_{b_{i+1},\ldots b_T}[C_x(\bar{r}_i, b_{i+1} \ldots b_T))]
+	\]
+	
+	
+\end{proof}
 
 \subsection{Two-Sided Error vs.\ One-Sided Error}
 
 \comment{TODO: reference Lecture 5, in which the theorem below is proved}
 
-\begin{definition}
+\begin{definition}\label{def:sampler}
   An \emph{$(\eps, \delta)$-sampler} is a function $s :
   \set{0,1}^{\overline{T}} \times \set{0,1}^\ell \to \set{0,1}^T$ such that for
   all $f : \set{0,1}^T \to \set{0,1}$ with probability at least $1 - \delta$ 
@@ -231,6 +307,12 @@ efficiently converted to an equivalent circuit for a fixed input length.
     |\Exp_i f(s(z, i)) - \Exp_x f(x)| \le \eps.
   \]
 \end{definition}
+
+In \Cref{def:sampler}, $\set{0,1}^{\overline{T}}$ should be thought of as a random input and $\set{0,1}^\ell$ should be thought of as an index. This definition is then saying that for any boolean test $f$, for most strings ($1-\delta$ fraction), the average of $f$ in the sample set (of size $2^{\ell}$) is roughly the same as the average of $f$ in the universe (of size $2^T$).
+
+One can think of $\set{0,1}^n$ as the $2^n$ students at Rutgers and $f$ as a test of height more than $6$ feet. The sampler uses $\overline{T}$ random bits to produce a sample set of $2^\ell$ students who with good probability roughly represent the entire population at Rutgers in terms of height more than $6$ feet.
+
+The naive sampler uses fresh randomness for each sample so $\overline{T}$ is a random string of length $2^\ell \cdot n$.
 
 \begin{theorem}
   For all $\eps > 0$ there exists a polynomial-time computable $(\eps,
