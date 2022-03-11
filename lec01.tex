@@ -239,28 +239,15 @@ efficiently converted to an equivalent circuit for a fixed input length.
 \begin{theorem}
   $\prBPTIME[T] \subsetneq \prBPTIME[\tilde{O}(T)]$
 \end{theorem}
-\begin{proof}
-	We construct a hard promise problem. The input is interpreted as $(<M>,x)$ where $M$ is a machine and $x$ is an input to $M$. The output can be found by simulating the machine $M$ on $x$ for $T$ steps with $T$ random coins and then flipping the output of $M$. 
-	
-	This is a promise problem because there are machines which take a long time (say more than $T^2$) to simulate implying no answer in $T$ steps. Also, there are machines which on input $x$ accept with probability exactly $1/2$ implying no correct answer. Such inputs do not satisfy the promise.
-	
-	We first show that this problem is hard for $\prBPTIME[T]$. Assume towards a contradiction (toc) that machine $M^*$ solves this problem in $\prBPTIME[T]$. When $M^*$ is given the input $(<M^*>,x)$ it will err (diagonalization). 
-	
-	On the other hand, this problem is in $\prBPTIME[\tilde{O}(T)]$. Consider a machine $\hat{M}$ that runs in time strictly more than $T$ but in $\tilde{O}(T)$. For any input $(<M>,x)$ $\hat{M}$ can simulate $M$ on $x$ since there is enough time. Also, the input $(<\hat{M}>,x)$ does not satisfy the promise so there is no contradiction. 
-	
-	Thus, we showed problem in $\prBPTIME[\tilde{O}(T)]$ which is not in $\prBPTIME[T]$.
-	
-	\comment{I am not sure if this is fully correct}
-\end{proof}
+
+\comment{TODO: Why standard diag fails for BPP. Why it fails for prBPP. 
+         Why lazy diag works for prBPP. Why it still fails for BPP.}
 
 We do not know such a result for $\BPP$. We can prove something similar when there are bits of advice:
 
 \begin{proposition}
 	$ \BPTIME[T]/1  \subsetneq \BPTIME[T^2]/1$ 
 \end{proposition}
-
-\comment{TODO: Why standard diag fails for BPP. Why it fails for prBPP. 
-         Why lazy diag works for prBPP. Why it still fails for BPP.}
 
 
 
