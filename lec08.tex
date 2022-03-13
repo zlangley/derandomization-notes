@@ -1,0 +1,334 @@
+\newcommand{\fn}{\mathbb{F}_n}
+\newcommand\antipi{\rotatebox[origin=c]{180}{$\Pi$}}
+\newcommand{\ceil}[1]{{\left\lceil{#1}\right\rceil}}
+%\newcommand{\vihan}[1]{\textcolor{blue}{\textbf{[Vihan:}~#1\textbf{]}}}
+
+
+\begin{lecture}{8}{Uniform Hardness vs Randomness: Part 2}{March 10, 2022}\label{lec:08}
+
+\subsection*{The Upshot}
+
+\begin{enumerate}
+	\item We show that if $\PSPACE$ is hard for $\BPTIME\left[2^{n^\eps}\right]$ then $\BPP$ is a subset of \\ $\ioTIME[2^{\log^c n}]$ ``on average''.
+	\item We construct a $\PSPACE$-complete problem $\fws$ with sufficient structure.
+	\item Uniform distinguishers for the NW-PRG with hard function $\fws$ can be
+	used to learn $\fws$ with $1/\poly(n)$ advantage with high probability.
+	\item The hard function $\fws$ has sufficient structure thus the $1/\poly(n)$
+	advantage can be used to bootstrap a reconstruction of $f$.
+	\item LLDCs and downward self-reducibility play a crucial role in the
+	bootstrapping algorithm.
+\end{enumerate}
+
+In Lecture \ref{lec:04}, we saw uniform hardness vs randomness. We showed that if there is a function with some nice properties (DSR and ECC) that is hard for $\BPTIME\brac{2^{\eps n}}$ then for all polynomials $p(n)$ there is a $(1 / n)$-PRG for uniform circuits generated in time $p(n)$ with $\log$-sized seed and polynomial running time (\Cref{thm:uniform-hard-random-sharpP}). 
+In this lecture, we will show a function $\fws$ in $\PSPACE$ which is DSR and  is a codeword which can be Locally List Decoded and Uniquely Decoded. Plugging this in the framework of Lecture \ref{lec:04} will give us the following theorem:
+\begin{theorem}\label{thm:uniform-hard-random-PSPACE}
+	If $\PSPACE$ is hard for $\BPTIME\left[2^{n^\eps}\right]$ then for all polynomials $p(n)$ and infinitely many values of $n$, there is a $(1/n)$-PRG for uniform circuits generated in time $p(n)$ with polylog-sized seed and polynomial running time. This implies that $\BPP$ is a subset of $\ioTIME[2^{\log^c n}]$ ``on average''.
+\end{theorem}
+
+
+On average here means that for every $L \in \BPP$ there exists $L' \in \ioTIME[2^{\log^c n}]$ such that $\Pr_x(L(x) \neq L'(x)) \leq 1/n$. This works not only for uniform distributions but also for random input sampled in time $q(n)$ (\Cref{p-sample-dist}).
+The implication is $\BPP$ is a subset of $\ioTIME[2^{\log^c n}]$ on average where i.o.\ means infinitely often so the PRG works for infinitely many values of $n$. (Note that it is not something like $\forall n > n_0$ because then one can hardcode the first $n_0$ values. So it is like $1,10,100 \ldots$)
+Note that we assume hardness for $\BPTIME\left[2^{n^\eps}\right]$ instead of $\BPTIME\left[2^{\eps n}\right]$. The reason for this is that the function we construct cannot have exponential hardness because it is decidable in time roughly $2^{\sqrt{n}}$. But for \emph{simplicity} we will assume hardness for $\BPTIME\left[2^{\eps n}\right]$ and show the result. \Cref{thm:uniform-hard-random-PSPACE} can then be shown by some small modifications.
+
+In the following sections we develop some tools we need to prove this result. We will first show a Self-Correctable and Downward Self-Reducible $\PSPACE$-complete Problem. Then we show learning via uniform distinguishers. We will then put everything together and prove \Cref{thm:uniform-hard-random-PSPACE}. We will do so by using the $\PSPACE$-complete problem in the NW-PRG and showing a reconstruction using a learning algorithm along with the properties of the $\PSPACE$-complete problem.
+
+\subsection[A Self-Correctable and Downward Self-Reducible \texorpdfstring{$\PSPACE$}{PSPACE}-complete Problem]
+{A Self-Correctable and Downward Self-Reducible \\ \texorpdfstring{$\PSPACE$}{PSPACE}-complete Problem}
+
+In this section, we show a function $\fws$ in $\PSPACE$ with some nice properties (DSR and self-correctable). We start with the following definition:
+\begin{definition}
+	$f$ is \emph{downward self-reducable (DSR)} if there exists an algorithm $A$
+	such that when $A$ gets $x \in \set{0, 1}^n$ and oracle access to $f$ on $n -
+	1$ bits, it outputs $f(x)$ in linear time.
+\end{definition}
+
+Consider the following lemma:
+\begin{lemma}\label{lem:DSR-ECC-func}
+	There exists a language/function $\fws :\set{0,1}^* \rightarrow \set{0,1}$ in $\PSPACE$-complete such that:
+	\begin{enumerate}
+		\item $\fws$ is DSR in time ${\ell}^2$ (any fixed polynomial should work).
+		\item For all $\ell \in \N$ the truth table of $\fws_{\ell} : \set{0,1}^\ell \rightarrow \set{0,1}$ is a codeword
+		which is:
+		\begin{enumerate}
+			\item Locally List Decodable from agreement $1/2 + \eps(\ell)$ where $\eps(\ell) = 2^{-\ell /
+				100}$ in time $p(1/\eps)$ with list size $q(1 / \eps)$ for fixed polynomials $p$ and $q$.
+			\item Uniquely Decodable from agreement $0.99$ in time $\poly(n)$.
+		\end{enumerate}
+	\end{enumerate}
+\end{lemma}
+
+In what follows, $\fn$ is the finite field of size $2^n$. We start by proving an easier claim:
+\begin{claim}\label{clm:USR-func-fam}
+	For some polynomials $t$ and $m$, there is a collection of functions \\ $\set{f_{n,i} : (\fn)^{t(n,i)} \rightarrow \fn}_{n \in N,i \leq m(n)}$ with the following properties:
+	\begin{enumerate}
+		\item (Self-Reducibility) For $i < m(n)$, $f_{n,i}$ can be evaluated with oracle access	to $f_{n,i+1}$ in time $\poly(n)$. Also, $f_{n,m(n)}$ can be evaluated in time $\poly(n)$.
+		\item ($\PSPACE$-hardness)  For every language $L$ in $\PSPACE$, with characteristic function $X_L$, there is a polynomial time computable function $g$ such that for all $x$, $g(x) = (1^n, y)$ with $y \in \fn^t(n,0)$, and $f_{n,0}(y) = X_L(x)$. (The top polynomial $f_{n,0}$ just computes the problem so is $\PSPACE$-complete)
+		\item (Low Degree) $f_{n,i}$ is a polynomial of total degree at most $\poly(n)$
+	\end{enumerate}
+\end{claim}
+
+\begin{proof}
+We start with the interactive proof system for the $\PSPACE$-complete problem True Quantified Boolean Formula (TQBF). In the construction of the proof system, a QBF instance 
+$\phi = \exists x_1 \forall x_2 \ldots , \forall x_n \; \psi(x_1,x_2, \ldots, x_n)$ induces a sequence $f_0, f_1, \ldots , f_m$ (where $m = \poly(n)$) of multivariate polynomials over a sufficiently large finite field $\fn$. 
+Each $f_i$ has variables $(x_1, \dots, x_{\ell})$ for some $\ell = \ell(i) \leq m$. 
+$f_m = f_m(x_1, \ldots , x_n)$ is an arithmetization of the propositional formula $\psi(x_1, \ldots , x_n)$, and for $i < n, f_i( x_1, \ldots , x_{\ell})$ is defined in terms of $f_{i+1}$ using one of the following rules:
+\begin{align*}
+	f_i(x_1, \ldots, x_{\ell}) &= f_{i+1}(x_1, \ldots, x_{\ell},0) \cdot f_{i+1}(x_1, \ldots, x_{\ell},1) \tag{Forall} \\
+	f_i(x_1, \ldots, x_{\ell}) &= 1- ( 1- f_{i+1}(x_1, \ldots, x_{\ell},0) ) \cdot ( 1- f_{i+1}(x_1, \ldots, x_{\ell},1) ) \tag{Exists}	\\
+	f_i(x_1, \ldots, x_k, \ldots, x_{\ell}) &= (1-x_k) \cdot f_{i+1}(x_1, \ldots, 0, \ldots, x_{\ell}) + x_k \cdot f_{i+1}(x_1, \ldots, 1, \ldots, x_{\ell}) \tag{Linearization}
+\end{align*}
+
+Which rule is used depends solely on $i$ and $n$ in an easily computable way. The first corresponds to universal quantifiers, the second to existential quantifiers, and the third is used to reduce the degree in variable $x_k$.
+$f_m$ is a function of $x_1$ to $x_n$ and is the arithmetization of $\psi(x_1, \ldots , x_n)$. $f_{m-1}=f_{m}(x_1, \ldots, x_{n-1},0) \cdot f_{m}(x_1, \ldots, x_{n-1},1)$ is a function of $x_1$ to $x_{n-1}$ and is the arithmetization of $\forall x_n \; \psi(x_1, \ldots , x_n)$ (assuming the last quantifier in $\phi$ is $\forall$). We keep iterating, and finally reach $f_0$ which is a constant polynomial which is the arithmetization of $\phi$ and equals the truth value of $\phi$. $f_i$ depends on $\ell$ variables and when $x_1, \ldots , x_{\ell}$ take on boolean values $f_i(x_1, \ldots , x_{\ell})$ equals the truth value of $\phi$ with the first $\ell$ quantifiers removed.
+We get rid of one variable when the operator is $\Pi$ (Forall) or $\antipi$ (Exists) but the number of variables remain the same when the operator is $L_k$ (Linearization Operator).
+
+The construction provides the following guarantees:
+\begin{enumerate}
+	\item $f_m$ can be evaluated in time $\poly(\card{\phi})$. \\
+	This is because $f_m$ is just the arithmetization of $\psi(x_1, \ldots , x_n)$.
+	
+	\item Each $f_i$ is of total degree at most $\poly(\card{\phi})$. \\
+	This is because the linearization operators force each variable to have a degree $1$ and after applying any other operator the degree of any variable is a constant.
+	
+	\item For $i < m$, $f_i$ can be evaluated in time $\poly(\card{\phi})$ given oracle access to $f_{i+1}$. \\
+	Deciding which of the three possible rules to apply can be done in time $O(n^2)$ since there are $O(n^2)$ operators. Then evaluating $f_i$ in terms of $f_{i+1}$ can be done in time $\poly(\card{\phi})$.
+\end{enumerate}
+
+However, this does not yet accomplish what we want since these polynomials depend on $\phi$, and not just its length. To solve this, we incorporate the formula $\phi$ into the arithmetization. We do this by defining a single ``universal" quantified formula $\Phi_n$ which has some free variables such that by setting these free variables appropriately, $\Phi_n$ can be specialized to \emph{any} instance of QBF. Specifically, $\Phi_n$ has $2n^2$ free variables $\set{y_{j,k}, z_{j,k} : 1 \leq j, k \leq n}$, \footnote{Note that in TQBF the formula is part of the input. The formula is part of the input in this case too, but here it is given by providing values for $\overline{y}$ and $\overline{z}$. }
+and is is defined as follows:
+\[
+	\Phi_n(\overline{y}, \overline{z}) = \exists x_1 \forall x_2 \ldots , \forall x_n \; \bigwedge_{j=1}^n \bigvee_{k=1}^n (y_{j,k} \wedge x_k) \vee (z_{j,k} \wedge \neg x_k)
+\]
+Now let $\phi$ be any instance of QBF. Without loss of generality, we can assume $\phi$ is in the form $\phi = \exists x_1 \forall x_2 \ldots , \forall x_n \; \psi(x_1,x_2, \ldots, x_n)$, where $\psi$ is a CNF formula with at most $n$ clauses. (These restrictions still preserve the fact that QBF is a $\PSPACE$-complete problem.)
+Define $y(\phi)$ and $z(\phi)$ as follows: $y_{j,k}(\phi) = 1$ iff the $j^{th}$ clause of $\psi$ contains $x_k$, and $z_{j,k}(\phi) = 1$ iff the $j^{th}$ clause of $\psi$ contains $\neg x_k$. Then, by inspection, $\Phi_n(\overline{y}(\phi), \overline{z}(\phi)) = \phi$.
+We are essentially asking the question: ``does $x_k$ belong in caluse $j$". The input to $\Phi_n$ is $2n^2$ bits for values of $\overline{y}$ and $\overline{z}$. Each assignment corresponds to one of the $2^{2n^2}$ possible QBF formulas (with at most $n$ clauses and arbitrary clause size). \footnote{Note that here we can see why the problem can be solved in time $2^{\sqrt{\text{Input len}}}$. The input length is $n^2$ and we can solve the problem in time $2^n$.}
+
+
+We can now define the polynomials $f_{n,0}, f_{n,1},\ldots , f_{n,m}$ ($m = m(n)$) to be the sequence of polynomials obtained by applying the above-described $\IP = \PSPACE$ construction to $\Phi_n$~(this is a fixed formula). The number of polynomials ($m(n)+1$) depend on the number of operators thus, $m(n)=O(n^2)$. 
+Note that $f_{n,i}$ is just $f_i$ applied to $\Phi_n$. 
+One difference is that, unlike a standard instance of QBF, $\Phi_n$ has the free variables $\overline{y}$ and $\overline{z}$. The effect of this is that each $f_{n,i}$ will have variables $(\overline{y}, \overline{z}, x_1,\ldots, x_{\ell})$ for some $\ell \leq n$ rather than just $(x_1, \ldots , x_{\ell})$ as in the original construction. This means that $f_{n,i}$ needs $2n^2 + \ell$ input bits ($f_i$ just needed $\ell$ bits). 
+If $f_{n,i}$ depends on $\ell$ of the $x$-variables, then when $y, z,$ and $x_1 \ldots , x_{\ell}$ take on Boolean values, $f_{n,i}(y, z, x_1, \ldots , x_{\ell})$ equals the truth value of $\Phi_n$ with the first $\ell$ quantifiers removed. $f_{n,0}$ depends on none of the x-variables, and thus $f_{n,0}(y, z) = \Phi_n(y, z)$ on Boolean inputs. We define $t(n,i)$ to be the number of inputs needed for $f_{n,i}$ ($2n^2+\ell$). Also, instead of feeding bits to the polynomials we can extend the input to elements of $\fn$. So $f_{n,i}$ is a function from $(\fn)^{t(n,i)}$ to $\fn$ for $n \in N$ and $0 \leq i \leq m(n)$.
+
+Analogous to the original construction, the resulting sequence of polynomials has the following properties:
+\begin{enumerate}
+	\item $f_{n,m(n)}$ can be evaluated in time $\poly(n)$. \\
+	This is because $f_{n,m(n)}$ is the arithmetization of the formula $\Phi_n$ without any quantifiers and $\Phi_n$ hast at most $n$ clauses with arbitrary clause size. 
+	
+	\item Each $f_{n,i}$ is of total degree at most $\poly(n)$. \\
+	This is because the linearization operators force each variable to have a degree $1$ and after applying any other operator the degree of any variable is a constant.
+	
+	\item $f_{n,i}$ can be computed in time $\poly(n)$ given oracle access to $f_{n,i+1}$. \\
+	Deciding which of the three possible rules to apply can be done in time $O(n^2)$ since there are $O(n^2)$ operators. Then evaluating $f_i$ in terms of $f_{i+1}$ can be done in time $\poly(\card{\Phi}) = \poly(n)$.
+\end{enumerate}
+
+This establishes the self-reducibility and low degree properties. The $\PSPACE$ hardness follows from the fact that $f_{n,0}(y, z) = \Phi_n(y, z)$. 
+\end{proof}
+
+Now, to deduce the final result, we simply combine the functions $f_{n,i}$ from \Cref{clm:USR-func-fam} into a single function $\fws$, with a careful ordering of input lengths so as to turn the ``upwards'' reductions from $f_{n,i}$ to $f_{n,i+1}$ into a downward self-reduction for $\fws$.
+
+
+\begin{proof}[Proof of \Cref{lem:DSR-ECC-func} ]
+	Let $\set{f_{n,i} : (\fn)^{t(n,i)} \rightarrow \fn}_{n \in N,i \leq m(n)}$ be the collection of functions given by \Cref{clm:USR-func-fam}. We will now construct a single function $\fws : \set{0, 1}^* \rightarrow \set{0, 1}$, so that each function $f_{n,i}$ corresponds to $\fws$ restricted to some input length $h(n, i)$. $h(n,i)$ is a function that dictates on what input length is $f_{n,i}$ used.
+	We need to stitch together functions $f_{n,i}$ in order of decreasing $i$ so that $\fws$ is DSR. We have the following requirements:
+	\begin{enumerate}
+		\item $h(n, i) \geq n \cdot t(n, i) + \log n$ \\
+		This is because we want $h(n, i)$ bits to be sufficient to encode an input for $f_{n,i}$ from $(\fn)^{t(n,i)}$ as well as specify one of the $n = \log (\card{\fn})$ output bits.
+		\item $h(n, i) > h(n, i + 1)$ \\
+		This is so that the reduction from $f_{n,i}$ to $f_{n,i+1}$ turns into a downward self-reduction for $\fws$.
+		\item $h(n,i)$ should be injective \\
+		This is so that we can relate computing $\fws_{h(n,i)}$ on a random input to computing $f_{n,i}$ on a random input. 
+	\end{enumerate}
+	The following inductive definition achieves these properties. For $i \leq m(n)$, we define $h(n, i)$ inductively as follows:
+	\begin{itemize}
+		\item $h(1, m(1)) = t(1, m(1))$
+		\item For $n > 1$, $h(n, m(n)) = \max \set{h(n - 1, 0) + 1, n \cdot t(n, m(n)) + \ceil{\log n}}$
+		\item For $n > 1, i < m(n)$, $h(n, i) = \max \set{h(n, i + 1) + 1, n \cdot t(n, i) + \ceil{\log n} }$
+	\end{itemize}
+	The base case is starting with $f_{1,m(1)}$ which needs $t(1, m(1))$ bits. We want to use $f_{n,m(n)}$ after $f_{n-1,0}$, so we use at least $1$ extra input bit. Similarly, we want to use $f_{n,i}$ after $f_{n,i+1}$, so we use at least $1$ extra input bit. 
+	Observe that $h$ is injective and $h(n, i) \leq \poly(n)$. For $i \leq m(n)$, we define	$\fws_{h(n,i)}$ to encode the function $f_{n,i}$.  Specifically, $\fws_{h(n,i)}(x, j)$ is the $j^{th}$ bit of $f_{n,i}(x)$. Note that $x$ takes $n \cdot t(n, i)$ bits to represent and $j$ takes $\ceil{\log n}$ bits, so together they can indeed be represented by a string of length $h(n, i)$.
+
+	For lengths $k$ not of the form $h(n, i)$, we let $h = \max \set{h(n, i) : h(n, i) \leq k}$, and we define $\fws_k$ to equal $\fws_h$. Thus, $\fws_k$ will ignore the last $k-h$ bits of its input. It can be verified that $h$ can be computed in time $\poly(k)$.
+
+	The downward self-reducibility and $\PSPACE$-hardness of $\fws$ follow immediately from the corresponding properties in \ref{clm:USR-func-fam}. The self-correctability follows from the fact that each $f_{n,i}$ is a multivariate polynomial of total degree at most $\poly(n)$ over a field of size $2^n$. This construction preserves unique decodability but does not preserve local list decodability. 
+	
+	To get both properties we should not extract one bit from the output in $\fn$. We should concatenate the output with a binary code. The polynomials we have can be thought of as the Reed Muller code, and we can concatenate it with the Hadamard code. Fortunately, this does not ruin the DSR, and we get the result.
+\end{proof}
+
+\subsection{Learning via Uniform Distinguishers}
+
+Recall the Nisan-Wigderson PRG. We start by defining a combinatorial design:
+\begin{definition}[Combinatorial design]
+	A collection of subsets $T_1, \dots, T_n \subseteq [d]$ is a \emph{$(\ell, a)$-design} if:
+	\begin{enumerate}
+		\item $\card{T_i} = \ell$ for all $i$, and
+		\item $\card{T_i \cap T_j} < a$ for all $i \ne j$.
+	\end{enumerate}
+\end{definition}
+
+We will be interested in combinatorial designs where $n = 2^\ell$, $d =
+O(\ell)$, and $a = \ell/100$. The following proposition states that, not only does such a design exist for all $\ell$ and all $\gamma$, but it can be computed deterministically in time $O(2^\ell)$.
+
+\begin{proposition}[Restatement of \Cref{thm:design}] \label{prop:comb-design}
+	Let $\gamma > 0 $ and let $\ell, n \in \mathbb{N}$. For all $a \ge \gamma
+	\log{n}$ and $d \ge e^2 \cdot 2^{1/\gamma} \cdot \ell^2/a$, there exists an
+	$(\ell, a)$-design $T_1, \dots, T_n \subseteq [d]$. Moreover, such a design
+	can be found deterministically in time $\poly(n, d)$.
+\end{proposition}
+
+We now define what it means for an algorithm to learn a function:
+\begin{definition}
+	Let $f_n : \set{0, 1}^n \to \set{0, 1}.$ A probabilistic algorithm $A$ with
+	oracle access to $f_n$ \emph{learns $f_n$ with success $\delta$ and advantage
+		$\eps$} if on input $1^n$, $A$ produces a circuit $C_n$ such that
+	$\Pr_{x \sim \{0, 1\}^n} \brac{C_n(x) = f_n(x)} \geq 1/2 + \eps$ with
+	probability $1 - \delta$.
+\end{definition}
+
+Now consider the following proposition:
+
+\begin{proposition}\label{prop:learning-func}
+	Let $\ell = \log{n}$, and let $T_1, \dots, T_n$ be
+	a $(\ell, \ell/100)$-design over $[d=O(\ell)]$. Finally, let $f :
+	\set{0,1}^\ell \to \set{0, 1}$ and let $G^f$ be the Nisan-Wigderson PRG with
+	oracle $f$ and design $T_1, \dots, T_n$. If $D$ is a uniform circuit on $n$
+	inputs generated by a TM in time $\poly(n)$ that is not $(1/n)$-fooled by $G^f$, then
+	there is a $\poly(n)$-time algorithm to learn $f$ with advantage $1/O(n^2)$ and
+	success $\eps/O(n)$.
+\end{proposition}
+
+The input to the function $\fws$ is of size $\ell$, thus the truth table of $f$ is of size $2^{\ell}$. The number of times the function is called is $n = 2^{\ell}$ implying that the pseudorandom strings are of size $n$.
+The hardness of the function is $2^{\sqrt{\ell}}$. We want to say that if there is a distinguisher then we can break this hardness i.e.\ reconstruction for $\fws$ will work in time less that $2^{\sqrt{\ell}}$.
+The distinguisher is of size at least $n$ (because it wants to differentiate random and pseudorandom strings of length $n$) generated in time $p(n)$. This implies that we want $n < 2^{\sqrt{\ell}}$ which means $\ell > \log^2 n$. This implies that the seed of NW-PRG should be of length $\ell^2/\log n = \polylog n$ (It would be $\polylog n$ even if the seed length was $O(\ell)$).
+
+We will present something cleaner and more familiar. We can then scale a bit to get the correct result.
+
+\begin{proof}
+	By definition, if $D$ is not $(1/n)$-fooled by $G^f$, then
+	\begin{equation}\label{eq:dist-NW-prg}
+		\card{\Pr\brac{D(G(1^n, s)) = 1} - \Pr\brac{D(\overline{u}_n) = 1}} > 1/n.
+	\end{equation}
+	
+	As in the hybrid argument, we define the distributions:
+	\begin{align*}
+		\overline{H}_0 &= (f(x_1), \ldots, f(x_n)),\\
+		\overline{H}_i &= (\overline{u}_i, f(x_{i + 1}), \ldots, f(x_n)),\\
+		\overline{H}_n &= \overline{u}_n,
+	\end{align*}
+	where $x_i$ is the projection of the seed given to the PRG onto the
+	coordinates $T_i$. Recall the (easy) lemma that there is an $i$ such that:
+	\[
+	\card{\Pr\brac{D(\overline{H}_{i - 1}) = 1} - \Pr\brac{D(\overline{H}_i) = 1}} > 1 / n^2.
+	\]
+	This is because if the difference between each consecutive distribution is $\leq 1/n^2$ then we would contradict \Cref{eq:dist-NW-prg}.
+	The learning algorithm, with probability $1/n$, has to output a circuit (using the distinguisher) that when given $x_i$ as input, needs to output $f(x_i)$ with probability at least $1/2 + 1/n^2$.
+	Roughly speaking, the learning algorithm will guess the value of this $i$ and
+	exploit the fact that $D$ can differentiate the bit $f(x_i)$ from a uniformly
+	random bit. More concretely, we describe the algorithm $A$:
+	\begin{enumerate}
+		\item Construct a $(\ell, \ell/100)$-design $T_1, \dots, T_n$ in
+		time $\poly(n)$ using \Cref{prop:comb-design}. (Same design that the PRG used)
+		\item Choose a random $i \in \brac{n}$. (Here you lose a $1/n$ factor in success)
+		\item Choose a random $z^* \in \set{0, 1}^{d - \ell}$. Here $s$
+		(the seed of the PRG) projected to $T_i$ will be equal to $x_i$,
+		and the remaining coordinates will be filled by $z^*$. (Here you lose a $\Theta(1)$ factor in success)
+		\item Choose a random bit $\sigma$. (Here you lose a $1/2$ factor in success)
+		\item Query the oracle for $f$ on all possible inputs
+		$x_{i + 1}, \ldots , x_n$. Note that at most $\ell / 100$ bits of
+		each of these $x_j$'s are unknown after fixing $z^*$, so there
+		are at most $n \cdot 2^{\ell / 100}$ queries to the oracle. We make the queries and then store a table which we later hard-wire into the circuit. (The distinguisher is correct with probability $\eps$ so here you lose an $\eps$ factor in success )
+		\item Choose a random $u^* \in \set{0, 1}^{i - 1}$. (Here you lose a $\Theta(1)$ factor in success)
+		\item Output the \emph{circuit} that takes input $x_i$ and simulates
+		$D$ on $(u^*, \sigma, f(x_{i + 1}), \ldots , f(x_n))$ and outputs
+		$\lnot \sigma$ if $D$ accepts, and $\sigma$ otherwise. 
+	\end{enumerate}
+	To complete the proof, we claim:
+	
+	\begin{claim}
+		With probability $\eps / O(n)$, $\Pr\brac{C_n(x) = f_n(x)} = 1/2 + 1/O(n^2)$.
+	\end{claim}
+	\begin{proof}
+	To see the claim, suppose without loss of generality that the probability
+	that $D$ accepts on an input sampled from $\overline{H}_{i}$ is larger
+	than the probability it accepts on one from $\overline{H}_{i - 1}$.
+	For brevity, define the distribution $\overline{H}'_{i - 1}$ which differs
+	from $\overline{H}_{i - 1}$ only in the $i$-th coordinate, where it is
+	$\lnot f(x_i)$.
+	Then note that since the distributions $\overline{H}_i$ and
+	$\overline{H}_{i - 1}$ differ only in their $i$-th bit, and this bit is
+	either $f(x_i)$ or $\lnot f(x_i)$ with equal probability in
+	$\overline{H}_i$:
+	\[
+	\Pr\brac{D(\overline{H}_{i}) = 1}
+	= \frac 12 \Pr\brac{D(\overline{H}_{i - 1}) = 1}
+	+ \frac 12 \Pr\brac{D(\overline{H}'_{i - 1}) = 1}.
+	\]
+	But this means that $\Pr\brac{D(\overline{H}'_{i - 1}) = 1} >
+	\Pr\brac{D(\overline{H}_{i - 1}) = 1} + 2/n^2$.
+	Now, $C_n$ outputs $f(x_i)$ correctly if either:
+	\begin{itemize}
+		\item $\sigma = f(x_i)$, and $D$ rejects, which happens with
+		probability $1/2 \cdot \Pr\brac{D(\overline{H}_{i - 1}) = 0}$.
+		\item $\sigma \neq f(x_i)$ and $D$ accepts, which happens with
+		probability $1/2 \cdot \Pr\brac{D(\overline{H}'_{i - 1}) = 1}$.
+	\end{itemize}
+	And hence the probability that $C_n(x) = f_n(x)$ is
+	\[
+	\frac 12 \paren*{
+		\Pr\brac{D(\overline{H}_{i - 1}) = 0} +
+		\Pr\brac{D(\overline{H}'_{i - 1}) = 1}
+	}
+	> 1/2 + 1/n^2. \qedhere
+	\]
+	\end{proof}
+	
+This proves that the advantage is $1/n^2$. This happens when we know $i$ correctly which happens with probability $1/n$ implying the success is $1/n$.	
+\end{proof}
+
+
+\begin{corollary}\label{cor:learning-boost-success}
+	If there is a $(1/n)$-distinguisher for the NW-PRG $G^f$, then there is an
+	algorithm that learns $f$ with success $1 - 1/\delta$ and advantage
+	$1/(2n^2)$ that runs in time $\poly(n, \log{1/\delta})$.
+\end{corollary}
+
+\begin{proof}
+	Let $A$ be the learning algorithm for $f$ with success $1/n$ and advantage
+	$1/n^2$ promised by \Cref{prop:learning-func}. By running $A$
+	independently $n \log(1/\delta)$ times, the probability that none of the
+	circuits produced has advantage $1/n^2$ is $1 - (1 - 1/n)^{n\log(1/\delta)} >
+	1 - \delta$. We can estimate the acceptance probability of each of the
+	$n\log(1/\delta)$ circuits to within an additive error of $1/(2n^2)$ with
+	probability $1 - \delta$ by running it on $O(n^4 \log(1/\delta))$ random
+	inputs. Hence if such a circuit exists, we will find it in time $\poly(n,
+	1/\delta)$. Reparameterizing $\delta$ gives the result.
+\end{proof}
+
+
+\subsection{Bootstrapping via Downward Self-Reducibility and LLDCs}
+In this section, we put everything together and prove the following:
+\begin{theorem}[Modification of \Cref{thm:uniform-hard-random-PSPACE}]
+	If $\PSPACE$ is hard for $\BPTIME\left[2^{\eps n}\right]$ then for all polynomials $p(n)$ there is a $(1/n)$-PRG for uniform circuits generated in time $p(n)$ with log-sized seed and polynomial running time. This implies that $\BPP$ is a subset of $\ioTIME[2^{O(\log n)}]$ on average.
+\end{theorem}
+
+
+If $\PSPACE$ is hard for $\BPTIME\left[2^{\eps \ell}\right]$ then $\fws$ on input length $\ell$, a $\PSPACE$-complete problem, is hard for $\BPTIME\left[2^{\eps \ell}\right]$. 
+We use the NW-PRG with $\fws$ and claim that we get a $(1/n)$-PRG for uniform circuits. We prove this using a reconstruction argument. 
+We assume tac that a uniform algorithm succeeds in producing a distinguisher circuit on all input lengths above a certain length $\ell_0$ (When we get the contradiction it will mean that there is no such $\ell_0$ implying that there are infinitely many input lengths where there is no distinguisher, and we get a PRG). In this case there is a learning algorithm that (uses the distinguisher and) succeeds whp in producing a circuit that computes $\fws$ on $1/2+2^{-2\eps \ell} = 1/2+1/n^2$ of the inputs, for each input length $\ell$ ($\ell=O(\log n )$). 
+
+For $i=\ell_0,\ell_0+1,\ldots,\ell$, we construct a circuit $C_i$ for $\fws$ on input length $i$. The base case ($i=\ell_0$) is trivial since we can just hard code a circuit, and the induction step runs the learning algorithm and answers its queries to $\fws_i$ using the DSR property and $C_{i-1}$ (which we already have from the previous step). 
+
+The last gap is that the learning algorithm only produces a circuit $\overline{C_i}$ that succeeds on $1/2+1/n^2$ fraction of inputs, rather than on all inputs. Here we use the decoder of the LLDC, feeding it truth table of $C_i$ as a ``corrupted codeword'' (we do not explicitly give the truth table), to get a circuit that succeeds in computing $\fws_i$ on all inputs. We have advantage $\rho = 2^{-2\eps \ell}$ and thus the number of candidate circuits we get is $\poly(1/\rho) = \poly(2^{\eps \ell}) = \poly(n)$ ($\hat{C}_1,\hat{C}_2,\ldots$).
+We can distinguish which one of them ($\hat{C}$) computes $\fws$ with probability at least $0.99$, using random sampling (i.e.\, evaluate each candidate on random inputs, evaluate $\fws_i$ on these inputs using DSR and $C_{i-1}$, and compare). The final step is to use the local unique decoder to get the exact circuit for $C_i$ (succeeds on all inputs). 
+
+Note that we can think of the truth table of the circuit as a corrupted codeword and the truth table of $\fws$ as a true codeword we want to arrive at. The list decoding can return a circuit computing $\hat{C}$ that is not a codeword itself. (That is, some of the circuits that it returns compute functions whose truth-tables aren't necessarily codewords.) If the decoder would've only returned circuits that computed functions that are codewords, finding a circuit that agrees with $\fws$ on $99$ percent of the entries would mean that this circuit agrees with $\fws$ on $100$ percent of the entries (because any two codewords are far apart). 
+Then the final step is to get to $C_i$ from $\hat{C}$ which we do using unique decoding. If $\hat{C}$ was a codeword then it computed $\fws_i$ anyway and if it was not then we find the codeword $C_i$ that computes $\fws_i$ and we are done.
+
+The time budget for reconstruction is $2^{\eps \ell}$. We have $\ell=c \log n$ for some large constant $c$. So we have $n= 2^{\ell/c}$ by rearranging. The time taken by the above algorithm is $\poly(n) \leq 2^{c_1 \cdot \ell/c} \leq 2^{\ell/c_2} \ll 2^{\eps \ell}$. $c_2$ is very large compared to $1/\eps$. 
+
+This proves the first part of \Cref{thm:uniform-hard-random-PSPACE}. The second part is derandomizing $\BPP$ on average. This can now be done by replacing the random coins of the $\BPP$ algorithm by pseudorandom coins. We can go over all possible seeds and take the majority. 
+Since the seed length is $O(\log n)$, the time taken is $2^{O(\log n)} \cdot \poly(n) = 2^{O(\log n)}$. 
+To fix the lie we use seed length of $\polylog n$ implying that the time taken is $2^{\polylog n} \cdot \poly(n) = 2^{\log^c n}$. 
+Note that we get derandomization on average and the argument for that is almost identical to that in \Cref{thm:DR-on-average}.
+
+
+\end{lecture}

@@ -1,3 +1,5 @@
+\newcommand{\fws}{\ensuremath{ f^{\text{ws}} }}
+
 \begin{lecture}{4}{Uniform Hardness vs.\ Randomness}{February 10, 2022}
 \label{lec:04}
 
@@ -16,11 +18,14 @@
 \subsection{Uniform Circuits}
 
 So far we have been studying PRGs for non-uniform circuits. As a consequence,
-our results so far require problems in \E that are hard for non-uniform models.
+our results so far require problems in $\E$ that are hard for non-uniform models.
 In this lecture we investigate the analgous questions for uniform models of
 computation.
 
-\comment{Define uniform circuits}
+
+\begin{definition}[Uniform circuits]
+	Uniform circuits are circuits that can be printed by a Turing Machine i.e.\ when the input to the TM is $1^n$ the output is circuit $C_n$.
+\end{definition}
 
 \begin{definition}[$\eps$-PRG for uniform circuits]
   An algorithm $G$ is an \emph{$\eps$-PRG for uniform circuits generated in
@@ -31,14 +36,14 @@ computation.
 	\]
 \end{definition}
 
-\begin{definition}
+\begin{definition}\label{p-sample-dist}
   Let $\overline{x} = \set{\overline{x}_n}$ be a sequence of distributions over
   $\set{0, 1}^n$ and let $p : \N \to \N$. We say that $\overline{x}$ is
   \emph{$p$-time samplable} if there is a probabilistic machine $S$ with
   runtime $p(n)$ such that $S(1^n)$ has the distribution $\overline{x}(n)$.
 \end{definition}
 
-\begin{theorem}
+\begin{theorem}\label{thm:DR-on-average}
   Assume that for all polynomials $p(n)$ there is an $\eps$-PRG $G$ for uniform
   circuits generated in time $p(n)$ that stretches a $\log(n)$-sized seed. Then
   for all $L \in \BPP$ and poly-time samplable distributions $\overline{x}$,%
@@ -90,7 +95,7 @@ computation.
 	$\RP = \P$ ``on average''.
 \end{theorem}
 
-\newcommand{\fws}{\ensuremath{ f^{\text{ws}} }}
+
 \begin{theorem}
 	There exists a language $\fws \in \P^{\sharpp}$ such that if $\fws$
 	is hard for $\BPTIME\brac{2^{\eps n}}$ then
@@ -212,7 +217,7 @@ circuits from Lecture~\ref{lec:03} is the following conjecture:
   \label{corr:learning-boost-success}
   If there is a $(1/n)$-distinguisher for the NW-PRG $G^f$, then there is an
   algorithm that learns $f$ with success $1 - 1/\delta$ and advantage
-  $1/(2n^2)$ that runs in time $\poly(n, 1/\delta)$.
+  $1/(2n^2)$ that runs in time $\poly(n, \log(1/\delta))$.
 \end{corollary}
 
 \begin{proof}
@@ -253,7 +258,7 @@ For example, $\SAT$ and $\PERM$ are DSR.
   \end{enumerate}
 \end{proposition}
 
-\begin{theorem}
+\begin{theorem}\label{thm:uniform-hard-random-sharpP}
   If $\fws$ is hard for $\BPTIME\brac{2^{\eps n}}$ then for all polynomials
   $p(n)$ there is a $(1 / n)$-PRG for uniform circuits generated in time $p(n)$
   with $\log$-sized seed and polynomial running time.
