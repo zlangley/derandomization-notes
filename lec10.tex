@@ -1,0 +1,34 @@
+%! TeX root = main.tex
+
+\begin{lecture}{10}{Non-black-box derandomization using doubly-efficient proof
+  systems}{March 31, 2022}\label{lec:non-black-box}
+
+\subsection*{The Upshot}
+
+\begin{enumerate}
+  \item We have seen equivalences between non-uniform hardness results and the
+    existence of PRGs that beat circuits (\cref{lec:02}), and between uniform
+    hardness results and PRGs that beat uniform circuits (\cref{lec:04}).
+    These results gave us worst case and average case derandomization
+    respectively, by simply using the PRG to generate the randomness for a
+    $\BPP$ algorithm.
+  \item However, the derandomization above is blackbox --- the output of the
+    PRG depends only on the seed (and not the input to the algorithm we are
+    trying to derandomize).
+  \item By instead designing \emph{targeted} PRGs, we will get closer to an
+    equivalence between the hardness assumption and derandomizing $\BPP$.
+\end{enumerate}
+
+\subsection{The Plan}
+TODO
+
+\subsection{Preliminaries}
+TODO
+
+\subsection{Bootstrapping System via Double Efficient Proofs}
+TODO
+
+\subsection{From Bootstrapping Systems to Targeted HSGs}
+TODO
+
+\end{lecture}
