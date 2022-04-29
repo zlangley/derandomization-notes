@@ -23,6 +23,26 @@
 TODO
 
 \subsection{Preliminaries}
+
+\begin{definition}[$\eps$-targeted PRG]%
+  \label{defn:targeted-PRG}
+  For $T : \N \to \N$, let $G$ be an algorithm that gets input:
+  \begin{itemize}
+    \item $x \in \set{0, 1}^n$ and
+    \item a seed of length $\ell(n)$,
+  \end{itemize}
+  and outputs a string of length $T(n)$.
+  We say $G$ is an $\eps$-targeted PRG for time $T$ if for every algorithm
+  $A$ running in time $T$, $n$ large enough, and $x \in \set{0, 1}^n$ it holds
+  that
+  \[
+    \card*{ \Pr_{r \in \set{0, 1}^{T(n)}} \brac{ A(x, r) = 1 } -
+    \Pr_{s \in \set{0, 1}^{\ell(n)}} \brac{ A(x, G(x, s)) = 1 }} \leq \eps.
+  \]
+\end{definition}
+Note that the only difference between this definition and that of a PRG is
+the additional input of $x$ to $G$.
+
 TODO
 
 \subsection{Bootstrapping System via Double Efficient Proofs}
