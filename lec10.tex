@@ -43,7 +43,55 @@ TODO
 Note that the only difference between this definition and that of a PRG is
 the additional input of $x$ to $G$.
 
-TODO
+\begin{definition}[Bootstrapping System]
+  Let $T, d, p : \N \to \N$ be logspace computable functions.%
+  \footnote{\comment{Do we really need this?}}
+  We say that a function $f : \set{0, 1}^* \to \set{0, 1}^*$ has
+  $(d \times T)$-bootstrapping systems with alphabet size $p$ if for
+  $x \in \set{0, 1}^n$ there exists a sequence of strings of strings
+  $P_0(x), \ldots , P_{d(n)}(x) \in \F_p^{T(n)}$ with the following properties:
+  \begin{enumerate}
+    \item Layers are efficiently printable: There exists an efficient algorithm
+      that gets input $(x, i) \in \set{0, 1}^n \times \brac{d(n)}$ and prints
+      the string $P_i(x)$ (encoding elements of the field $\F_p$ as binary
+      strings).%
+      \label{defn:bs-print-layers}
+    \item Base case: There exists an efficient algorithm that gets input
+      $(x, j) \in \set{0, 1}^n \times \brac{T(n)}$ and outputs ${P_0(x)}_j$.%
+      \label{defn:bs-base-case}
+    \item Downward self-reducibility: There exists an efficient algorithm that
+      gets input
+      $(x, i, j) \in \set{0, 1}^n \times \brac{d(n)} \times \brac{T(n)}$ and
+      oracle access to $P_{i - 1}(x)$ and outputs ${P_i(x)}_j$.%
+      \label{defn:bs-dsr}
+    \item Error correction: Each row $P_i(x)$ is a codeword in a sufficiently
+      good Reed-Muller code.
+    \item Final case: There exists an efficient algorithm that gets input
+      $x \in \set{0, 1}^n$ and oracle access to $P_{d(n)}(x)$ and outputs
+      $f(x)$.%
+      \label{defn:bs-final}
+  \end{enumerate}
+\end{definition}
+
+Note that this definition is vague: we did not define ``efficient algorithm''
+in \cref{defn:bs-print-layers,defn:bs-base-case,defn:bs-dsr,defn:bs-final}.
+We will try to justify this choice with a quick example of viewing previous
+reconstruction arguments as building the layers of a bootstrapping system.
+
+\paragraph{\Cref{lec:08} as a Bootstrapping System.}
+Recall $\fws$, the well-structured $\PSPACE$ hard function from \Cref{lec:08},
+and for $d = n$, and $T = 2^n$, define $P_i(x)$ as the truth table of $\fws$
+on inputs of size $i$.
+This satisfies the requirements of a boostrapping system since:
+\begin{enumerate}
+  \item The algorithm to print $P_i(x)$ runs in polynomial space.
+  \item The base case is trivial since it corresponds to inputs of size $1$
+  \item The downward self-reducibility of $\fws$ was shown in $\Cref{lec:08}$.
+    \comment{Add running time here.}
+  \item Each row is a codeword in the Reed-Muller code.
+  \item The final row is the truth table of $\fws$ on $n$-bit inputs, so
+    to compute $f(x)$ we can just look it up in the final row.
+\end{enumerate}
 
 \subsection{Bootstrapping System via Double Efficient Proofs}
 TODO
