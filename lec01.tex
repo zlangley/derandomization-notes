@@ -27,42 +27,38 @@ A \emph{promise problem} is a pair $\Pi = (\Pi_Y, \Pi_N) \subseteq \{0, 1\}^*
 captures all of the ``yes'' instances, and the set $\Pi_N$ captures all of the
 ``no'' instances. The set $\Pi_Y \cup \Pi_N$ is called the \emph{promise}. We
 say that a Turing machine $M$ \emph{solves} a promise problem $\Pi$ if on
-input $x \in \Pi_Y$ it accepts and on input $x \in \Pi_N$ it rejects. Crucially,
-for inputs not in the promise, the machine can behave arbitrarily.
+every input $x \in \Pi_Y$ it accepts and on input $x \in \Pi_N$ it rejects.
+Crucially, for inputs not in the promise, the machine can behave arbitrarily.
 
 Promise problems generalize decision problems (languages) in the case that
-$\Pi_Y \cup \Pi_N = \{0,1\}^*$. Complexity classes based on decision problems
-have obvious analogs based on promise problems. For example, $\prP$ is the
-class of all promise problems solvable by a deterministic polynomial-time
+$\Pi_Y \cup \Pi_N = \{0,1\}^*$, and complexity classes based on decision
+problems have obvious analogs based on promise problems. For example, $\prP$ is
+the class of all promise problems solvable by a deterministic polynomial-time
 Turing machine. Similarly, the class $\prBPP$ is the class of promise problems
 solvable by a probabilistic polynomial-time Turing machine with error
 probability at most 1/3 for all instances. The class $\prBPP$ will be one of
-our main objects of study, so its definition is worth repeating carefully.
+our main objects of study, so its definition is worth emphasizing.
 
 \begin{definition}[$\prBPP$]
-  A promise problem $\Pi = (\Pi_Y, \Pi_N)$ is in $\prBPP$ if and only if there
-  exists a polynomial $p(n)$ and a probabilistic Turing machine $M$ such that
+  A promise problem $\Pi = (\Pi_Y, \Pi_N)$ is in $\prBPP$ if there exists a
+  polynomial $p(n)$ and a probabilistic Turing machine $M$ such that
   \begin{enumerate}
-    \item if $x \in \Pi_Y$, then $M$ accepts input $x$ with probability greater
-      than $2/3$ after $p(n)$ steps, and
-    \item if $x \in \Pi_N$, then $M$ rejects input $x$ with probability greater
-      than $2/3$ after $p(n)$ steps.
+    \item if $x \in \Pi_Y$, then $M$ accepts on input $x$ with probability
+      greater than $2/3$ after $p(n)$ steps, and
+    \item if $x \in \Pi_N$, then $M$ rejects on input $x$ with probability
+      greater than $2/3$ after $p(n)$ steps.
   \end{enumerate}
 \end{definition}
 
-The constant $2/3$ in the definition of $\prBPP$ is not important; it
-can be replaced by any other constant greater than 1/2, which we will discuss
-in more detail in the next section.%
+The constant $2/3$ in the definition of $\prBPP$ is not important; it can be
+replaced by any other constant greater than 1/2 without changing the class.
 
-\begin{proposition}
+The following observation states that if we can derandomize promise problems,
+then we can also derandomize languages. Its proof is trivial.
+
+\begin{observation}
   If $\prBPP = \prP$, then $\BPP = \P$.
-\end{proposition}
-
-\begin{proof}
-  If $\Pi \in \BPP$, then trivially $\Pi \in \prBPP$, and therefore by
-  assumption, $\Pi \in \prP$. As $\Pi$ is a decision problem, it follows
-  that $\Pi \in \P$.
-\end{proof}
+\end{observation}
 
 What do we know about the placement $\BPP$ with respect to other complexity
 classes? An easy inclusion is $\BPP \subseteq \PSPACE$.
@@ -71,15 +67,16 @@ classes? An easy inclusion is $\BPP \subseteq \PSPACE$.
   $\BPP \subseteq \PSPACE$.
 \end{proposition}
 \begin{proof}
-  In one sentence: Simulate the $\BPP$ algorithm with all possible random
-  strings.
+  Briefly, the idea is to simulate the $\BPP$ algorithm with all possible
+  random strings and count the fraction of acceptances.
 
   In more detail, let $L \in \BPP$ and let $M$ be a probabilistic Turing
   machine that solves $L$ in polynomial time $p(n)$. We can design a
-  deterministic machine $M'$ that solves $L$ as follows. On input $x$, $M'$
-  simulates $M$ on input $(x, r)$ for every $r \in \set{0,1}^{p(n)}$ and counts
-  the number of times $M$ accepts. If $M$ accepts for more than $\frac{2}{3}
-  \cdot 2^{p(n)}$ choices of $r$, then $M'$ accepts. Otherwise, $M'$ rejects.
+  deterministic machine $M'$ that solves $L$ with $O(p(n))$ space as follows.
+  On input $x$, $M'$ simulates $M$ on input $(x, r)$ for every $r \in
+  \set{0,1}^{p(n)}$ and counts the number of times $M$ accepts. If $M$ accepts
+  for more than $\frac{2}{3} \cdot 2^{p(n)}$ choices of $r$, then $M'$ accepts.
+  Otherwise, $M'$ rejects.
 
   Clearly $M'$ accepts $L$ if and only if $M$ accepts $L$. The space
   requirements of $M'$ are the space requirements of $M$ plus the $p(n)$ bits
@@ -87,9 +84,12 @@ classes? An easy inclusion is $\BPP \subseteq \PSPACE$.
   polynomial space.
 \end{proof}
 
-Of course we cannot yet prove $\BPP \ne \PSPACE$ because we cannot yet prove
-$\P \ne \PSPACE$. The deterministic time hierarchy theorem tells us that $P \ne
-\EXP$, but suprisingly, it is still only a conjecture that $\BPP \ne \NEXP$!
+Unfortunately, we cannot yet prove $\BPP \ne \PSPACE$; such a proof would imply
+that $\P \ne \PSPACE$, resolving a long-standing open problem. Here is
+tantalizing open problem that would not as strong consequences, and thus should
+be easier to prove: Show that $\BPP \ne \NEXP$. We know that $\P
+\ne \EXP$ by the time-hierarchy theorem, so we certainly expect $\BPP \ne
+\EXP$, but surprisingly, the problem remains wide open.
 
 \subsection{Equivalent Definitions of prBPP via Amplification}
 
@@ -106,7 +106,7 @@ Recall the following additive Chernoff bound.
 
 \begin{theorem}[Additive Chernoff lower tail bound]\label{thm:chernoff}
   Let $X_1, \dots, X_n$ are independent random variables where $X_i \sim
-  \Bern(p)$, let $X := \sum_{i=1}^n X_i$, and let $\mu = \Exp X$. For all
+  \Bern(p)$, let $X = \sum_{i=1}^n X_i$, and let $\mu = \Exp X$. For all
   $\lambda \ge 0$, \[
     \Pr\paren*{X \le \mu - \lambda} \le \exp\paren*{-\frac{\lambda^2}{2\mu}}.
   \]
@@ -119,7 +119,7 @@ Recall the following additive Chernoff bound.
 \end{proposition}
 
 \begin{proof}
-  Let $X := \sum_{i=1}^t X_i$ and let $\mu = \Exp X$ and observe that $\mu \ge
+  Let $X = \sum_{i=1}^t X_i$ and let $\mu = \Exp X$ and observe that $\mu \ge
   t/2 + t\eps$ and $\mu \le t$. If $X > t/2$, then the majority is $1$. By the
   Chernoff bound of Theorem~\ref{thm:chernoff}, the probability that this does
   not happen is \[
@@ -136,7 +136,7 @@ Recall the following additive Chernoff bound.
 \begin{proof}
   By Proposition~\ref{prop:maj}, any algorithm with success rate $\delta_0 =
   1/2 + \eps$ can be used to produce an algorithm with success rate $\delta_1 >
-  \delta_0$ by repeating the algorithm independently $t :=
+  \delta_0$ by repeating the algorithm independently $t =
   2\ln(1 / \delta_1)/\eps^2$ times and taking the majority. The conditions on
   $\delta_0$ and $\delta_1$ ensure that $t = \poly(n)$.
 \end{proof}
@@ -172,7 +172,7 @@ Recall the following additive Chernoff bound.
 There are a few reasons to believe that we can do better. Consider the following propositions (informal):
 
 \begin{proposition}[BM82,GGM84]
-	If there exist one way functions secure against sub exponential size circuits then $\prBPP \subseteq \prQP := \cup_c \prDTIME[n^{\log^c n}]$.
+	If there exist one way functions secure against sub exponential size circuits then $\prBPP \subseteq \prQP = \cup_c \prDTIME[n^{\log^c n}]$.
 \end{proposition}
 
 Circuit lower bound
@@ -202,9 +202,9 @@ which it outputs 1.
   $\CAPP$ is the promise problem where
   \begin{enumerate}
     \item $\CAPP_Y$ is the set of all descriptions of circuits that have
-      acceptance probability at least $2/3$ over the inputs, and
+      acceptance probability greater than $2/3$ over the inputs, and
     \item $\CAPP_N$ is the set of all descriptions of circuits that have
-      acceptance probability at most $1/3$.
+      acceptance probability greater than $1/3$.
   \end{enumerate}
 \end{definition}
 
