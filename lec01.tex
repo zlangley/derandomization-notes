@@ -184,14 +184,18 @@ Circuit lower bound
 	If there exists a function computable by uniform circuits of size $\poly(n)$ and depth $n^2$ that is hard for probabilistic time $n^{100}$ on almost all inputs then $\prBPP = \prP$.
 \end{proposition}
 
+\commenta{zach}{Where do we say that $\BPP \subseteq \Sigma_2$?}
+
 \begin{proposition}
-	$\BPP \neq \P \rightarrow \P \neq \NP$.
+	If $\BPP \neq \P$, then $\P \neq \NP$.
 \end{proposition}
-\begin{proof}[Short proof]
-This is because if $\P = \NP$ then the polynomial hierarchy collapses. We know that $\BPP \subseteq \Sigma_2$ which implies $\BPP = \P$.
+\begin{proof}
+  If $\P = \NP$ then the polynomial hierarchy collapses, and in particular,
+  $\Sigma_2 = \P$. Hence $\BPP \subseteq \Sigma_2 = \P$.
 \end{proof}
 
-One strong reason to believe in derandomization is that whenever we try we are always successful. 
+One reason to believe in derandomization is that whenever we try we are always
+successful. 
 
 \subsection{The Circuit Acceptance Probability Problem (CAPP)}
 
@@ -199,7 +203,7 @@ The \emph{acceptance probability} of a circuit is the fraction of inputs for
 which it outputs 1.
 
 \begin{definition}[$\CAPP$]
-  $\CAPP$ is the promise problem where
+  $\CAPP = (\CAPP_Y, \CAPP_N)$ is the promise problem where
   \begin{enumerate}
     \item $\CAPP_Y$ is the set of all descriptions of circuits that have
       acceptance probability greater than $2/3$ over the inputs, and
@@ -212,21 +216,19 @@ which it outputs 1.
   $\CAPP$ is complete for $\prBPP$ under deterministic polynomial-time reductions.
 \end{theorem}
 
-$\CAPP$ is a promise problem because circuits that accept exactly half their inputs neither belong to $\CAPP_Y$ nor to $\CAPP_N$. $\CAPP$ is in $\prBPP$ because given a circuit we can plug in random strings and check if most of the strings are accepted or rejected. We now show why it is complete for $\prBPP$.
-
-Recall from the reduction in Cook's theorem that every Turing machine can be
-efficiently converted to an equivalent circuit for a fixed input length.
+For the proof, we will need the following classic result which asserts that
+Turing machines can be efficiently converted into circuits.
 \begin{lemma}\label{lem:tm-to-circuit}
-  For all $n \in \N$ there is an $O(t^2)$-time algorithm that, on input
-  $\langle M \rangle$ for some Turing machine $M$ with running time $t$, outputs a circuit $C_n$ such
-  that $C_n$ accepts $x \in \{0, 1\}^n$ if and only if $x \in L(M)$.
+  There is an algorithm that takes as input a Turing machine $M$, an $n \in
+  \N$, and and a time bound $T$ and ouputs a circuit $C_n$ on $n$ inputs
+  such that $C_n$ accepts $x \in \{0, 1\}^n$ if and only if $M$ accepts
+  $x$ in $T$ steps. Furthermore, the algorithm runs in time $O(T^2)$.
 \end{lemma}
-\comment{$t$ is the running time of $M$ right?}
 
 \begin{proof}[Proof of Theorem~\ref{thm:complete}]
-  The problem $\CAPP$ is easily seen to be in $\prBPP$: consider the algorithm
-  that simply simulates the input circuit on a randomly chosen input. So let us
-  show that every problem in $\prBPP$ can be reduced to $\CAPP$ in
+  The problem $\CAPP$ is easily seen to be in $\prBPP$: just consider the
+  algorithm that simply simulates the input circuit on a randomly chosen input.
+  So let us show that every problem in $\prBPP$ can be reduced to $\CAPP$ in
   deterministic polynomial time. Let $\Pi \in \prBPP$ and let $M$ be the
   probabilistic polynomial-time Turing machine solving $\Pi$. Given an input
   $x$, by Lemma~\ref{lem:tm-to-circuit}, we can construct in polynomial-time a
