@@ -1,26 +1,7 @@
-\begin{lecture}{1}{The Class prBPP}{January 23, 2020}
+\chapter{The Class prBPP}
 \label{lec:01}
 
-\subsection*{The Upshot}
-
-\begin{enumerate}
-  \item Randomness is necessary in many computational settings. Is randomness
-    necessary for polynomial-time computation? There are good reasons to expect
-    it is not! This is a fundamental question we will investigate in this
-    course.
-  \item Promise problems are a natural generalization of languages, and the
-    theory of probabilistic algorithms for promise problems is richer than
-    for that of languages.
-  \item The class $\prBPP$ has a complete problem ($\CAPP$) under deterministic
-    polynomial-time reductions. Hence to prove $\prBPP = \prP$ it suffices
-    to give a deterministic polynomial-time algorithm for $\CAPP$.
-  \item The class $\prBPP$ admits a time-hierarchy theorem.
-  \item Probabilistic search problems can be reduced to probabilistic decision
-    problems, meaning the theory we will develop around the class of decision
-    problems $\prBPP$ will apply to the search analog as well.
-\end{enumerate}
-
-\subsection{Promise Problems and prBPP}
+\section{Promise Problems and prBPP}
 
 A \emph{promise problem} is a pair $\Pi = (\Pi_Y, \Pi_N) \subseteq \{0, 1\}^*
 \times \{0, 1\}^*$ such that $\Pi_Y \cap \Pi_N = \emptyset$. The set $\Pi_Y$
@@ -91,7 +72,7 @@ be easier to prove: Show that $\BPP \ne \NEXP$. We know that $\P
 \ne \EXP$ by the time-hierarchy theorem, so we certainly expect $\BPP \ne
 \EXP$, but surprisingly, the problem remains wide open.
 
-\subsection{Equivalent Definitions of prBPP via Amplification}
+\section{Equivalent Definitions of prBPP via Amplification}
 
 Let $\prBPP[\delta(n)]$ be the class of promise problems that are solved by a
 polynomial-time Turing machine with error probability at most $\delta(n)$ on
@@ -197,7 +178,7 @@ Circuit lower bound
 One reason to believe in derandomization is that whenever we try we are always
 successful. 
 
-\subsection{The Circuit Acceptance Probability Problem (CAPP)}
+\section{The Circuit Acceptance Probability Problem (CAPP)}
 
 The \emph{acceptance probability} of a circuit is the fraction of inputs for
 which it outputs 1.
@@ -236,7 +217,7 @@ Turing machines can be efficiently converted into circuits.
   \Pi_Y$, then $C_x \in \CAPP_Y$, and if $x \in \Pi_N$, then $C_x \in \CAPP_N$.
 \end{proof}
 
-\subsection{A Time-Hierarchy Theorem}
+\section{A Time-Hierarchy Theorem}
 
 \begin{theorem}
   $\prBPTIME[T] \subsetneq \prBPTIME[\tilde{O}(T)]$
@@ -252,8 +233,7 @@ We do not know such a result for $\BPP$. We can prove something similar when the
 \end{proposition}
 
 
-
-\subsection{Reducing Search Problems to Decision Problems}
+\section{Reducing Search Problems to Decision Problems}
 
 We now want to show that problems in the search world of $\BPP$ can be reduced to decision problems in $\BPP$ (so it is okay to focus on decision problems). We start with some definitions:
 
@@ -284,7 +264,7 @@ $R$ is a promise problem because there are yes instances $(x,w)$ where $w$ is th
 	
 \end{proof}
 
-\subsection{Two-Sided Error vs.\ One-Sided Error}
+\section{Two-Sided Error vs.\ One-Sided Error}
 
 \comment{TODO: reference Lecture 5, in which the theorem below is proved}
 
@@ -363,4 +343,21 @@ The naive sampler uses fresh randomness for each sample so $\overline{T}$ is a r
     Since $\prP \subseteq \prBPP$, we have $\prBPP = \prP$.
 \end{proof}
 
-\end{lecture}
+\section*{The Upshot}
+
+\begin{enumerate}
+  \item Randomness is necessary in many computational settings. Is randomness
+    necessary for polynomial-time computation? There are good reasons to expect
+    it is not! This is a fundamental question we will investigate in this
+    course.
+  \item Promise problems are a natural generalization of languages, and the
+    theory of probabilistic algorithms for promise problems is richer than
+    for that of languages.
+  \item The class $\prBPP$ has a complete problem ($\CAPP$) under deterministic
+    polynomial-time reductions. Hence to prove $\prBPP = \prP$ it suffices
+    to give a deterministic polynomial-time algorithm for $\CAPP$.
+  \item The class $\prBPP$ admits a time-hierarchy theorem.
+  \item Probabilistic search problems can be reduced to probabilistic decision
+    problems, meaning the theory we will develop around the class of decision
+    problems $\prBPP$ will apply to the search analog as well.
+\end{enumerate}

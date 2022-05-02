@@ -1,9 +1,9 @@
 \newcommand{\fws}{\ensuremath{ f^{\text{ws}} }}
 
-\begin{lecture}{4}{Uniform Hardness vs.\ Randomness}{February 10, 2022}
+\chapter{Uniform Hardness vs.\ Randomness}
 \label{lec:04}
 
-\subsection*{The Upshot}
+\section*{The Upshot}
 
 \begin{enumerate}
   \item Uniform distinguishers for the NW-PRG with hard function $f$ can be
@@ -15,7 +15,7 @@
 \end{enumerate}
 
 
-\subsection{Uniform Circuits}
+\section{Uniform Circuits}
 
 So far we have been studying PRGs for non-uniform circuits. As a consequence,
 our results so far require problems in $\E$ that are hard for non-uniform models.
@@ -112,7 +112,7 @@ circuits from Lecture~\ref{lec:03} is the following conjecture:
 	runtime $\poly(n)$ that stretches a $\log(n)$ sized seed.
 \end{conjecture}
 
-\subsection{Learning via Uniform Distinguishers}
+\section{Learning via Uniform Distinguishers}
 
 \comment{Restate / refer to the Nisan-Wigderson PRG here.}
 
@@ -232,7 +232,7 @@ circuits from Lecture~\ref{lec:03} is the following conjecture:
   1/\delta)$. Reparameterizing $\delta$ gives the result.
 \end{proof}
 
-\subsection{Bootstrapping via Downward Self-Reducibility and LLDCs}
+\section{Bootstrapping via Downward Self-Reducibility and LLDCs}
 
 \begin{definition}
   $f$ is \emph{downward self-reducable (DSR)} if there exists an algorithm $A$
@@ -292,5 +292,3 @@ For example, $\SAT$ and $\PERM$ are DSR.
   each step we run in time $\poly(2^{\ell / c})$ and output a circuit of size
   $\poly(2^{\ell / c})$.
 \end{proofsk}
-
-\end{lecture}

@@ -1,11 +1,12 @@
 \newcommand{\F}{\mathbb{F}}
 \newcommand{\fH}{\mathbb{H}}
 
-\begin{lecture}{9}{Doubly Efficient Proof Systems}{March 24, 2022}\label{lec:09}
+\chapter{Doubly-Efficient Proof Systems}
+\label{lec:09}
 
-\subsection*{The Upshot}%We will prove this theorem for the class $\mathcal{L}$-uniform $\mathcal{NC}$.
+\section*{The Upshot}%We will prove this theorem for the class $\mathcal{L}$-uniform $\mathcal{NC}$.
 
-\subsection{Logspace Uniform Circuits}
+\section{Logspace Uniform Circuits}
 
 \begin{definition}\label{def:logspaceuniform}
   A circuit family $\{C_n\}_{n \geq 1}$ is called \emph{logspace uniform} if
@@ -48,7 +49,7 @@ particular, it implies that $\L$-uniform $\NC$ is contained in $\DEIP[\poly(n),
   \end{enumerate}
 \end{theorem}
 
-\subsection{Circuit Specification and Arithmetization}
+\section{Circuit Specification and Arithmetization}
 
 The prover and the verifier are given a boolean circuit $C$ of size $s$ and
 depth $d$ and an input $x$. The prover wants to convince a space-bounded
@@ -171,7 +172,7 @@ circuit $C$. We define $\tilde{L_i}: \F^m \rightarrow \F, \tilde{\psi_i}:
 \F^{3m} \rightarrow \F$ for $i\in \{0,1,\ldots, d\}$ as their low degree
 extensions from \cref{lem:lde}, and work with these functions.
 
-\subsection{Barebones Sumcheck Protocol}
+\section{Barebones Sumcheck Protocol}
 
 In this section we prove \cref{thm:main} when the verifier has access to
 oracles of low degree extensions of circuit specification functions from
@@ -190,6 +191,4 @@ verifier has to check whether $\tilde{L_d}(z_d) = r_d$ in the input layer,
 which it can verify without the aid of the prover in $O(n\cdot \poly(d, \log
 s))$ space.
 
-\subsection{Highly Uniform Circuit Oracles}
-
-\end{lecture}
+\section{Highly Uniform Circuit Oracles}

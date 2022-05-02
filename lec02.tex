@@ -1,7 +1,7 @@
-\begin{lecture}{2}{Hardness vs.\ Randomness}{January 27, 2022}
+\chapter{Hardness vs.\ Randomness}
 \label{lec:02}
 
-\subsection*{The Upshot}
+\section*{The Upshot}
 
 \begin{enumerate}
   \item Hardness and randomness are intimately connected. Suitably hard
@@ -25,9 +25,9 @@
     in all but one coordinate.
 \end{enumerate}
 
-\subsection{Pseudorandomness}
+\section{Pseudorandomness}
 
-\subsection{Hitting Set Generators}
+\section{Hitting Set Generators}
 
 \begin{definition}[Hitting Set Generator]
     A deterministic algorithm $H$ is a Hitting Set Generator (HSG) with seed length 
@@ -75,9 +75,9 @@
     \comment{TODO?: More formal description of the program that prints $f$}
 \end{proofsk}
 
-\subsection{Pseudorandom Generators}
+\section{Pseudorandom Generators}
 
-\subsection{The Nisan-Wigderson Generator}
+\section{The Nisan-Wigderson Generator}
 
 \begin{definition}[Combinatorial design]
   A collection of subsets $T_1, \dots, T_m \subseteq [d]$ is a \emph{$(\ell, a)$-design}
@@ -173,5 +173,3 @@ Now we return to the proof of Theorem~\ref{thm:design}.
   Hence we can iteratively apply Lemma~\ref{lem:design} $m$ times to obtain the
   sets $T_1, \dots T_m$.
 \end{proof}
-
-\end{lecture}

@@ -78,20 +78,5 @@
 % Hopefully this doesn't come back to bite me...
 \WarningFilter{latex}{Empty bibliography}
 
-
-\newenvironment{lecture}[3]{
-  \refstepcounter{section}
-
-  \newpage
-  \phantomsection{}
-  {\noindent\sffamily\LARGE\bfseries Lecture #1\\[2ex]\noindent#2}
-  \addcontentsline{toc}{section}{Lecture #1: #2}
-  \bigskip
-  \bigskip
-  \begin{refsection}
-}{
-  \printbibliography[heading=subbibliography]
-  \end{refsection}
-}
-
 \crefname{lecture}{lecture}{lectures}
+\Crefname{lecture}{Lecture}{Lectures}

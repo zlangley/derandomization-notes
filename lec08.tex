@@ -1,9 +1,10 @@
 \newcommand{\fn}{\mathbb{F}_n}
 \newcommand\antipi{\rotatebox[origin=c]{180}{$\Pi$}}
 
-\begin{lecture}{8}{Uniform Hardness vs. Randomness Revisited}{March 10, 2022}\label{lec:08}
+\chapter{Uniform Hardness vs.\ Randomness Revisited}
+\label{lec:08}
 
-\subsection*{The Upshot}
+\section*{The Upshot}
 
 \begin{enumerate}
 	\item We show that if $\PSPACE$ is hard for $\BPTIME\left[2^{n^\eps}\right]$ then $\BPP$ is a subset of \\ $\ioTIME[2^{\log^c n}]$ ``on average''.
@@ -29,7 +30,7 @@ Note that we assume hardness for $\BPTIME\left[2^{n^\eps}\right]$ instead of $\B
 
 In the following sections we develop some tools we need to prove this result. We will first show a Self-Correctable and Downward Self-Reducible $\PSPACE$-complete Problem. Then we show learning via uniform distinguishers. We will then put everything together and prove \Cref{thm:uniform-hard-random-PSPACE}. We will do so by using the $\PSPACE$-complete problem in the NW-PRG and showing a reconstruction using a learning algorithm along with the properties of the $\PSPACE$-complete problem.
 
-\subsection[A Self-Correctable and Downward Self-Reducible \texorpdfstring{$\PSPACE$}{PSPACE}-complete Problem]
+\section[A Self-Correctable and Downward Self-Reducible \texorpdfstring{$\PSPACE$}{PSPACE}-complete Problem]
 {A Self-Correctable and Downward Self-Reducible \\ \texorpdfstring{$\PSPACE$}{PSPACE}-complete Problem}
 
 In this section, we show a function $\fws$ in $\PSPACE$ with some nice properties (DSR and self-correctable). We start with the following definition:
@@ -151,7 +152,7 @@ Now, to deduce the final result, we simply combine the functions $f_{n,i}$ from 
 	To get both properties we should not extract one bit from the output in $\fn$. We should concatenate the output with a binary code. The polynomials we have can be thought of as the Reed Muller code, and we can concatenate it with the Hadamard code. Fortunately, this does not ruin the DSR, and we get the result.
 \end{proof}
 
-\subsection{Learning via Uniform Distinguishers}
+\section{Learning via Uniform Distinguishers}
 
 Recall the Nisan-Wigderson PRG. We start by defining a combinatorial design:
 \begin{definition}[Combinatorial design]
@@ -301,7 +302,7 @@ This proves that the advantage is $1/n^2$. This happens when we know $i$ correct
 \end{proof}
 
 
-\subsection{Bootstrapping via Downward Self-Reducibility and LLDCs}
+\section{Bootstrapping via Downward Self-Reducibility and LLDCs}
 In this section, we put everything together and prove the following:
 \begin{theorem}[Modification of \Cref{thm:uniform-hard-random-PSPACE}]
 	If $\PSPACE$ is hard for $\BPTIME\left[2^{\eps n}\right]$ then for all polynomials $p(n)$ there is a $(1/n)$-PRG for uniform circuits generated in time $p(n)$ with log-sized seed and polynomial running time. This implies that $\BPP$ is a subset of $\ioTIME[2^{O(\log n)}]$ on average.
@@ -326,6 +327,3 @@ This proves the first part of \Cref{thm:uniform-hard-random-PSPACE}. The second 
 Since the seed length is $O(\log n)$, the time taken is $2^{O(\log n)} \cdot \poly(n) = 2^{O(\log n)}$. 
 To fix the lie we use seed length of $\polylog n$ implying that the time taken is $2^{\polylog n} \cdot \poly(n) = 2^{\log^c n}$. 
 Note that we get derandomization on average and the argument for that is almost identical to that in \Cref{thm:DR-on-average}.
-
-
-\end{lecture}
