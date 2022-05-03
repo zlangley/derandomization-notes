@@ -3,17 +3,6 @@
 \chapter{Uniform Hardness vs.\ Randomness}
 \label{lec:04}
 
-\section*{The Upshot}
-
-\begin{enumerate}
-  \item Uniform distinguishers for the NW-PRG with hard function $f$ can be
-    used to learn $f$ with $1/\poly(n)$ advantage with high probability.
-  \item If the hard function $f$ has sufficient structure, the $1/\poly(n)$
-    advantage can be used to bootstrap a reconstruction of $f$.
-  \item LLDCs and downward self-reducibility play a crucial role in the
-    bootstrapping algorithm.
-\end{enumerate}
-
 
 \section{Uniform Circuits}
 
@@ -292,3 +281,14 @@ For example, $\SAT$ and $\PERM$ are DSR.
   each step we run in time $\poly(2^{\ell / c})$ and output a circuit of size
   $\poly(2^{\ell / c})$.
 \end{proofsk}
+
+\section*{The Upshot}
+
+\begin{enumerate}
+  \item Uniform distinguishers for the NW-PRG with hard function $f$ can be
+    used to learn $f$ with $1/\poly(n)$ advantage with high probability.
+  \item If the hard function $f$ has sufficient structure, the $1/\poly(n)$
+    advantage can be used to bootstrap a reconstruction of $f$.
+  \item LLDCs and downward self-reducibility play a crucial role in the
+    bootstrapping algorithm.
+\end{enumerate}

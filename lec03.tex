@@ -2,11 +2,13 @@
 \label{lec:03}
 
 In \Cref{lec:02}, we saw that if there is a language $L$ in $\E{}$ that cannot
-be computed on average by a circuit of size $2^{\eps n}$, then $\BPP = \P$. In
-this lecture, we will show---through the magic of polynomials---that we can
+be computed on, say, 51\% of inputs by a circuit of size $2^{\eps n}$, then $\BPP = \P$. In
+this chapter, we will show that we can
 make a signficantly weaker assumption and obtain the same conclusion: If there
-is a language in $\E$ which is not computable by any circuit of size $2^{\eps
+is a language in $\E$ that cannot be computed on 100\% of inputs by a circuit of size $2^{\eps
 n}$, then $\BPP = \P$.
+
+The main technique is called \emph{hardness amplification}: Given a problem that is hard to compute on 51\% of inputs, we construct a new problem that is hard to compute on 100\% of inputs.
 
 \section{A Primer on Coding Theory}
 

@@ -4,27 +4,13 @@
 \chapter{Uniform Hardness vs.\ Randomness Revisited}
 \label{lec:08}
 
-\section*{The Upshot}
-
-\begin{enumerate}
-	\item We show that if $\PSPACE$ is hard for $\BPTIME\left[2^{n^\eps}\right]$ then $\BPP$ is a subset of \\ $\ioTIME[2^{\log^c n}]$ ``on average''.
-	\item We construct a $\PSPACE$-complete problem $\fws$ with sufficient structure.
-	\item Uniform distinguishers for the NW-PRG with hard function $\fws$ can be
-	used to learn $\fws$ with $1/\poly(n)$ advantage with high probability.
-	\item The hard function $\fws$ has sufficient structure thus the $1/\poly(n)$
-	advantage can be used to bootstrap a reconstruction of $f$.
-	\item LLDCs and downward self-reducibility play a crucial role in the
-	bootstrapping algorithm.
-\end{enumerate}
-
-In Lecture \ref{lec:04}, we saw uniform hardness vs randomness. We showed that if there is a function with some nice properties (DSR and ECC) that is hard for $\BPTIME\brac{2^{\eps n}}$ then for all polynomials $p(n)$ there is a $(1 / n)$-PRG for uniform circuits generated in time $p(n)$ with $\log$-sized seed and polynomial running time (\Cref{thm:uniform-hard-random-sharpP}). 
-In this lecture, we will show a function $\fws$ in $\PSPACE$ which is DSR and  is a codeword which can be Locally List Decoded and Uniquely Decoded. Plugging this in the framework of Lecture \ref{lec:04} will give us the following theorem:
+In \Cref{lec:04}, we showed that if there is a function with some nice properties (DSR and ECC) that is hard for $\BPTIME\brac{2^{\eps n}}$, then for all polynomials $p(n)$ there is a $(1/n)$-PRG for uniform circuits generated in time $p(n)$ with a logarithmically-sized seed (see \Cref{thm:uniform-hard-random-sharpP}). 
+In this lecture, we will describe a function $\fws$ in $\PSPACE$ which is DSR and is a codeword which can be locally list decoded and uniquely decoded. Plugging this in the framework of \Cref{lec:04} will give us the following theorem:
 \begin{theorem}\label{thm:uniform-hard-random-PSPACE}
 	If $\PSPACE$ is hard for $\BPTIME\left[2^{n^\eps}\right]$ then for all polynomials $p(n)$ and infinitely many values of $n$, there is a $(1/n)$-PRG for uniform circuits generated in time $p(n)$ with polylog-sized seed and polynomial running time. This implies that $\BPP$ is a subset of $\ioTIME[2^{\log^c n}]$ ``on average''.
 \end{theorem}
 
-
-On average here means that for every $L \in \BPP$ there exists $L' \in \ioTIME[2^{\log^c n}]$ such that $\Pr_x(L(x) \neq L'(x)) \leq 1/n$. This works not only for uniform distributions but also for random input sampled in time $q(n)$ (\Cref{p-sample-dist}).
+``On average'' here means that for every $L \in \BPP$ there exists $L' \in \ioTIME[2^{\log^c n}]$ such that $\Pr_x(L(x) \neq L'(x)) \leq 1/n$. This works not only for uniform distributions but also for random input sampled in time $q(n)$ (\Cref{p-sample-dist}).
 The implication is $\BPP$ is a subset of $\ioTIME[2^{\log^c n}]$ on average where i.o.\ means infinitely often so the PRG works for infinitely many values of $n$. (Note that it is not something like $\forall n > n_0$ because then one can hardcode the first $n_0$ values. So it is like $1,10,100 \ldots$)
 Note that we assume hardness for $\BPTIME\left[2^{n^\eps}\right]$ instead of $\BPTIME\left[2^{\eps n}\right]$. The reason for this is that the function we construct cannot have exponential hardness because it is decidable in time roughly $2^{\sqrt{n}}$. But for \emph{simplicity} we will assume hardness for $\BPTIME\left[2^{\eps n}\right]$ and show the result. \Cref{thm:uniform-hard-random-PSPACE} can then be shown by some small modifications.
 
@@ -224,7 +210,7 @@ We will present something cleaner and more familiar. We can then scale a bit to 
 	random bit. More concretely, we describe the algorithm $A$:
 	\begin{enumerate}
 		\item Construct a $(\ell, \ell/100)$-design $T_1, \dots, T_n$ in
-		time $\poly(n)$ using \Cref{prop:comb-design}. (Same design that the PRG used)
+		time $\poly(n)$ using \Cref{prop:comb-design}.
 		\item Choose a random $i \in \brac{n}$. (Here you lose a $1/n$ factor in success)
 		\item Choose a random $z^* \in \set{0, 1}^{d - \ell}$. Here $s$
 		(the seed of the PRG) projected to $T_i$ will be equal to $x_i$,
@@ -327,3 +313,17 @@ This proves the first part of \Cref{thm:uniform-hard-random-PSPACE}. The second 
 Since the seed length is $O(\log n)$, the time taken is $2^{O(\log n)} \cdot \poly(n) = 2^{O(\log n)}$. 
 To fix the lie we use seed length of $\polylog n$ implying that the time taken is $2^{\polylog n} \cdot \poly(n) = 2^{\log^c n}$. 
 Note that we get derandomization on average and the argument for that is almost identical to that in \Cref{thm:DR-on-average}.
+
+
+\section*{The Upshot}
+
+\begin{enumerate}
+	\item We show that if $\PSPACE$ is hard for $\BPTIME\left[2^{n^\eps}\right]$ then $\BPP$ is a subset of \\$\ioTIME[2^{\log^c(n)}]$ ``on average''.
+	\item We construct a $\PSPACE$-complete problem $\fws$ with sufficient structure.
+	\item Uniform distinguishers for the NW-PRG with hard function $\fws$ can be
+	used to learn $\fws$ with $1/\poly(n)$ advantage with high probability.
+	\item The hard function $\fws$ has sufficient structure thus the $1/\poly(n)$
+	advantage can be used to bootstrap a reconstruction of $f$.
+	\item LLDCs and downward self-reducibility play a crucial role in the
+	bootstrapping algorithm.
+\end{enumerate}

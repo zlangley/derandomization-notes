@@ -1,38 +1,13 @@
 \chapter{Hardness vs.\ Randomness}
 \label{lec:02}
 
-\section*{The Upshot}
-
-\begin{enumerate}
-  \item Hardness and randomness are intimately connected. Suitably hard
-    functions $f$ can be used to build PRGs that exponentially stretch random
-    seeds into a string that appears random to circuits that cannot compute $f$
-    with any significant advantage.
-  \item The quintisential construction of such a PRG is the Nisan-Wigderson PRG
-    (NW-PRG).
-  \item The NW-PRG applies the hard function $f$ to many mostly disjoint
-    projections of the seed; the projections are given by a combinatorial
-    design.
-  \item The NW-PRG shows that if there is constant $\varepsilon > 0$ and a
-    language $L \in \DTIME[2^{O(n)}]$ that is hard for circuits of size
-    $2^{\varepsilon n}$, then there is a $(1/n)$-PRG for circuits of size
-    $\widetilde{O}(n)$. In particular, the existence of such a $\varepsilon$ and
-    $L$ implies $\prBPP = \prP$.
-  \item A key technique in the proof of the previous item is the \emph{hybrid
-    argument}, which asserts that if a circuit $D$ distinguishes the uniform
-    distribution from another product distribution, then it distinguishes two
-    ``hybrid'' product distributions whose marginal distributions are the same
-    in all but one coordinate.
-\end{enumerate}
-
 \section{Pseudorandomness}
 
 \section{Hitting Set Generators}
 
-\begin{definition}[Hitting Set Generator]
-    A deterministic algorithm $H$ is a Hitting Set Generator (HSG) with seed length 
-    $\ell(n)$ for $F = \set{f_n}_n$ if it satisfies $\Pr\brac{f(H(1^n, u_{l(n)})) = 
-    1} > 0$ for all $f \in F$.
+\begin{definition}[Hitting set generator]
+    A deterministic algorithm $H$ is a \emph{hitting set generator} with seed length $\ell(n)$ for $F = \set{f_n}_n$ if
+    it satisfies $\Pr\brac{f(H(1^n, u_{\ell(n)})) = 1} > 0$ for all $f \in F$.
 \end{definition}
 
 \begin{theorem}
@@ -46,6 +21,7 @@
     The Kolmogorov Complexity of $x \in \set{0, 1}^*$ is the length of the shortest 
     programs that, when run, prints $x$ and halts.
 \end{definition}
+\commenta{Zach}{Technically we need to fix a machine to define Kolmogorov complexity. Maybe this belongs in an appendix.}
 
 \begin{theorem}
     There is an algorithm $H$ that, when given $1^n$ and oracle access to a hard 
@@ -79,7 +55,7 @@
 
 \section{The Nisan-Wigderson Generator}
 
-\begin{definition}[Combinatorial design]
+\begin{definition}[Combinatorial design]\label{def:design}
   A collection of subsets $T_1, \dots, T_m \subseteq [d]$ is a \emph{$(\ell, a)$-design}
 	\begin{enumerate}
     \item $\card{T_i} = \ell$ for all $i$, and
@@ -94,7 +70,7 @@ all $\gamma$, but it can be computed deterministically in time $O(2^\ell)$.
 
 \begin{theorem}\label{thm:design}
   Let $\gamma > 0 $ and let $\ell, m \in \mathbb{N}$. For all $a \ge \gamma
-  \log{m}$ and $d \ge e^2 \cdot 2^{1/\gamma} \cdot \ell^2/a$, there exists an
+  \log_2{m}$ and $d \ge e^2 \cdot 2^{1/\gamma} \cdot \ell^2/a$, there exists an
   $(\ell, a)$-design $T_1, \dots, T_m \subseteq [d]$. Moreover, such a design
   can be found deterministically in time $\poly(m, d)$.
 \end{theorem}
@@ -159,8 +135,8 @@ The proof of the theorem will use the following lemma.
 
 Now we return to the proof of Theorem~\ref{thm:design}.
 
-\begin{proof}[Proof of Theorem~\ref{thm:design} using Lemma~\ref{lem:design}]
-  A routine calculation shows that for $a \ge \gamma \log{m}$ and $d \ge e^2
+\begin{proof}[Proof of Theorem~\ref{thm:design}]
+  A routine calculation shows that for $a \ge \gamma \log_2{m}$ and $d \ge e^2
   \cdot 2^{1/\gamma} \cdot \ell^2/a$, we have $m \le \binom{d}{a} /
   \binom{\ell}{a}^2$. Indeed,
   \begin{align*}
@@ -170,6 +146,30 @@ Now we return to the proof of Theorem~\ref{thm:design}.
     &= 2^{a / \gamma}\\
     &\ge m.
   \end{align*}
-  Hence we can iteratively apply Lemma~\ref{lem:design} $m$ times to obtain the
-  sets $T_1, \dots T_m$.
+  Hence we can apply Lemma~\ref{lem:design} iteratively $m$ times to obtain the
+  sets $T_1, \dots, T_m$.
 \end{proof}
+
+\section*{The Upshot}
+
+\begin{enumerate}
+  \item Hardness and randomness are intimately connected. Suitably hard
+    functions $f$ can be used to build PRGs that exponentially stretch random
+    seeds into a string that appears random to circuits that cannot compute $f$
+    with any significant advantage.
+  \item The quintisential construction of such a PRG is the Nisan-Wigderson PRG
+    (NW-PRG).
+  \item The NW-PRG applies the hard function $f$ to many mostly disjoint
+    projections of the seed; the projections are given by a combinatorial
+    design.
+  \item The NW-PRG shows that if there is constant $\varepsilon > 0$ and a
+    language $L \in \DTIME[2^{O(n)}]$ that is hard for circuits of size
+    $2^{\varepsilon n}$, then there is a $(1/n)$-PRG for circuits of size
+    $\widetilde{O}(n)$. In particular, the existence of such a $\varepsilon$ and
+    $L$ implies $\prBPP = \prP$.
+  \item A key technique in the proof of the previous item is the \emph{hybrid
+    argument}, which asserts that if a circuit $D$ distinguishes the uniform
+    distribution from another product distribution, then it distinguishes two
+    ``hybrid'' product distributions whose marginal distributions are the same
+    in all but one coordinate.
+\end{enumerate}
