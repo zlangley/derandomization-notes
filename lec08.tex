@@ -21,7 +21,7 @@ In the following sections we develop some tools we need to prove this result. We
 
 In this section, we show a function $\fws$ in $\PSPACE$ with some nice properties (DSR and self-correctable). We start with the following definition:
 \begin{definition}
-	$f$ is \emph{downward self-reducable (DSR)} if there exists an algorithm $A$
+	$f$ is \emph{downward self-reducible (DSR)} if there exists an algorithm $A$
 	such that when $A$ gets $x \in \set{0, 1}^n$ and oracle access to $f$ on $n -
 	1$ bits, it outputs $f(x)$ in linear time.
 \end{definition}
@@ -85,7 +85,7 @@ and is is defined as follows:
 \]
 Now let $\phi$ be any instance of QBF. Without loss of generality, we can assume $\phi$ is in the form $\phi = \exists x_1 \forall x_2 \ldots , \forall x_n \; \psi(x_1,x_2, \ldots, x_n)$, where $\psi$ is a CNF formula with at most $n$ clauses. (These restrictions still preserve the fact that QBF is a $\PSPACE$-complete problem.)
 Define $y(\phi)$ and $z(\phi)$ as follows: $y_{j,k}(\phi) = 1$ iff the $j^{th}$ clause of $\psi$ contains $x_k$, and $z_{j,k}(\phi) = 1$ iff the $j^{th}$ clause of $\psi$ contains $\neg x_k$. Then, by inspection, $\Phi_n(\overline{y}(\phi), \overline{z}(\phi)) = \phi$.
-We are essentially asking the question: ``does $x_k$ belong in caluse $j$". The input to $\Phi_n$ is $2n^2$ bits for values of $\overline{y}$ and $\overline{z}$. Each assignment corresponds to one of the $2^{2n^2}$ possible QBF formulas (with at most $n$ clauses and arbitrary clause size). \footnote{Note that here we can see why the problem can be solved in time $2^{\sqrt{\text{Input len}}}$. The input length is $n^2$ and we can solve the problem in time $2^n$.}
+We are essentially asking the question: ``does $x_k$ belong in clause $j$". The input to $\Phi_n$ is $2n^2$ bits for values of $\overline{y}$ and $\overline{z}$. Each assignment corresponds to one of the $2^{2n^2}$ possible QBF formulas (with at most $n$ clauses and arbitrary clause size). \footnote{Note that here we can see why the problem can be solved in time $2^{\sqrt{\text{Input len}}}$. The input length is $n^2$ and we can solve the problem in time $2^n$.}
 
 
 We can now define the polynomials $f_{n,0}, f_{n,1},\ldots , f_{n,m}$ ($m = m(n)$) to be the sequence of polynomials obtained by applying the above-described $\IP = \PSPACE$ construction to $\Phi_n$~(this is a fixed formula). The number of polynomials ($m(n)+1$) depend on the number of operators thus, $m(n)=O(n^2)$. 
@@ -297,7 +297,7 @@ In this section, we put everything together and prove the following:
 
 If $\PSPACE$ is hard for $\BPTIME\left[2^{\eps \ell}\right]$ then $\fws$ on input length $\ell$, a $\PSPACE$-complete problem, is hard for $\BPTIME\left[2^{\eps \ell}\right]$. 
 We use the NW-PRG with $\fws$ and claim that we get a $(1/n)$-PRG for uniform circuits. We prove this using a reconstruction argument. 
-We assume tac that a uniform algorithm succeeds in producing a distinguisher circuit on all input lengths above a certain length $\ell_0$ (When we get the contradiction it will mean that there is no such $\ell_0$ implying that there are infinitely many input lengths where there is no distinguisher, and we get a PRG). In this case there is a learning algorithm that (uses the distinguisher and) succeeds whp in producing a circuit that computes $\fws$ on $1/2+2^{-2\eps \ell} = 1/2+1/n^2$ of the inputs, for each input length $\ell$ ($\ell=O(\log n )$). 
+We assume tac that a uniform algorithm succeeds in producing a distinguisher circuit on all input lengths above a certain length $\ell_0$ (When we get the contradiction it will mean that there is no such $\ell_0$ implying that there are infinitely many input lengths where there is no distinguisher, and we get a PRG). In this case there is a learning algorithm that (uses the distinguisher and) succeeds with high probability in producing a circuit that computes $\fws$ on $1/2+2^{-2\eps \ell} = 1/2+1/n^2$ of the inputs, for each input length $\ell$ ($\ell=O(\log n )$). 
 
 For $i=\ell_0,\ell_0+1,\ldots,\ell$, we construct a circuit $C_i$ for $\fws$ on input length $i$. The base case ($i=\ell_0$) is trivial since we can just hard code a circuit, and the induction step runs the learning algorithm and answers its queries to $\fws_i$ using the DSR property and $C_{i-1}$ (which we already have from the previous step). 
 

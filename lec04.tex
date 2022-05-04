@@ -128,7 +128,6 @@ circuits from Lecture~\ref{lec:03} is the following conjecture:
   \[
     \card{\Pr\brac{D(G(1^n, s)) = 1} - \Pr\brac{D(\overline{u}_n) = 1}} > 1/n.
   \]
-  \comment{Should the input to $G$ really be $1^n$ above?}
 
   As in the hybrid argument (\comment{ref. lecture 2 here}), we define the
   distributions
@@ -224,14 +223,15 @@ circuits from Lecture~\ref{lec:03} is the following conjecture:
 \section{Bootstrapping via Downward Self-Reducibility and LLDCs}
 
 \begin{definition}
-  $f$ is \emph{downward self-reducable (DSR)} if there exists an algorithm $A$
-  such that when $A$ gets $x \in \set{0, 1}^n$ and oracle access to $f$ on $n -
-  1$ bits, it outputs $f(x)$ in linear time.%
-  \footnote{Linear time is not critical, it can be replaced (for example) by
-	quadratic time ... but not $\poly$-time (???).}
+  A function family $f_n : \set{0, 1}^n \to \set{0, 1}$ is \emph{downward self-reducible (DSR)} if there exists an algorithm $A$
+  such that on input $x \in \set{0, 1}^n$ and with oracle access to $f_{n-1}$, $A$ computes $f_n(x)$ in linear-time.
+  \footnote{Linear time is not critical, it can be replaced (for example) by quadratic time ... but not $\poly$-time
+  (???).}
 \end{definition}
 
 For example, $\SAT$ and $\PERM$ are DSR.
+
+\commenta{Zach}{I'm not sure that the statement ``$\SAT$ is DSR'' type-checks.}
 
 \begin{proposition}
   There exists a function $\fws \in \P^{\sharpp}$ such that:

@@ -58,7 +58,7 @@ We assume the circuit $C$ has the following form:
     transformed into one with fan-in 2 by increasing the depth of the circuit
     by a factor of $O(\log s)$.)
   \item The circuit is layered: a gate is in layer $i$ if it is at distance $i$
-    from an output gate, and gates in layer $i$ only recieve their inputs from
+    from an output gate, and gates in layer $i$ only receive their inputs from
     layer $i + 1$. (We can always add intermediary forwarding gates if this is
     not the case.)
   \item The circuit has exactly $s$ gates at each layer. (We can add dummy
@@ -173,7 +173,7 @@ extensions from \cref{lem:lde}, and work with these functions.
 
 In this section we prove \cref{thm:main} when the verifier has access to
 oracles of low degree extensions of circuit specification functions from
-\cref{def:psis}. In the next section, we show how the verifer can compute
+\cref{def:psis}. In the next section, we show how the verifier can compute
 $\tilde{\psi_i}$s by using the logspace uniformity (from
 \cref{def:logspaceuniform}) of $C$.
 
