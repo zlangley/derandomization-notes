@@ -5,9 +5,16 @@
 
 \section{Hitting Set Generators}
 
+\begin{definition}[Hitting set]
+  Let $f_n : \set{0, 1}^n \to \set{0, 1}$.
+  A set $S \in \set{0, 1}^{n}$ is a \emph{hitting set} for $f_n$ if there exists an $r \in S$ such that $f_n(r) = 1$.
+\end{definition}
+
 \begin{definition}[Hitting set generator]
-    A deterministic algorithm $H$ is a \emph{hitting set generator} with seed length $\ell(n)$ for $F = \set{f_n}_n$ if
-    it satisfies $\Pr\brac{f(H(1^n, u_{\ell(n)})) = 1} > 0$ for all $f \in F$.
+  Let $f_n : \set{0, 1}^n \to \set{0, 1}$ for $n \in \N$ and let $f = (f_n)_n$.
+  A \emph{hitting set generator $H$ with seed length $\ell(n)$} is a deterministic algorithm that on input $\langle 1^n, s \rangle$, where $s \in \set{0, 1}^{\ell(n)}$, outputs a string in $\set{0, 1}^n$ such that for all $n$, \[
+    \{ H(\langle 1^n, s \rangle) : s \in \set{0, 1}^{\ell(n)} \}
+  \] is a hitting set for $f_n$.
 \end{definition}
 
 \begin{theorem}
@@ -19,9 +26,9 @@
 
 \begin{definition}[Kolmogorov Complexity]
     The Kolmogorov Complexity of $x \in \set{0, 1}^*$ is the length of the shortest 
-    programs that, when run, prints $x$ and halts.
+    program that, when run, prints $x$ and halts.
 \end{definition}
-\commenta{Zach}{Technically we need to fix a machine to define Kolmogorov complexity. Maybe this belongs in an appendix.}
+\commenta{Zach}{Technically we need to fix a machine to define Kolmogorov complexity. Maybe something about Kolmogorov complexity belongs in an appendix.}
 
 \begin{theorem}
     There is an algorithm $H$ that, when given $1^n$ and oracle access to a hard 
@@ -53,7 +60,24 @@
 
 \section{Pseudorandom Generators}
 
+\begin{enumerate}
+  \item Define $\eps$-PRG with advantage and running time.
+  \item Show that the existence of a $(1/n)$-PRG for circuits of size $\widetilde{O}(n)$ with advantage $1/n^2$ and running time $\poly(n)$ implies that $\prBPP = \prP$.
+\end{enumerate}
+
 \section{The Nisan-Wigderson Generator}
+
+\begin{theorem}
+  There exists an algorithm $G$ that gets $1^n$ and oracle $f : \set{0, 1}^\ell \to \set{0, 1}$ where $\ell = O(\log{n})$ such that for all circuits $C : \set{0, 1}^\ell \to \set{0, 1}$ of size $2^{\ell/10}$ \[
+    \Pr_{x \sim \set{0, 1}^n}[C(x) = f(x)] \le \nicefrac{1}{2} + \nicefrac{1}{n^2}
+  \]
+  is a $(1/n)$-PRG with runtime $\poly(n)$ for circuits of size $\widetilde{O}(n)$.
+\end{theorem}
+
+\begin{corollary}
+  If there is a language $L \in \DTIME[2^{O(n)}]$ such that
+  every circuit of size $2^{n/10}$ computes $L$ with advantage at most $1/n^2$, then $\prBPP = \prP$.
+\end{corollary}
 
 \begin{definition}[Combinatorial design]\label{def:design}
   A collection of subsets $T_1, \dots, T_m \subseteq [d]$ is a \emph{$(\ell, a)$-design}
@@ -83,6 +107,8 @@ The proof of the theorem will use the following lemma.
   for all $i \in [m]$. Moreover, such a set $T^*$ can be found
   deterministically in time $\poly(m, d)$.
 \end{lemma}
+
+\commenta{Zach}{We should probably move this proof to an appendix or make it an exercise, as this is not really our business.}
 
 \begin{proof}
   We first use the probabilistic method to show that such a set $T^*$ exists.
@@ -130,8 +156,6 @@ The proof of the theorem will use the following lemma.
   ugly calculation, but only involves basic combinatorics; we leave the details
   to the reader.
 \end{proof}
-%    \Pr(B_j \mid \mathbb{T} \cap [i] = T) = \binom{d - i}{\ell - |T|}^{-1}
-%    \sum_{b=a}^{\ell} \binom{|S_j \cap \set{i+1, \dots, d}|}{b-|T \cap S_j|}\binom{d - \ell}{\ell}
 
 Now we return to the proof of Theorem~\ref{thm:design}.
 

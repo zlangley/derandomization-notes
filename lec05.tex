@@ -1,5 +1,18 @@
 \chapter{Algebraic Reconstruction I: The TZS Extractor}
 
+\begin{enumerate}
+  \item Define min-entropy.
+  \item Define binary extractor, $q$-ary extractor. Extractor has two parameters: an $x$ with bounded min-entropy and a random $y$.
+  \item The TZS $q$-ary extractor uses random input $y$ to choose $\vec{a} \in \F^2$ uniformly at random, encodes $x$ as a low-degree polynomial $\hat{x}$, and then outputs $\hat{x}(S(\vec{a})) \circ \hat{x}(S^2(\vec{a})) \circ \cdots \circ \hat{x}(S^m(\vec{a}))$.
+  \item Proof idea: Reconstruction. If TZS is not a $q$-ary extractor, then by the hybrid argument, there is a predictor. We can use the predictor and a small amount of randomness to learn $\hat{x}$, and hence $\hat{x}$ has low entropy.
+\end{enumerate}
+
+\section{Extractors}
+
+\section{The TZS Extractor}
+
+\section{Sudan's Lemma}
+
 \section*{The Upshot}
 
 \begin{enumerate}

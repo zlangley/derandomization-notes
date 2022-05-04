@@ -1,18 +1,32 @@
 \chapter{Hardness Amplification via Error-Correcting Codes}
 \label{lec:03}
 
-In \Cref{lec:02}, we saw that if there is a language $L$ in $\E{}$ that cannot
-be computed on, say, 51\% of inputs by a circuit of size $2^{\eps n}$, then $\BPP = \P$. In
-this chapter, we will show that we can
-make a signficantly weaker assumption and obtain the same conclusion: If there
-is a language in $\E$ that cannot be computed on 100\% of inputs by a circuit of size $2^{\eps
-n}$, then $\BPP = \P$.
+In \Cref{lec:02}, we saw that if there is a language $L$ in $\E{}$ that cannot be computed on 100\% of inputs by a
+circuit of size $2^{\eps n}$, then $\BPP = \P$.
+In this chapter, we will show that we can make a significantly weaker assumption and obtain the same conclusion: If
+there is a language in $\E$ that cannot be computed on 51\% of inputs by a circuit of size $2^{\eps n}$, then $\BPP =
+\P$.
 
-The main technique is called \emph{hardness amplification}: Given a problem that is hard to compute on 51\% of inputs, we construct a new problem that is hard to compute on 100\% of inputs.
+The main technique is called \emph{hardness amplification}: Given a problem that is hard to compute on 100\% of inputs,
+we construct a new problem that is hard to compute on just 51\% of inputs.
+Notice that it is trivial to compute any function on 50\% of its inputs: either the circuit that always outputs 0 or the
+circuit that always outputs 1 will do.
+
+\commenta{Zach}{Possibly mention Yao's XOR Lemma.}
 
 \section{A Primer on Coding Theory}
 
+\begin{enumerate}
+    \item Define code, rate, distance.
+    \item Define asymptotic rate, distance.
+\end{enumerate}
+
 \section{Hardness Amplification via Locally List Decodable Codes}
+
+\begin{enumerate}
+    \item Let $f : \set{0, 1}^\ell \to \{0, 1\}$. We will identify $f$ with its truth table $\set{0, 1}^{2^\ell}$.
+    \item We can use an encoding $\hat{f}$ as the new hard function. Note that if the encoding has distance $\delta$, then computing $\hat{f}$ on a $\delta$-fraction of the input would allow us to decode to $f$, and therefore compute $f$.
+\end{enumerate}
 
 \section{Reed-Solomon Codes}
 

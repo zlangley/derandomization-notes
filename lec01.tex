@@ -59,10 +59,9 @@ classes? An easy inclusion is $\BPP \subseteq \PSPACE$.
   for more than $\frac{2}{3} \cdot 2^{p(n)}$ choices of $r$, then $M'$ accepts.
   Otherwise, $M'$ rejects.
 
-  Clearly $M'$ accepts $L$ if and only if $M$ accepts $L$. The space
-  requirements of $M'$ are the space requirements of $M$ plus the $p(n)$ bits
-  for $r$ plus the $p(n)$ bits for the counter, and hence $M$ decides $L$ in
-  polynomial space.
+  Clearly $M'$ accepts $L$ if and only if $M$ accepts $L$. The space requirements of $M'$ are the space requirements to
+  simulate $M$, a polynomial-time machine, plus the $p(n)$ bits for $r$, plus the $p(n)$ bits for the counter. Hence $M$
+  decides $L$ in polynomial space.
 \end{proof}
 
 Unfortunately, we cannot yet prove $\BPP \ne \PSPACE$; such a proof would imply

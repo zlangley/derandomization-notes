@@ -8,12 +8,12 @@
 
 So far we have been studying PRGs for non-uniform circuits. As a consequence,
 our results so far require problems in $\E$ that are hard for non-uniform models.
-In this lecture we investigate the analgous questions for uniform models of
+In this lecture we investigate the analogous questions for uniform models of
 computation.
 
 
 \begin{definition}[Uniform circuits]
-	Uniform circuits are circuits that can be printed by a Turing Machine i.e.\ when the input to the TM is $1^n$ the output is circuit $C_n$.
+  A circuit family $\{C_n\}$ is \emph{uniform} if there exists a Turing machine that on input $1^n$ outputs $C_n$.
 \end{definition}
 
 \begin{definition}[$\eps$-PRG for uniform circuits]
@@ -48,7 +48,7 @@ computation.
 	Let $S$ be the sampling algorithm for $\overline{x}$, and let $M = M_L$
 	be the $\BPP$ machine for $L$. We define $L'$ as: given $x$, enumerate
 	over seeds $s$ of $G$, and output
-	\[ \textsf{MAJ}_{s} \set{M(x, G(s)) }. \]
+	\[ \MAJ_{s} \set{M(x, G(s)) }. \]
 	Since the seed length $s$ is $O(\log n)$, the algorithm above runs in
 	polynomial time, and hence $L' \in \P$.
 	Further, for each $x$, we define:
@@ -267,12 +267,12 @@ For example, $\SAT$ and $\PERM$ are DSR.
     \item Let $A$ be the learning algorithm for
       Corollary~\ref{corr:learning-boost-success} with $\delta = 1/n^2$. Run
       $A$ on input $1^i$, answering queries $\fws_i(x)$ using the downward
-      self-reducability of $\fws$ and the circuit $F_{i - 1}$.
+      self-reducibility of $\fws$ and the circuit $F_{i - 1}$.
     \item With high probability, $A$ returns a circuit that agrees with
       $\fws_i$ on a $1/2 + 1/i^2$ fraction of the inputs.
     \item Compute a list of circuits via the LLDC decoder with the previous
       circuit as the corrupt codeword.
-    \item Using random sampling and the downward self-reducability of $\fws$
+    \item Using random sampling and the downward self-reducibility of $\fws$
       and $F_{i - 1}$, find a circuit that agrees with $\fws_i$ on a $0.99$
       fraction of the inputs.
     \item Combine this with a local unique decoder.
