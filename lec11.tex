@@ -2,12 +2,45 @@
 
 \section[\texorpdfstring{The Class $\MA$}{The Class MA}]{The Class $\MA$}
 
-\begin{enumerate}
-    \item State definition of $\MA$.
-    \item Describe $\MA$ as a randomized version of $\NP$ (i.e., a randomized proof system).
-    \item The $\MA$ vs $\NP$ question is the non-deterministic analog of $\BPP$ vs $\P$.
-    \item $\BPP = \P$ implies $\MA = \NP$, so derandomization of proof systems is easier.
-\end{enumerate}
+\begin{definition}[$\MA$]
+  $\MA$ is the complexity class of all languages $L$ for which there is a probabilistic 
+  polytime verifier $V$ and polynomials $p,r$ such that
+  \begin{align*}
+      x \in L \implies &
+      \exists z \in \set{0,1}^{p(|x|)} \Pr_{y \in \set{0,1}^{r(|x|)}} \brac{V(x,y,z) = 1} \ge \frac{2}{3}
+      \\
+      x \not\in L \implies &
+      \forall z \in \set{0,1}^{p(|x|)} \Pr_{y \in \set{0,1}^{r(|x|)}} \brac{V(x,y,z) = 0} \ge \frac{2}{3}.
+  \end{align*}
+\end{definition}
+
+One can think of $\MA$ in terms of languages that can be decided by Arthur through a one 
+message interaction with Merlin, where Merlin has unbounded computation and Arthur is 
+restricted to polytime computation with randomness:
+If $x \in L$, then there is some proof of membership that Merlin can send that Arthur is 
+likely to accept.
+On the other hand, if $x \not\in L$, then there is no proof of membership that Merlin can 
+send that's likely to trick Arthur into accepting.
+
+Succinctly, one can think of $\MA$ as a randomized version of $\NP$.
+Put otherwise, $\MA$ is to $\NP$ as $\BPP$ is to $\P$.
+Just as we wish to answer the $\BPP$ vs $\P$ question, this perspective begets the $\MA$ vs
+$\NP$ question; is $\MA = \NP$?
+
+$\MA$ vs $\NP$ is a question we do not yet know the answer to.
+This does not stop us from asking:
+How believable is $\MA = \NP$?
+It is at least as believable as $\BPP = \P$, and a proof of $\MA = \NP$ may even come with
+less blood, sweat, and tears.
+\begin{lemma}
+  $\BPP = \P \implies \MA = \NP$
+\end{lemma}
+\begin{proofsk}
+  Once non-determinism has been used up (Merlin has sent Arthur a proof), we are left with
+  a verification problem in $\BPP$ which can be derandomized to $\P$.
+\end{proofsk}
+
+\section[\texorpdfstring{Derandomizations of $\MA$}{Derandomizations of MA}]{Derandomizations of $\MA$}
 
 \section{Hardness vs.\ Randomness for Proof Systems}
 
