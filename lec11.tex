@@ -32,7 +32,7 @@ This does not stop us from asking:
 How believable is $\MA = \NP$?
 It is at least as believable as $\BPP = \P$, and a proof of $\MA = \NP$ may even come with
 less blood, sweat, and tears.
-\begin{lemma}
+\begin{lemma}\label{lem:manp-ez}
   $\BPP = \P \implies \MA = \NP$
 \end{lemma}
 \begin{proofsk}
@@ -41,6 +41,23 @@ less blood, sweat, and tears.
 \end{proofsk}
 
 \section[\texorpdfstring{Derandomizations of $\MA$}{Derandomizations of MA}]{Derandomizations of $\MA$}
+
+$\MA = \NP$ is the strongest derandomization of $\MA$ (up to a polynomial slowdown).
+We know that $\NP \subseteq \MA \subseteq \NEXP$ and so we can try to say something easier
+about the extent to which $\MA$ can be derandomized.
+For example, $\MA \subsetneq \NEXP$ is already a non-trivial statement to make, but
+it is certainly ``easier'' than $\MA = \NP$.
+
+Constrast this with derandomizations of $\BPP$.
+Weakening the hardness of a function given to the NW-generator yields a PRG that requires 
+longer random seeds and thus gives weaker derandomizations.
+
+In the remaining sections we will show a conditional derandomization that is much weaker 
+than $\MA = \NP$.
+In a sense, it will be the weakest non-trivial derandomization we show in these notes;
+lemma~\ref{lem:manp-ez} suggests, qualitatively, that derandomizations of $\MA$ are 
+easier endeavors than similar derandomizations of $\BPP$ and, within the scope of 
+derandomizing $\MA$, we will aim to show something that is weak albeit non-trivial.
 
 \section{Hardness vs.\ Randomness for Proof Systems}
 
