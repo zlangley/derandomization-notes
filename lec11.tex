@@ -48,17 +48,29 @@ about the extent to which $\MA$ can be derandomized.
 For example, $\MA \subsetneq \NEXP$ is already a non-trivial statement to make, but
 it is certainly ``easier'' than $\MA = \NP$.
 
-Constrast this with derandomizations of $\BPP$.
+Constrast this with derandomizations of $\BPP$ under the Hardness vs.\ Randomess paradigm.
 Weakening the hardness of a function given to the NW-generator yields a PRG that requires 
-longer random seeds and thus gives weaker derandomizations.
+longer random seeds and thus gives weaker derandomizations like $\BPP \subsetneq \EXP$.
 
 In the remaining sections we will show a conditional derandomization that is much weaker 
 than $\MA = \NP$.
 In a sense, it will be the weakest non-trivial derandomization we show in these notes;
-lemma~\ref{lem:manp-ez} suggests, qualitatively, that derandomizations of $\MA$ are 
+Lemma~\ref{lem:manp-ez} suggests, qualitatively, that derandomizations of $\MA$ are 
 easier endeavors than similar derandomizations of $\BPP$ and, within the scope of 
-derandomizing $\MA$, we will aim to show something that is weak albeit non-trivial.
+derandomizing $\MA$, we will aim to show something that is, while non-trivial, much 
+weaker than $\MA = \NP$.
 
 \section{Hardness vs.\ Randomness for Proof Systems}
+
+\begin{theorem}\label{thm:hr-ma}
+  If there is a $\poly(2^n)$-time non-deterministic Turing Machine which, given input 
+  $1^n$ with advice of length $a(n)$, generates the $2^n$ bit truth table of a function
+  that is hard for $\Ppoly$ infinitely often, then for every $\varepsilon > 0$ we have 
+  $\MA \subset \ioNTIME[2^{n^\varepsilon}]/a(n^\varepsilon)$.
+\end{theorem}
+\begin{proofsk}
+  We omit a proof (for now), but the idea is not dissimilar to the proof for the classical 
+  Hardness vs.\ Randomness result discussed earlier in these notes.
+\end{proofsk}
 
 \section{Easy Witnesses}
