@@ -1,10 +1,12 @@
 \chapter{Derandomization Requires Circuit Lower Bounds in NTIME}\label{lec:11}
 
+\comment{TODO: Bring the Karp-Lipton results into the picture}.
+
 \section[\texorpdfstring{The Class $\MA$}{The Class MA}]{The Class $\MA$}
 
 \begin{definition}[$\MA$]
-  $\MA$ is the complexity class of all languages $L$ for which there is a probabilistic 
-  polytime verifier $V$ and polynomials $p,r$ such that
+  $\MA$ is the complexity class of all languages $L$ for which there is a 
+  probabilistic polytime verifier $V$ and polynomials $p,r$ such that
   \begin{align*}
       x \in L \implies &
       \exists z \in \set{0,1}^{p(|x|)} \Pr_{y \in \set{0,1}^{r(|x|)}} \brac{V(x,y,z) = 1} \ge \frac{2}{3}
@@ -14,63 +16,94 @@
   \end{align*}
 \end{definition}
 
-One can think of $\MA$ in terms of languages that can be decided by Arthur through a one 
-message interaction with Merlin, where Merlin has unbounded computation and Arthur is 
-restricted to polytime computation with randomness:
-If $x \in L$, then there is some proof of membership that Merlin can send that Arthur is 
-likely to accept.
-On the other hand, if $x \not\in L$, then there is no proof of membership that Merlin can 
-send that's likely to trick Arthur into accepting.
+One can think of $\MA$ in terms of languages that can be decided by Arthur 
+through a one message interaction with Merlin, where Merlin has unbounded 
+computation and Arthur is restricted to polytime computation with randomness:
+If $x \in L$, then there is some proof of membership that Merlin can send that 
+Arthur is likely to accept.
+On the other hand, if $x \not\in L$, then there is no proof of membership that 
+Merlin can send that's likely to trick Arthur into accepting.
 
 Succinctly, one can think of $\MA$ as a randomized version of $\NP$.
 Put otherwise, $\MA$ is to $\NP$ as $\BPP$ is to $\P$.
-Just as we wish to answer the $\BPP$ vs $\P$ question, this perspective begets the $\MA$ vs
-$\NP$ question; is $\MA = \NP$?
+Just as we wish to answer the $\BPP$ vs $\P$ question, this perspective begets 
+the $\MA$ vs $\NP$ question; is $\MA = \NP$?
 
 $\MA$ vs $\NP$ is a question we do not yet know the answer to.
 This does not stop us from asking:
 How believable is $\MA = \NP$?
-It is at least as believable as $\BPP = \P$, and a proof of $\MA = \NP$ may even come with
-less blood, sweat, and tears.
+It is at least as believable as $\BPP = \P$, and a proof of $\MA = \NP$ may 
+even come with less blood, sweat, and tears.
 \begin{lemma}\label{lem:manp-ez}
   $\BPP = \P \implies \MA = \NP$
 \end{lemma}
 \begin{proofsk}
-  Once non-determinism has been used up (Merlin has sent Arthur a proof), we are left with
-  a verification problem in $\BPP$ which can be derandomized to $\P$.
+  Once non-determinism has been used up (Merlin has sent Arthur a proof), we 
+  are left with a verification problem in $\BPP$ which can be derandomized to 
+  $\P$.
 \end{proofsk}
 
 \section[\texorpdfstring{Derandomizations of $\MA$}{Derandomizations of MA}]{Derandomizations of $\MA$}
 
-$\MA = \NP$ is the strongest derandomization of $\MA$ (up to a polynomial slowdown).
-We know that $\NP \subseteq \MA \subseteq \NEXP$ and so we can try to say something easier
-about the extent to which $\MA$ can be derandomized.
-For example, $\MA \subsetneq \NEXP$ is already a non-trivial statement to make, but
-it is certainly ``easier'' than $\MA = \NP$.
+$\MA = \NP$ is the strongest derandomization of $\MA$ (up to a polynomial 
+slowdown).
+We know that $\NP \subseteq \MA \subseteq \NEXP$ and so we can try to say 
+something easier about the extent to which $\MA$ can be derandomized.
+For example, $\MA \subsetneq \NEXP$ is already a non-trivial statement to make, 
+but it is certainly ``easier'' than $\MA = \NP$.
 
-Constrast this with derandomizations of $\BPP$ under the Hardness vs.\ Randomess paradigm.
-Weakening the hardness of a function given to the NW-generator yields a PRG that requires 
-longer random seeds and thus gives weaker derandomizations like $\BPP \subsetneq \EXP$.
+Constrast this with derandomizations of $\BPP$ under the Hardness vs.\ 
+Randomess paradigm.
+Weakening the hardness of a function given to the NW-generator yields a PRG 
+that requires longer random seeds and thus gives weaker derandomizations like 
+$\BPP \subsetneq \EXP$.
 
-In the remaining sections we will show a conditional derandomization that is much weaker 
-than $\MA = \NP$.
-In a sense, it will be the weakest non-trivial derandomization we show in these notes;
-Lemma~\ref{lem:manp-ez} suggests, qualitatively, that derandomizations of $\MA$ are 
-easier endeavors than similar derandomizations of $\BPP$ and, within the scope of 
-derandomizing $\MA$, we will aim to show something that is, while non-trivial, much 
-weaker than $\MA = \NP$.
+In the next few sections we will show a conditional derandomization that is 
+much weaker than $\MA = \NP$.
+Roughly, we will show that ``the non-existence of easy witnesses'' implies a 
+derandomization of MA; more on this shortly.
+In a sense, it will be the weakest non-trivial derandomization we show in these 
+notes; Lemma~\ref{lem:manp-ez} suggests, qualitatively, that derandomizations 
+of $\MA$ are easier endeavors than similar derandomizations of $\BPP$ and, 
+within the scope of derandomizing $\MA$, we will aim to show something that is, 
+while non-trivial, much weaker than $\MA = \NP$.
 
 \section{Hardness vs.\ Randomness for Proof Systems}
 
+The condition under which we show a derandomization of $\MA$ is, informally, 
+``the non-existence of easy witnesses''.
+This condition, while new, will take the tried-and-true path of the Hardness 
+vs.\ Randomness paradigm.
+What we will end up showing is that ``the non-existence of easy witnesses'' 
+gives us access to hard strings with which we can feed into the NW-generator 
+(now with non-determinism), and consequently derandomize $\MA$.
+The following theorem says that access to hard strings gets us derandomization.
+
 \begin{theorem}\label{thm:hr-ma}
-  If there is a $\poly(2^n)$-time non-deterministic Turing Machine which, given input 
-  $1^n$ with advice of length $a(n)$, generates the $2^n$ bit truth table of a function
-  that is hard for $\Ppoly$ infinitely often, then for every $\varepsilon > 0$ we have 
-  $\MA \subset \ioNTIME[2^{n^\varepsilon}]/a(n^\varepsilon)$.
+  If there is a $\poly(2^n)$-time non-deterministic Turing Machine which, given 
+  input $1^n$ with advice of length $a(n)$, generates the $2^n$ bit truth table 
+  of a function that is hard for $\Ppoly$ infinitely often, then for every 
+  $\varepsilon > 0$ we have $\MA \subset \ioNTIME[2^{n^\varepsilon}]/a(n^\varepsilon)$.
 \end{theorem}
 \begin{proofsk}
-  We omit a proof (for now), but the idea is not dissimilar to the proof for the classical 
-  Hardness vs.\ Randomness result discussed earlier in these notes.
+  We omit a proof (for now), but the idea is not dissimilar to the proof for 
+  the classical Hardness vs.\ Randomness result discussed earlier in these 
+  notes.
 \end{proofsk}
 
+We are thus now left to finally explain what an ``easy witness'' is, and how 
+the non-existence of such gives us access to hard strings.
+
 \section{Easy Witnesses}
+
+\begin{definition}
+  Define \emph{$T(n)$} to be the set of truth tables of boolean functions on 
+  $n$ variables.
+  Define \emph{$T_s(n)$} to be the set of truth tables of boolean functions on 
+  $n$ variables that can be computed by a circuit of size $s(n)$.
+\end{definition}
+
+\comment{TODO: Enumeration of $T_s(n)$}.
+
+\section{Conditionally Generating Hard Strings}
+
